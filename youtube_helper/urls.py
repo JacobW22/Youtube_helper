@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_views.main_page, name='main_page'),
     path('download/', main_views.download_page, name='download_page'),
+    path('download/video/', main_views.download_video, name="download_video"),
+    path('download/audio/', main_views.download_audio, name="download_audio"),
 ]

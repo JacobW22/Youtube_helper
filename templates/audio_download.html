@@ -1,0 +1,133 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube helper</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+
+    <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+
+
+    <style>
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+          }
+          
+          * {
+            box-sizing: border-box;
+          }
+
+          .bg-image {
+            background-image: url("{% static 'images/Background_image.jpg' %}");
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+
+          h2 {
+            font-family: Open Sans;
+          }
+
+          .form-control {
+            background-color:rgba(0, 0, 0, 0);
+          }
+
+          .form-control:focus {
+            background-color:rgba(0, 0, 0, 0);
+          }
+
+          .container {
+            width: 100%;
+            height: 100%;
+          }
+
+          button, a, h2, img{
+            position: relative;
+          }
+
+          @media (min-width: 1200px) {
+            #main_form, #result_form {
+                width: 50%;
+            }  
+          }
+
+          video {
+            z-index: 1;
+            max-width: 100%;
+          }
+
+          img {
+            width: 200px;
+            height: 100px;
+          }
+
+          h2 {
+            text-shadow: 2px 2px 5px black;
+          }
+
+    </style>
+</head>
+<body>
+
+<div class="bg-image"></div>
+    
+<!-- Navbar start -->
+
+    <nav class="navbar navbar-expand-sm ">
+        <div class="container-fluid">
+          <a class="navbar-brand text-light ms-sm-2" href="#"><h2>Youtube helper</h2></a>
+          <button class="navbar-toggler bg-light mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse mb-sm-2 " id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto me-2 gap-4 mb-sm-0">
+              <li class="nav-item">
+                <a class="nav-link active text-light" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Log in</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Sign up</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+    
+<!-- Navbar end -->
+
+<!-- Container for centering start -->
+<!-- Centered input start -->
+<div class="border d-flex flex-column align-items-center gap-3 justify-content-center p-2" style="height: calc(80% - 72.39px); max-width: 100%;">
+        <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
+        <h2 class="card-title text-center text-light">{{ title }}</h2>
+
+        <audio class="rounded" controls>
+            <source src="{% static 'audio.mp3' %}" type="audio/mp3">
+            Your browser does not support HTML video.
+        </audio>
+        
+        <a type="button" class="btn btn-dark downloading btn-lg" name="sd_quality" href="{% static 'audio.mp3' %}" download="audio.mp3"><i class="fa-solid fa-file-arrow-down"></i>&nbsp Download file</a>
+</div>
+<!-- Centered input end -->
+<!-- Container for centering end -->
+</body>
+</html>
