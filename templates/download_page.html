@@ -1,0 +1,196 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube helper</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+
+    <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+
+    <style>
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+          }
+          
+          * {
+            box-sizing: border-box;
+          }
+
+          .bg-image {
+            background-image: url("{% static 'images/Background_image.jpg' %}");
+            height: 100%;
+            width: 100%;
+            position: absolute;
+
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+
+          h2, p {
+            font-family: Open Sans;
+          }
+
+          .form-control {
+            background-color:rgba(0, 0, 0, 0);
+          }
+
+          .form-control:focus {
+            background-color:rgba(0, 0, 0, 0);
+          }
+
+          .container {
+            width: 100%;
+            height: 100%;
+          }
+
+          button, a, p {
+            position: relative;
+          }
+
+
+
+          @media (min-width: 1200px) {
+            #main_form, #result_form {
+                width: 50%;
+            }  
+          }
+
+          
+          #floating { 
+              animation-name: floating;
+              animation-duration: 3s;
+              animation-iteration-count: infinite;
+              animation-timing-function: ease-in-out;
+          }
+          
+          @keyframes floating {
+              0% { transform: translate(0,  0px); }
+              50%  { transform: translate(0, 15px); }
+              100%   { transform: translate(0, -0px); }   
+          }
+          
+    </style>
+</head>
+<body>
+
+<div class="bg-image"></div>
+    
+<!-- Navbar start -->
+
+    <nav class="navbar navbar-expand-sm ">
+        <div class="container-fluid">
+          <a class="navbar-brand text-light ms-sm-2" href="#"><h2>Youtube helper</h2></a>
+          <button class="navbar-toggler bg-light mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse mb-sm-2 " id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto me-2 gap-4 mb-sm-0">
+              <li class="nav-item">
+                <a class="nav-link active text-light" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Log in</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Sign up</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+    
+<!-- Navbar end -->
+
+<!-- Container for centering start -->
+<!-- Centered input start -->
+<div class="border d-flex align-items-end" style="height: calc(50% - 72.39px)">
+<div class="container-fluid d-flex align-items-center justify-content-center" id="main_form" style="height: auto">
+
+  <!-- Card start -->
+    <div class="card mb-3 bg-dark text-light ps-sm-4" style="max-width: 540px;">
+        <div class="row g-0 align-items-center justify-content-center">
+          <div class="col-4 d-flex align-items-center justify-content-center">
+            <img src="{{ thumbnail }}" class="img-fluid rounded" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body ">
+              <h5 class="card-title text-center">{{ title }}</h5>
+              <p class="card-text d-flex align-items-center justify-content-center">
+                <!-- Scrollable modal -->
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      Show description
+                    </button>
+
+                    <!-- Modal start -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-scrollable text-dark">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            {{ description }}
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Modal end -->
+              </p>
+              <p class="card-text text-center"><small class="text-muted"><i class="fa-regular fa-clock"></i> {{ length }} &nbsp&nbsp<i class="fa-regular fa-calendar-days"></i>&nbsp {{ publish_date }}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+  <!-- Card end -->
+
+</div>
+</div>
+<!-- Centered input end -->
+<!-- Container for centering end -->
+
+<!-- Download section start -->
+<div class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form">
+  <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
+</div>
+
+
+<!-- Result box start -->
+<form class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form" method="post">
+    {% csrf_token %}
+    <a type="submit" class="btn btn-dark" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality">SD quality</a>
+    <a type="submit" class="btn btn-dark" name="hd_quality" href="{% url 'download_page' %}?link={{ link }}&name=hd_quality">HD quality</a>
+</form>
+<!-- Result box end -->
+
+<!-- Result box start -->
+<form class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form" method="post">
+  {% csrf_token %}
+  <a type="submit" class="btn btn-dark" name="mp3" href="{% url 'download_page' %}?link={{ link }}&name=mp3">MP3 only</a>
+</form>
+<!-- Result box end -->
+
+
+<!-- Download section end -->
+
+</body>
+</html>
