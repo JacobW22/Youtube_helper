@@ -15,6 +15,16 @@ def main_page(request):
 
 
 
+def login_page(request):
+    return render(request, 'login_page.html')
+
+
+
+def sign_up_page(request):
+    return render(request, 'sign_up_page.html')
+
+
+
 def download_page(request):
 
     link = request.GET.get('link')
@@ -25,7 +35,6 @@ def download_page(request):
     views = f'{yt.views:,}' # For 100000 = 100,000 etc.
 
     name = request.GET.get('name')
-
 
     # For sd quality video files
     if name == "sd_quality":

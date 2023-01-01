@@ -90,30 +90,27 @@
     
 <!-- Navbar start -->
 
-    <nav class="navbar navbar-expand-sm ">
-        <div class="container-fluid">
-          <a class="navbar-brand text-light ms-sm-2" href="#"><h2>Youtube helper</h2></a>
-          <button class="navbar-toggler bg-light mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse mb-sm-2 " id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto me-2 gap-4 mb-sm-0">
-              <li class="nav-item">
-                <a class="nav-link active text-light" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="#">Link</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="#">Log in</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="#">Sign up</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+  <nav class="navbar navbar-expand-sm ">
+    <div class="container-fluid">
+      <a class="navbar-brand text-light ms-sm-2" href="#"><h2>Youtube helper</h2></a>
+      <button class="navbar-toggler bg-light mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse mb-sm-2" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
+          <li class="nav-item">
+            <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
     
 <!-- Navbar end -->
@@ -212,7 +209,7 @@
 
 
 <!-- Download section end -->
-<script>
+<script type="text/javascript">
   $(".modal2").on('shown.bs.modal', function() {
     $('.modal-backdrop').css('opacity', '0.9');
   });
@@ -220,6 +217,11 @@
 	$(".downloading").click(function(){
 		$("#staticBackdrop").modal('show');
 	});
+
+  window.addEventListener("beforeunload", (event) => {
+		$("#staticBackdrop").modal('hide');
+  }); 
+
 </script>
 
 </body>
