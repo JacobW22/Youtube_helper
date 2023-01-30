@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from pytube import YouTube
+from django.contrib.auth.forms import UserCreationForm
+from .forms import CreateUserForm
+
 import datetime
 
 # Create your views here.
@@ -21,7 +24,18 @@ def login_page(request):
 
 
 def sign_up_page(request):
-    return render(request, 'sign_up_page.html')
+    form = CreateUserForm()
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login/')
+
+    context = {
+        'form' : form
+    }
+    return render(request, 'sign_up_page.html',context)
 
 
 
