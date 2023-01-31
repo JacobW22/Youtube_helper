@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from pytube import YouTube
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from .forms import CreateUserForm
 
 import datetime
@@ -19,6 +20,22 @@ def main_page(request):
 
 
 def login_page(request):
+
+    if request.method == "POST":
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = authenticate(request, email = email, password = password)
+
+        if user is not None:
+            login(request, user)
+            redirect(main_page)
+        else: 
+            messages.info(request, 'E-mail or Password is incorrect')
+
+
+    context = {
+    }
     return render(request, 'login_page.html')
 
 
@@ -30,7 +47,9 @@ def sign_up_page(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login/')
+            user = form.cleaned_data.get('username')
+            messages.success(request, user + ' Welcome on board')
+            return redirect(login_page)
 
     context = {
         'form' : form

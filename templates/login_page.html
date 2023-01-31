@@ -103,6 +103,11 @@
         form {
             scale: 1.2;
         }
+        .toast {
+          position: relative;
+          scale: 1.1;
+        }
+        
 
     </style>
 </head>
@@ -139,7 +144,7 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-flex align-items-center justify-content-center" style="height: calc(100% - 72.39px)">
+<div class="d-flex align-items-center justify-content-center" style="height: calc(93% - 72.39px)">
     <div class="insides">
         <form>
             {% csrf_token %}
@@ -167,7 +172,7 @@
                             
                             <div class="container-login100-form-btn">
                                 <button class="login100-form-btn">
-                                    Login
+                                    Sign in
                                 </button>
                             </div>
         
@@ -190,12 +195,25 @@
                     </div>
                 </div>
             </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
 
 
-</div>
+  <!--======================================Toasts===================================================-->	
+  <div class="toast-container botomm-0 start-50 translate-middle-x">
+    {% for message in messages %}
+    <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true"> 
+      <div class="toast-body">
+        {{ message }}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  <!--===============================================================================================-->	
+
+
 <!-- Centered input end -->
 <!-- Container for centering end -->
 
@@ -208,12 +226,15 @@
 	<script src="{% static 'vendor/select2/select2.min.js' %}"></script>
 <!--===============================================================================================-->
 	<script src="{% static 'vendor/tilt/tilt.jquery.min.js' %}"></script>
-	<script >
-		$('.js-tilt').tilt({
-			scale: 1.1
-		})
+<!--===============================================================================================-->
+
+<script >
+        $('.js-tilt').tilt({
+          scale: 1.1
+        })
 
         $(document).ready(function(){
+            $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
             var form_fields = document.getElementsByTagName("input");
 
             for (const element of form_fields) {
@@ -223,8 +244,8 @@
             form_fields[1].placeholder = "E-mail";
             form_fields[2].placeholder = "Password";
         });
-	</script>
+</script>
 <!--===============================================================================================-->
-	<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
