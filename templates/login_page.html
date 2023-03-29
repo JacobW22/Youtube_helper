@@ -146,21 +146,21 @@
 <!-- Centered input start -->
 <div class="d-flex align-items-center justify-content-center" style="height: calc(93% - 72.39px)">
     <div class="insides">
-        <form>
+        <form method="POST">
             {% csrf_token %}
             <div class="limiter">
                         <form class="login100-form validate-form">
                             <span class="login100-form-title">
-                                Member Register
+                                Login
                             </span>
         
                             <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-                                {{ form.email }}
-                                <span class="focus-input100"></span>
-                                <span class="symbol-input100">
-                                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                                </span>
-                            </div>
+                              {{ form.username }}
+                              <span class="focus-input100"></span>
+                              <span class="symbol-input100">
+                                  <i class="fa fa-user" aria-hidden="true"></i>
+                              </span>
+                          </div>
         
                             <div class="wrap-input100 validate-input" data-validate = "Password is required">
                                 {{ form.password1 }}
@@ -171,8 +171,8 @@
                             </div>
                             
                             <div class="container-login100-form-btn">
-                                <button class="login100-form-btn">
-                                    Sign in
+                                <button class="login100-form-btn" type="submit">
+                                    Log in
                                 </button>
                             </div>
         
@@ -241,7 +241,7 @@
                 element.classList.add("input100");
             };
 
-            form_fields[1].placeholder = "E-mail";
+            form_fields[1].placeholder = "Username";
             form_fields[2].placeholder = "Password";
         });
 </script>

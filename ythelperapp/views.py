@@ -20,23 +20,33 @@ def main_page(request):
 
 
 def login_page(request):
+    form = CreateUserForm()
 
-    if request.method == "POST":
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+    if request.method == 'POST':
 
-        user = authenticate(request, email = email, password = password)
+        username = request.POST.get('username')
+        password = request.POST.get('password1')
+
+        user = authenticate(request, username = username, password = password)
+    
 
         if user is not None:
             login(request, user)
-            redirect(main_page)
+            return redirect(main_page)
         else: 
-            messages.info(request, 'E-mail or Password is incorrect')
+            messages.info(request, 'Username or Password is incorrect')
 
 
     context = {
+        'form': form
     }
-    return render(request, 'login_page.html')
+    return render(request, 'login_page.html', context)
+
+
+
+# Zaczać tutaj
+def logoutUser(request):
+    return redirect(login_page)
 
 
 
@@ -54,7 +64,7 @@ def sign_up_page(request):
     context = {
         'form' : form
     }
-    return render(request, 'sign_up_page.html',context)
+    return render(request, 'sign_up_page.html', context)
 
 
 
@@ -64,7 +74,7 @@ def download_page(request):
     yt = YouTube(link)
 
     length = str(datetime.timedelta(seconds=yt.length))
-    
+
     views = f'{yt.views:,}' # For 100000 = 100,000 etc.
 
     name = request.GET.get('name')
