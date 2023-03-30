@@ -3,27 +3,28 @@ from pytube import YouTube
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import CreateUserForm
+from .decorators import login_check, not_authenticated
 
 import datetime
 
 # Create your views here.
 
-
-def main_page(request):
+@login_check
+def main_page(request, login_context):
 
     if request.method == 'POST':
         link = request.POST.get('sended_link')
         return redirect('download/?link=' + link)
 
-    return render(request, 'main_page.html')
+    return render(request, 'main_page.html', login_context)
 
 
-
+@not_authenticated
 def login_page(request):
     form = CreateUserForm()
 
-    if request.method == 'POST':
-
+    if request.method == 'POST' :
+        
         username = request.POST.get('username')
         password = request.POST.get('password1')
 
@@ -32,24 +33,25 @@ def login_page(request):
 
         if user is not None:
             login(request, user)
+            messages.success(request, 'Welcome ' + username)
             return redirect(main_page)
         else: 
             messages.info(request, 'Username or Password is incorrect')
 
 
     context = {
-        'form': form
+        'form': form,
     }
     return render(request, 'login_page.html', context)
 
 
 
-# Zaczać tutaj
 def logoutUser(request):
-    return redirect(login_page)
+    logout(request)
+    return redirect(main_page)
 
 
-
+@not_authenticated
 def sign_up_page(request):
     form = CreateUserForm()
 

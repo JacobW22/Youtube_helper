@@ -10,72 +10,20 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css/template_style.css' %}">
 
     <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
     <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
 
-    <style>
-        body, html {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-          }
-          
-          * {
-            box-sizing: border-box;
-          }
 
-          .bg-image {
-            background-image: url("{% static 'images/Background_image.jpg' %}");
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-          }
-
-          h2 {
-            font-family: Open Sans;
-          }
-
-          .form-control {
-            background-color:rgba(0, 0, 0, 0);
-          }
-
-          .form-control:focus {
-            background-color:rgba(0, 0, 0, 0);
-          }
-
-          .container {
-            width: 100%;
-            height: 100%;
-          }
-
-          button {
-            position: relative;
-          }
-
-          @media (min-width: 1200px) {
-            #main_form, #result_form {
-                width: 50%;
-            }  
-          }
-
-
-
-    </style>
 </head>
 <body>
-
-<div class="bg-image"></div>
     
 <!-- Navbar start -->
 
   <nav class="navbar navbar-expand-sm ">
     <div class="container-fluid">
-      <a class="navbar-brand text-light ms-sm-2" href="#"><h2>Youtube helper</h2></a>
+      <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2>Youtube helper</h2></a>
       <button class="navbar-toggler bg-light mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -84,12 +32,21 @@
           <li class="nav-item">
             <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
           </li>
+
+          {% if logged == False %}
           <li class="nav-item">
-            <a class="nav-link text-light" href="#"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
+            <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="#"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
+            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
           </li>
+
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
+          </li>
+          {% endif %}
+
         </ul>
       </div>
     </div>
@@ -100,18 +57,43 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="border d-flex align-items-end" style="height: calc(50% - 72.39px)">
+<div class="d-flex align-items-end" style="height: calc(50% - 72.39px)">
         <form method="post" class="container-fluid gap-2 d-flex align-items-center" id="main_form" style="height: 10%">
             {% csrf_token %}
-            <div class="input-group input-group-lg">
-                <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Your link here -> </span>
-                <input type="text" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
-            </div>
+              <div class="input-group input-group-lg">
+                  <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Your link here -> </span>
+                  <input type="text" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+              </div>
             <button type="submit" class="btn btn-dark btn-lg"><i class="fa-solid fa-check"></i></button>
         </form>
-
 </div>
+
+  <!--======================================Toasts===================================================-->	
+  <div class="toast-container bottom-0 start-50 translate-middle-x mb-3 ">
+    {% for message in messages %}
+    <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true"> 
+      <div class="toast-body">
+        <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  <!--===============================================================================================-->	
+
+
 <!-- Centered input end -->
 <!-- Container for centering end -->
+
+<!--===============================================================================================-->	
+<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+
+<script>
+
+  $(document).ready(function(){
+      $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
+  });
+    
+</script>
 </body>
 </html>
