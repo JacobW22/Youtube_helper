@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youtube helper</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/template_audio_video_style.css' %}">
@@ -15,20 +16,35 @@
     <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
     <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
 
+    <!--===============================================================================================-->	
+	      <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
+    <!--===============================================================================================-->	
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!--===============================================================================================-->
+
 </head>
 <body>
-
-<div class="bg-image"></div>
     
 <!-- Navbar start -->
 
 <nav class="navbar navbar-expand-sm ">
   <div class="container-fluid">
-    <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2>Youtube helper</h2></a>
-    <button class="navbar-toggler bg-light mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
+    <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse mb-sm-2" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
         <li class="nav-item">
           <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
@@ -59,7 +75,7 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="border d-flex flex-column align-items-center gap-3 justify-content-center p-2" style="height: calc(80% - 72.39px); max-width: 100%;">
+<div class="d-flex flex-column align-items-center gap-3 justify-content-center p-2" style="height: calc(80% - 72.39px); max-width: 100%;">
         <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
         <h2 class="card-title text-center text-light">{{ title }}</h2>
 
@@ -68,7 +84,7 @@
             Your browser does not support HTML video.
         </video>
         
-        <a type="button" class="btn btn-dark downloading btn-lg" name="sd_quality" href="{% static 'video.mp4' %}" download><i class="fa-solid fa-file-arrow-down"></i>&nbsp Download file</a>
+        <a type="button" class="btn btn-dark downloading btn-lg login100-form-btn" name="sd_quality" href="{% static 'video.mp4' %}" download><i class="fa-solid fa-file-arrow-down"></i>&nbsp Download file</a>
 </div>
 <!-- Centered input end -->
 <!-- Container for centering end -->

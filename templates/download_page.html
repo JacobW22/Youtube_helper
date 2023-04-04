@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youtube helper</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/template_download_style.css' %}">
@@ -16,20 +17,34 @@
     <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+    <!--===============================================================================================-->	
+	      <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
+    <!--===============================================================================================-->	
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!--===============================================================================================-->
 </head>
 <body>
-
-<div class="bg-image"></div>
     
 <!-- Navbar start -->
 
 <nav class="navbar navbar-expand-sm ">
   <div class="container-fluid">
-    <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2>Youtube helper</h2></a>
-    <button class="navbar-toggler bg-light mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
+    <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse mb-sm-2" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
         <li class="nav-item">
           <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
@@ -60,68 +75,52 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="border d-flex align-items-end" style="height: calc(50% - 72.39px)">
+<div class="d-flex align-items-end" style="height: calc(50% - 72.39px)">
 <div class="container-fluid d-flex align-items-center justify-content-center" id="main_form" style="height: auto">
 
   <!-- Card start -->
-    <div class="card mb-3 bg-dark text-light ps-sm-4" style="max-width: 540px;">
+    <div class="card mb-3 border-0 text-light ps-sm-4" style="max-width: 1020px;">
         <div class="row g-0 align-items-center justify-content-center">
           <div class="col-4 d-flex align-items-center justify-content-center">
             <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
           </div>
           <div class="col-md-8">
             <div class="card-body ">
-              <h5 class="card-title text-center">{{ title }}</h5>
+              <h5 class="card-title text-center fs-4">{{ title }}</h5>
               <p class="card-text d-flex align-items-center justify-content-center">
                 <!-- Scrollable modal -->
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-secondary mb-2 bg-black border-0 p-3 description" data-bs-toggle="modal" data-bs-target="#exampleModal">
                       Show description
                     </button>
 
-                    <!-- Modal with description start -->
-                    <div class="modal fade modal1" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-scrollable text-dark">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }}</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                            {{ description }}
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Modal with description end -->
-
-                    <!-- Modal when downloading start -->
-                    <div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content bg-dark">
-                          <div class="modal-body rounded bg-dark">
-                            <div class="d-flex align-items-center justify-content-center">
-                              <div class="spinner-border" role="status" aria-hidden="true"></div>
-                                &nbsp
-                                <strong> We're downloading file for you...</strong>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Modal when downloading end -->
-
               </p>
-              <p class="card-text text-center"><small class="text-muted"><i class="fa-solid fa-eye"></i></i> {{ views }}  views</small></p>
-              <p class="card-text text-center"><small class="text-muted"><i class="fa-regular fa-clock"></i> {{ length }} &nbsp&nbsp<i class="fa-regular fa-calendar-days"></i>&nbsp {{ publish_date }}</small></p>
+              <p class="card-text text-center"><small><i class="fa-solid fa-eye"></i></i> {{ views }}  views</small></p>
+              <p class="card-text text-center"><small><i class="fa-regular fa-clock"></i> {{ length }} &nbsp&nbsp<i class="fa-regular fa-calendar-days"></i>&nbsp {{ publish_date }}</small></p>
             </div>
           </div>
         </div>
       </div>
   <!-- Card end -->
+  
+  <!-- Modal with description start -->
+  <div class="modal fade modal1" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable text-dark">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {{ description }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal with description end -->
 
 </div>
 </div>
@@ -136,17 +135,17 @@
 
 
 <!-- Result box start -->
-<form class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form" method="post">
+<form class="container-fluid gap-2 d-flex mt-5 justify-content-center" id="main_form" method="post">
     {% csrf_token %}
-    <a type="submit" class="btn btn-dark downloading" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality">SD quality</a>
-    <a type="submit" class="btn btn-dark downloading" name="hd_quality" href="{% url 'download_page' %}?link={{ link }}&name=hd_quality">HD quality</a>
+    <a type="submit" class="btn btn-dark downloading login100-form-btn" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality">SD quality</a>
+    <a type="submit" class="btn btn-dark downloading login100-form-btn" name="hd_quality" href="{% url 'download_page' %}?link={{ link }}&name=hd_quality">HD quality</a>
 </form>
 <!-- Result box end -->
 
 <!-- Result box2 start -->
 <form class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form" method="post">
   {% csrf_token %}
-  <a type="submit" class="btn btn-dark downloading" name="mp3" href="{% url 'download_page' %}?link={{ link }}&name=mp3">MP3 only</a>
+  <a type="submit" class="btn btn-dark downloading login100-form-btn" name="mp3" href="{% url 'download_page' %}?link={{ link }}&name=mp3">MP3 only</a>
 </form>
 <!-- Result box2 end -->
 

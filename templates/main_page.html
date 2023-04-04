@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youtube helper</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/template_style.css' %}">
@@ -15,6 +16,12 @@
     <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
     <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
 
+    
+    <!--===============================================================================================-->	
+        <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!--===============================================================================================-->
 
 </head>
 <body>
@@ -23,11 +30,11 @@
 
   <nav class="navbar navbar-expand-sm ">
     <div class="container-fluid">
-      <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2>Youtube helper</h2></a>
-      <button class="navbar-toggler bg-light mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
+      <button class="navbar-toggler mt-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse mb-sm-2" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
           <li class="nav-item">
             <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
@@ -57,14 +64,13 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-flex align-items-end" style="height: calc(50% - 72.39px)">
-        <form method="post" class="container-fluid gap-2 d-flex align-items-center" id="main_form" style="height: 10%">
+<div class="d-flex align-items-end" style="height: calc(50% - 100px)">
+  
+        <form method="post" class="container-fluid d-flex flex-column align-items-center" id="main_form" style="height: 10%">
             {% csrf_token %}
-              <div class="input-group input-group-lg">
-                  <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Your link here -> </span>
+                  <span class="pointing-to-link p-3 text-light fs-3" id="inputGroup-sizing-default">&darr; Paste your link here &darr;	 </span>
                   <input type="text" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
-              </div>
-            <button type="submit" class="btn btn-dark btn-lg"><i class="fa-solid fa-check"></i></button>
+                  <button type="submit" class="btn btn-dark btn-lg mt-4 rounded-pill"><i class="fa-solid fa-check"></i></button>
         </form>
 </div>
 

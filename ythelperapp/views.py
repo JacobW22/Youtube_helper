@@ -69,8 +69,8 @@ def sign_up_page(request):
     return render(request, 'sign_up_page.html', context)
 
 
-
-def download_page(request):
+@login_check
+def download_page(request, login_context):
 
     link = request.GET.get('link')
     yt = YouTube(link)
@@ -127,11 +127,13 @@ def download_page(request):
     'length' : length,
     }
 
+    context.update(login_context)
+
     return render(request, 'download_page.html', context)
 
 
-
-def download_video(request):
+@login_check
+def download_video(request, login_context):
     link = request.GET.get('link')
     yt = YouTube(link)
 
@@ -139,12 +141,14 @@ def download_video(request):
     'title' : yt.title,
     'thumbnail' : yt.thumbnail_url,
     }
+
+    context.update(login_context)
 
     return render(request, 'video_download.html', context)
     
 
-
-def download_audio(request):
+@login_check
+def download_audio(request, login_context):
     link = request.GET.get('link')
     yt = YouTube(link)
 
@@ -152,5 +156,7 @@ def download_audio(request):
     'title' : yt.title,
     'thumbnail' : yt.thumbnail_url,
     }
+
+    context.update(login_context)
 
     return render(request, 'audio_download.html', context)
