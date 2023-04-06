@@ -121,6 +121,22 @@
   </div>
 <!-- Modal with description end -->
 
+<!-- Modal when downloading start -->
+<div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-body rounded">
+      <div class="d-flex align-items-center justify-content-center text-light">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+          &nbsp
+          <strong>  Downloading file for you...</strong>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Modal when downloading end -->
+
 </div>
 </div>
 <!-- Centered input end -->
@@ -155,7 +171,7 @@
 <!--===============================================================================================-->
 <script type="text/javascript">
   $(".modal2").on('shown.bs.modal', function() {
-    $('.modal-backdrop').css('opacity', '0.9');
+    $('.modal-backdrop').css('opacity', '0.6');
   });
 
 	$(".downloading").click(function(){
