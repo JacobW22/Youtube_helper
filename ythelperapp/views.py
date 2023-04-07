@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import CreateUserForm
 from .decorators import login_check, not_authenticated
+from .models import user_data_storage,User
 
 import datetime
 
@@ -11,6 +12,15 @@ import datetime
 
 @login_check
 def main_page(request, login_context):
+
+    # User download history
+    if login_context['username'] != 'none':
+        username = login_context['username']
+
+    storage = user_data_storage.objects.get(user = User.objects.get(username=username)) 
+
+    for link in storage.yt_links: 
+        print(link)
 
     if request.method == 'POST':
         link = request.POST.get('sended_link')
@@ -60,6 +70,14 @@ def sign_up_page(request):
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
+
+            # Created data storage for user in the database / avoid not-null
+
+            user_data_storage.objects.create(user = User.objects.get(username=user), yt_links = ['registered'])
+            storage = user_data_storage.objects.get(user = User.objects.get(username=user)) 
+            storage.yt_links.remove('registered')
+            storage.save()
+
             messages.success(request, user + ' Welcome on board')
             return redirect(login_page)
 
@@ -80,6 +98,15 @@ def download_page(request, login_context):
     views = f'{yt.views:,}' # For 100000 = 100,000 etc.
 
     name = request.GET.get('name')
+
+    # Store link in user database
+    if login_context['username'] != 'none':
+        username = login_context['username']
+
+    storage = user_data_storage.objects.get(user = User.objects.get(username=username)) 
+    storage.yt_links.append(link)
+    storage.save()
+
 
     # For sd quality video files
     if name == "sd_quality":

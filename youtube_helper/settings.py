@@ -77,8 +77,17 @@ WSGI_APPLICATION = 'youtube_helper.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': 'Youtube_helper_Database',
+
+        'USER': 'jaqb',
+
+        'PASSWORD': 'jw8s0F4',
+
+        'HOST': 'localhost',
+
+        'PORT': '5432',
     }
 }
 
