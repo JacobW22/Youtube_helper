@@ -12,21 +12,35 @@ import datetime
 
 @login_check
 def main_page(request, login_context):
+    context = {}
 
     # User download history
-    if login_context['username'] != 'none':
+    if 'username' in login_context:
         username = login_context['username']
+        storage = user_data_storage.objects.get(user = User.objects.get(username=username)) 
 
-    storage = user_data_storage.objects.get(user = User.objects.get(username=username)) 
+        # Use download history for slides on the main page
 
-    for link in storage.yt_links: 
-        print(link)
+        Download_videos_informations = []
+
+        for link in storage.yt_links: 
+            yt = YouTube(link)
+            Download_videos_informations.append({
+                'thumbnail': yt.thumbnail_url,
+                'title': yt.title,
+                'link': link
+	        })
+            
+        context.update({'number_of_links': range(0,len(Download_videos_informations))})
+        context.update({'videos_informations':Download_videos_informations})
+    
+    context.update(login_context)
 
     if request.method == 'POST':
         link = request.POST.get('sended_link')
         return redirect('download/?link=' + link)
 
-    return render(request, 'main_page.html', login_context)
+    return render(request, 'main_page.html', context)
 
 
 @not_authenticated
@@ -100,12 +114,11 @@ def download_page(request, login_context):
     name = request.GET.get('name')
 
     # Store link in user database
-    if login_context['username'] != 'none':
+    if 'username' in login_context:
         username = login_context['username']
-
-    storage = user_data_storage.objects.get(user = User.objects.get(username=username)) 
-    storage.yt_links.append(link)
-    storage.save()
+        storage = user_data_storage.objects.get(user = User.objects.get(username=username)) 
+        storage.yt_links.append(link)
+        storage.save()
 
 
     # For sd quality video files
