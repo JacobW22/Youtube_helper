@@ -28,6 +28,7 @@ def main_page(request, login_context):
             Download_videos_informations.append({
                 'thumbnail': yt.thumbnail_url,
                 'title': yt.title,
+                'publish_date': yt.publish_date,
                 'link': link
 	        })
             

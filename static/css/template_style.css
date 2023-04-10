@@ -25,12 +25,13 @@ body, html {
   }
 
   .form-control {
-    background-color: transparent;
-    font-size: 1.5rem;
+    background-color: transparent!important;
+    font-size: 1.5rem!important;
+    border-color: white!important;
   }
 
   .form-control:focus {
-    background-color:transparent;
+    background-color:transparent!important;
   }
 
   .container {
@@ -70,7 +71,7 @@ body, html {
     user-select: none;
   }
 
-  .fa-solid, .btn, #main-title, .navbar-toggler-icon {
+  .fa-solid, .btn, #main-title, .navbar-toggler-icon, .carousel-inner .carousel-item > img {
     -webkit-transition: all 0.4s !important;
     -o-transition: all 0.4s !important;
     -moz-transition: all 0.4s !important;
@@ -103,4 +104,36 @@ body, html {
     font-family: Montserrat-Bold;
 
   }
+
+  .carousel-inner .carousel-item > img  {
+    transform: scale(1.4)!important;
+    filter: brightness(20%);
+    -webkit-filter: brightness(20%);
+
+  }
+  .carousel-inner .carousel-item > img:hover  {
+    filter: brightness(60%);
+    -webkit-filter: brightness(60%);
+
+  }
+  
+  .carousel:hover .carousel-inner .carousel-item > img  {
+    transform: scale(1.0)!important;
+    
+  }
+
+  .carousel-caption {
+    opacity: 0.8;
+  }
+
+  .download-button {
+    width: 7.5rem!important;
+    scale: 0.7!important;
+  }
+
+  .carousel {
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
 
