@@ -20,6 +20,28 @@ body, html {
   100% { background-position: 0% 50%;   }
   }
 
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar {
+      scrollbar-color: #ff9a9e #F5F5F5;
+      width: 7px;
+      background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+      background-image: -webkit-gradient(linear, left bottom, left top, from(#ff9a9e), color-stop(99%, #fecfef),
+              to(#fecfef));
+      background-image: -webkit-linear-gradient(bottom, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+      background-image: linear-gradient(to top, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+      opacity: 0.5!important;
+  }
+  
   h2 {
     font-family: Open Sans;
   }
