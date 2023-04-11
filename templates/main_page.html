@@ -75,9 +75,11 @@
         </form>
 </div>
 
-<div class="d-flex container-fluid carousel_slider align-items-center justify-content-center" style="height: 95%">
+<div class="d-flex flex-column container-fluid carousel_slider align-items-center justify-content-center" style="height: 95%">
  
-  <div id="carouselExampleIndicators" class="carousel slide rounded" data-ride="carousel">
+  <span class="slider_info p-3 text-light fs-3 text-center" id="inputGroup-sizing-default"> Previously downloaded media </span>
+
+  <div id="carouselExampleIndicators" class="carousel slide " data-ride="carousel">
     <ol class="carousel-indicators">
 
       {% for number in number_of_links %}

@@ -4,4 +4,4 @@ from django.contrib.auth.models import User
 
 class user_data_storage(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    yt_links = ArrayField(models.CharField(max_length=200), default=None)
+    download_history = ArrayField(ArrayField(models.CharField(max_length=200), default=None))

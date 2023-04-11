@@ -7,6 +7,8 @@ from .decorators import login_check, not_authenticated
 from .models import user_data_storage,User
 
 import datetime
+import random
+from datetime import datetime as dt
 
 # Create your views here.
 
@@ -17,20 +19,39 @@ def main_page(request, login_context):
     # User download history
     if 'username' in login_context:
         username = login_context['username']
-        storage = user_data_storage.objects.get(user = User.objects.get(username=username)) 
+        storage = user_data_storage.objects.get(user = User.objects.get(username=username))
 
         # Use download history for slides on the main page
+        # Get random item from history
+        # Eliminate repetitions
 
         Download_videos_informations = []
 
-        for link in storage.yt_links: 
-            yt = YouTube(link)
-            Download_videos_informations.append({
-                'thumbnail': yt.thumbnail_url,
-                'title': yt.title,
-                'publish_date': yt.publish_date,
-                'link': link
-	        })
+        Download_history = random.sample(storage.download_history,len(storage.download_history))
+        Download_history = Download_history[:10]    # Limit to 10 slides
+
+        for item in Download_history:
+            it_is_in_dict = 0
+
+            if Download_videos_informations == []:
+                Download_videos_informations.append({
+                        'title': item[1],
+                        'thumbnail': item[2],
+                        'publish_date': item[3],
+                        'link': item[0]
+                    })
+            else:
+                for dictionary in Download_videos_informations:
+                    if item[0] in dictionary.values():
+                            it_is_in_dict += 1
+
+                if it_is_in_dict == 0:
+                    Download_videos_informations.append({
+                        'title': item[1],
+                        'thumbnail': item[2],
+                        'publish_date': item[3],
+                        'link': item[0]
+                    })
             
         context.update({'number_of_links': range(0,len(Download_videos_informations))})
         context.update({'videos_informations':Download_videos_informations})
@@ -88,9 +109,9 @@ def sign_up_page(request):
 
             # Created data storage for user in the database / avoid not-null
 
-            user_data_storage.objects.create(user = User.objects.get(username=user), yt_links = ['registered'])
+            user_data_storage.objects.create(user = User.objects.get(username=user), download_history = ['registered'])
             storage = user_data_storage.objects.get(user = User.objects.get(username=user)) 
-            storage.yt_links.remove('registered')
+            storage.download_history.remove('registered')
             storage.save()
 
             messages.success(request, user + ' Welcome on board')
@@ -107,6 +128,8 @@ def download_page(request, login_context):
 
     link = request.GET.get('link')
     yt = YouTube(link)
+    title = yt.title
+    thumbnail = yt.thumbnail_url
 
     length = str(datetime.timedelta(seconds=yt.length))
 
@@ -117,8 +140,10 @@ def download_page(request, login_context):
     # Store link in user database
     if 'username' in login_context:
         username = login_context['username']
-        storage = user_data_storage.objects.get(user = User.objects.get(username=username)) 
-        storage.yt_links.append(link)
+        storage = user_data_storage.objects.get(user = User.objects.get(username=username))
+        time = dt.now()
+        info = [link, title, thumbnail, time.strftime("%d/%m/%Y %H:%M")] 
+        storage.download_history.append(info)
         storage.save()
 
 
@@ -160,9 +185,9 @@ def download_page(request, login_context):
 
     context = {
     'link' : link,
-    'title' : yt.title,
+    'title' : title,
     'views' : views,
-    'thumbnail' : yt.thumbnail_url,
+    'thumbnail' : thumbnail,
     'description' : yt.description,
     'publish_date' : yt.publish_date,
     'length' : length,
