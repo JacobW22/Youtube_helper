@@ -8,6 +8,9 @@ from .models import user_data_storage, User
 
 import datetime
 import random
+import requests
+import backoff
+import pytube
 from datetime import datetime as dt
 
 # Create your views here.
@@ -130,16 +133,25 @@ def sign_up_page(request):
     return render(request, "sign_up_page.html", context)
 
 
+# Backoff for sending request again ( sometimes titles can't be found by pytube )
+
 @login_check
+@backoff.on_exception(backoff.expo, (pytube.exceptions.PytubeError, ValueError), max_time=0.3)
 def download_page(request, login_context):
     link = request.GET.get("link")
     yt = YouTube(link)
-    title = yt.title
-    thumbnail = yt.thumbnail_url
+    
+    try:
+        title = yt.title
+    except pytube.exceptions.PytubeError:
+        title = "Could not find"
 
-    length = str(datetime.timedelta(seconds=yt.length))
-
-    views = f"{yt.views:,}"  # Format numbers 100000 = 100,000 etc.
+    try:
+        thumbnail = yt.thumbnail_url
+        length = str(datetime.timedelta(seconds=yt.length))
+        views = f"{yt.views:,}"  # Format numbers 100000 = 100,000 etc.
+    except:
+        return redirect(main_page)
 
     name = request.GET.get("name")
 
@@ -149,6 +161,7 @@ def download_page(request, login_context):
         storage = user_data_storage.objects.get(
             user=User.objects.get(username=username)
         )
+
         time = dt.now()
         info = [link, title, thumbnail, time.strftime("%d/%m/%Y %H:%M")]
         storage.download_history.append(info)

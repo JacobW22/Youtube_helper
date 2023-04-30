@@ -40,7 +40,7 @@
 <nav class="navbar navbar-expand-sm ">
   <div class="container-fluid">
     <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-    <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
@@ -74,13 +74,13 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-flex align-items-end" style="height: calc(50% - 72.39px)">
+<div class="d-flex align-items-end first-container mt-2 mt-sm-0" style="height: calc(50% - 72.39px)">
 <div class="container-fluid d-flex align-items-center justify-content-center" id="main_form" style="height: auto">
 
   <!-- Card start -->
-    <div class="card mb-3 border-0 text-light ps-sm-4" style="max-width: 1020px;">
+    <div class="card mb-3 border-0 text-light ps-sm-4 align-items-center justify-content-center" style="max-width: 100%;">
         <div class="row g-0 align-items-center justify-content-center">
-          <div class="col-4 d-flex align-items-center justify-content-center">
+          <div class="col-4 mb-4 mb-sm-0 d-flex align-items-center justify-content-center">
             <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
           </div>
           <div class="col-md-8">
@@ -93,8 +93,8 @@
                       Show description
                     </button>
               </p>
-              <p class="card-text text-center"><small><i class="fa-solid fa-eye"></i></i> {{ views }}  views</small></p>
-              <p class="card-text text-center"><small><i class="fa-regular fa-clock"></i> {{ length }} &nbsp&nbsp<i class="fa-regular fa-calendar-days"></i>&nbsp {{ publish_date }}</small></p>
+              <p class="card-text text-center fs-6 mt-1 mt-sm-0"><i class="fa-solid fa-eye"></i></i> {{ views }}  views</p>
+              <p class="card-text text-center fs-6"><i class="fa-regular fa-clock"></i> {{ length }} &nbsp&nbsp<i class="fa-regular fa-calendar-days"></i>&nbsp {{ publish_date }}</p>
             </div>
           </div>
         </div>
@@ -143,25 +143,28 @@
 
 <!-- Download section start -->
 
-<div class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form">
-  <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
+<div class="second-container">
+    <div class="container-fluid gap-2 d-flex mt-2 mt-sm-4 justify-content-center" id="main_form">
+      <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
+    </div>
+
+
+    <!-- Result box start -->
+    <form class="container-fluid gap-2 d-flex mt-5 justify-content-center" id="main_form" method="post">
+        {% csrf_token %}
+        <a type="submit" class="btn btn-dark downloading login100-form-btn" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality">SD quality</a>
+        <a type="submit" class="btn btn-dark downloading login100-form-btn" name="hd_quality" href="{% url 'download_page' %}?link={{ link }}&name=hd_quality">HD quality</a>
+    </form>
+    <!-- Result box end -->
+
+    <!-- Result box2 start -->
+    <form class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form" method="post">
+      {% csrf_token %}
+      <a type="submit" class="btn btn-dark downloading login100-form-btn" name="mp3" href="{% url 'download_page' %}?link={{ link }}&name=mp3">MP3 only</a>
+    </form>
+
+    <!-- Result box2 end -->
 </div>
-
-
-<!-- Result box start -->
-<form class="container-fluid gap-2 d-flex mt-5 justify-content-center" id="main_form" method="post">
-    {% csrf_token %}
-    <a type="submit" class="btn btn-dark downloading login100-form-btn" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality">SD quality</a>
-    <a type="submit" class="btn btn-dark downloading login100-form-btn" name="hd_quality" href="{% url 'download_page' %}?link={{ link }}&name=hd_quality">HD quality</a>
-</form>
-<!-- Result box end -->
-
-<!-- Result box2 start -->
-<form class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form" method="post">
-  {% csrf_token %}
-  <a type="submit" class="btn btn-dark downloading login100-form-btn" name="mp3" href="{% url 'download_page' %}?link={{ link }}&name=mp3">MP3 only</a>
-</form>
-<!-- Result box2 end -->
 <!-- Download section end -->
 
 

@@ -41,7 +41,7 @@
 <nav class="navbar navbar-expand-sm ">
   <div class="container-fluid">
     <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-    <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler mt-1 mt-sm-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
@@ -67,7 +67,7 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-flex align-items-center justify-content-center" style="height: calc(100% - 72.39px)">
+<div class="d-flex align-items-center justify-content-center main-container" style="height: calc(100% - 72.39px)">
     <div class="insides">
         <form method="POST">
           {% csrf_token %}

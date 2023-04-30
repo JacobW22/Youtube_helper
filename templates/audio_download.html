@@ -17,7 +17,7 @@
     <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
 
     <!--===============================================================================================-->	
-	      <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
+        <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
     <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->
@@ -41,7 +41,7 @@
 <nav class="navbar navbar-expand-sm ">
   <div class="container-fluid">
     <a class="navbar-brand text-light ms-sm-2" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-    <button class="navbar-toggler bg-light mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler bg-light collapsed" id="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
@@ -68,6 +68,7 @@
     </div>
   </div>
 </nav>
+
 
   
 <!-- Navbar end -->
