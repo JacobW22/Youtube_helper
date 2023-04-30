@@ -67,17 +67,27 @@
 <!-- Centered input start -->
 <div class="d-flex align-items-center first-container" style="height: 95%">
   
-        <form method="post" class="container-fluid d-flex flex-column align-items-center" id="main_form" >
+        <form method="post" class="container-fluid d-flex flex-column align-items-center mb-5" id="main_form" >
             {% csrf_token %}
-                  <span class="pointing-to-link p-3 text-light fs-3 text-center" id="inputGroup-sizing-default">&darr; Paste your link here &darr;	 </span>
+
+                  <span class="text-light fs-2 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
+                  <span class="pointing-to-link p-3 text-light fs-3 text-center mb-2" id="inputGroup-sizing-default">&darr; Paste your link here &darr;	 </span>
                   <input type="text" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
                   <button type="submit" class="btn btn-dark btn-lg mt-4 rounded-pill"><i class="fa-solid fa-check"></i></button>
         </form>
+
+</div>
+
+<div class="d-flex justify-content-center">
+  <hr class="hr">
 </div>
 
 <div class="d-flex flex-column container-fluid carousel_slider align-items-center justify-content-center second-container" style="height: 95%">
  
-  <span class="slider_info p-3 text-light fs-3 text-center" id="inputGroup-sizing-default"> Previously downloaded media </span>
+  <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
+  <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
+
+  {% if logged == true %}
 
   <div id="carouselExampleIndicators" class="carousel slide " >
     <ol class="carousel-indicators">
@@ -115,8 +125,13 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
-
 </div>
+
+  {% else %}
+  <div class="d-flex info_for_carousel">
+    <span class="text-light fs-2 text-center text-muted"> Log in to see your download history </span>
+  <div>
+  {% endif %}
 
   <!--======================================Toasts===================================================-->	
   <div class="toast-container bottom-0 start-50 translate-middle-x mb-3 ">
