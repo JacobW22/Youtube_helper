@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/template_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/template_ai_site.css' %}">
 
 
     <!--===============================================================================================-->
@@ -82,73 +82,39 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-none align-items-center first-container hidden" style="height: 100%;">
+<div class="d-flex first-container hidden row p-3 m-0" style="height: 100%; max-width: 100%;">
   
-        <form method="post" class="container-fluid d-flex flex-column align-items-center mb-5" id="main_form" >
+        <div class="d-flex first-section flex-column justify-content-center col">
+            <span class="text-light fs-1 ai-title ms-3 align-self-topmt-5">
+                <i class="fa-solid fa-brain" style="color: #ffffff;"></i>&nbsp Video Recommendation by Ai
+            </span>
+            <span class="text-light fs-3 ms-lg-3 align-self-top col mt-lg-4">
+                <span class="ai-subtitle ps-2">
+                How it works?
+                </span>
+                <div class="border_bottom"></div>
+            </span>
+        </div>
+
+        <form method="post" class="container-fluid d-flex flex-column align-items-center justify-content-center col" id="main_form" >
             {% csrf_token %}
 
-                  <span class="text-light fs-2 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
-                  <span class="pointing-to-link p-3 text-light fs-3 text-center mb-2" id="inputGroup-sizing-default">&darr; Paste your link here &darr;	 </span>
-                  <input type="text" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
-                  <button type="submit" class="btn btn-dark btn-lg mt-4 rounded-pill"><i class="fa-solid fa-check"></i></button>
+                <span class="text-light fs-2 container-for-gears row">
+                    <span class="col align-self-start p-0 p-sm-1"><i class="fa-solid fa-gear" style="color: #ffffff;"></i></span>
+                    <span class="col align-self-end p-0 p-sm-1"><small><i class="fa-solid fa-gear" style="color: #ffffff;"></i></small></span>
+                </span>
+
+                <span class="pointing-to-link p-3 text-light fs-3 text-center mb-2" id="inputGroup-sizing-default">&darr; Paste your link here &darr;	 </span>
+                <div class="row justify-content-center">
+                    <input type="text" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                    <button type="submit" class="btn btn-dark btn-lg mt-4 rounded-pill">Generate</button>
+                </d>
         </form>
 
 </div>
 
-<div class="d-none justify-content-center horizontal-line hidden">
-  <hr class="hr">
-</div>
 
-<div class="d-none flex-column container-fluid carousel_slider align-items-center justify-content-center second-container hidden" style="height: 100%">
- 
-  <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
-  <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
 
-  {% if logged == True %}
-
-  <div id="carouselExampleIndicators" class="carousel slide " >
-    <ol class="carousel-indicators">
-
-      {% for number in number_of_links %}
-      <li data-target="#carouselExampleIndicators" class="indicator" data-slide-to="{{ number }}"></li>
-      {% endfor %} 
-
-    </ol>
-    <div class="carousel-inner">
-
-      {% for video in videos_informations %}
-
-        <div class="carousel-item">
-          <img class="d-block slider_image" src="{{ video.thumbnail }}" alt="slide">
-            <div class="carousel-caption d-block text-center">
-              {% comment %}  Fix staright line bug in text when fullscreen mode {% endcomment %}
-              <span class="caption_text d-block text-truncate"> {{ video.title }} </span>
-
-              {% comment %} Here make the data real time from database, try adding date or only title to database {% endcomment %}
-              <p class="mt-2 date_in_caption"><small><i class="fa-regular fa-calendar-days"></i>&nbsp {{ video.publish_date }}</small></p>
-              <a type="submit" class="mx-auto btn btn-dark downloading login100-form-btn download-button" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality"> Download </a>
-            </div>
-        </div>
-
-      {% endfor %} 
-
-    </div>
-    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
-</div>
-
-  {% else %}
-  <div class="d-flex info_for_carousel">
-    <span class="text-light fs-2 text-center text-muted"> Log in to see your download history </span>
-  <div>
-  {% endif %}
 
   <!--======================================Toasts===================================================-->	
   <div class="toast-container bottom-0 start-50 translate-middle-x mb-3 ">
@@ -171,27 +137,32 @@
 <!--===============================================================================================-->
 <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
 <!--===============================================================================================-->
-<script src="{% static 'js/DragToScroll.js' %}"></script>
 
 <script>
 
       $(document).ready(function(){
 
-      // Fade In and Fade Out page
+      {% comment %} // Fade In and Fade Out page
       $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
       $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
       $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
+
+      window.addEventListener("beforeunload", (event) => {
+        $('.first-container').fadeOut( 2000, function() {
+          $('.first-container').removeClass('d-flex').addClass('d-none')
+        });
+        
+        $('.horizontal-line').fadeOut( 1500, function() {
+          $('.horizontal-line').removeClass('d-flex').addClass('d-none')
+        });
+        
+        $('.second-container').fadeOut( 1000, function() {
+          $('.second-container').removeClass('d-flex').addClass('d-none')
+        });
+      }); {% endcomment %}
     
 
       $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
-
-      var carousel_slides = document.getElementsByClassName("carousel-item");
-      var carousel_indicators = document.getElementsByClassName("indicator");
-
-      carousel_slides[0].classList.add("active");
-      carousel_indicators[0].classList.add("active");
-
-      $('.carousel').carousel('99999999999')
   });
 
   var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");

@@ -21,6 +21,7 @@ from ythelperapp import views as main_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_views.main_page, name='main_page'),
+    path('ai_site/', main_views.ai_page, name='ai_site'),
     path('login/', main_views.login_page, name='login_page'),
     path('sign_up/', main_views.sign_up_page, name='sign_up_page'),
     path('log_out/', main_views.logoutUser, name='logout'),

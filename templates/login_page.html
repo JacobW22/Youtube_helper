@@ -180,14 +180,8 @@
 
         $(document).ready(function(){
 
-            // Fade In and Fade Out page
+            // Fade In page
             $('.main-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
-      
-            window.addEventListener("beforeunload", (event) => {
-              $('.main-container').fadeOut( 2000, function() {
-                $('.main-container').removeClass('d-flex').addClass('d-none')
-              });
-            }); 
 
             $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
             var form_fields = document.getElementsByTagName("input");

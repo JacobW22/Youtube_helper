@@ -248,3 +248,16 @@ def download_audio(request, login_context):
     context.update(login_context)
 
     return render(request, "audio_download.html", context)
+
+
+@login_check
+def ai_page(request, login_context):
+
+
+    context = {
+
+    }
+
+    context.update(login_context)
+
+    return render(request, "ai_site.html", context)

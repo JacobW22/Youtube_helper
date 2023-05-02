@@ -186,19 +186,10 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    // Fade In and Fade Out page
+    // Fade In page
     $('.first-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
     $('.second-container').fadeIn(1000).removeClass('d-none');
 
-    window.addEventListener("beforeunload", (event) => {
-      $('.first-container').fadeOut( 2000, function() {
-        $('.first-container').removeClass('d-flex').addClass('d-none')
-      });
-      
-      $('.second-container').fadeOut( 1500, function() {
-        $('.second-container').addClass('d-none')
-      });
-    }); 
   });
 
   $(".modal2").on('shown.bs.modal', function() {
