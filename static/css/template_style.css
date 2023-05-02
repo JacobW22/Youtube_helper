@@ -261,3 +261,28 @@ body, html {
     box-shadow: 0px 0px 25px 2px black;
 
   }
+
+  .dropdown-menu {
+    background: transparent!important;
+    border: none!important;
+  }
+
+  .dropdown-item.text-light:focus, .dropdown-item.text-light:hover {
+    color: gray !important;
+  }
+
+
+  .dropdown-item.text-light:active {
+    color: #fff!important;
+  }
+
+  .dropdown-item.active, .dropdown-item:active {
+    color: #fff!important;
+    text-decoration: none;
+    background-color: #fff!important;
+  }
+
+
+  .dropdown-item {
+    border-radius: 15px!important;
+  }

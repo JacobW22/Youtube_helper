@@ -77,8 +77,9 @@ def main_page(request, login_context):
     return render(request, "main_page.html", context)
 
 
+@login_check
 @not_authenticated
-def login_page(request):
+def login_page(request, login_context):
     form = CreateUserForm()
 
     if request.method == "POST":
@@ -97,6 +98,9 @@ def login_page(request):
     context = {
         "form": form,
     }
+
+    context.update(login_context)
+    
     return render(request, "login_page.html", context)
 
 
@@ -105,8 +109,9 @@ def logoutUser(request):
     return redirect(main_page)
 
 
+@login_check
 @not_authenticated
-def sign_up_page(request):
+def sign_up_page(request, login_context):
     form = CreateUserForm()
 
     if request.method == "POST":
@@ -130,6 +135,9 @@ def sign_up_page(request):
             return redirect(login_page)
 
     context = {"form": form}
+
+    context.update(login_context)
+
     return render(request, "sign_up_page.html", context)
 
 
