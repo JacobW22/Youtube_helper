@@ -87,7 +87,7 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-flex align-items-center justify-content-center main-container" style="height: calc(95% - 72.39px)">
+<div class="d-none align-items-center justify-content-center main-container" style="height: calc(95% - 72.39px)">
     <div class="insides">
         <form method="POST">
           {% csrf_token %}
@@ -191,6 +191,17 @@
 		})
 
     $(document).ready(function(){
+
+        // Fade In and Fade Out page
+        $('.main-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
+      
+        window.addEventListener("beforeunload", (event) => {
+          $('.main-container').fadeOut( 2000, function() {
+            $('.main-container').removeClass('d-flex').addClass('d-none')
+          });
+        }); 
+
+
         $(".toast").toast("show");
         var form_fields = document.getElementsByTagName("input");
 
