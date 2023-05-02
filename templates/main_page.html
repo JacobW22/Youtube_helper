@@ -81,7 +81,7 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-flex align-items-center first-container" style="height: 100%">
+<div class="d-none align-items-center first-container hidden" style="height: 100%;">
   
         <form method="post" class="container-fluid d-flex flex-column align-items-center mb-5" id="main_form" >
             {% csrf_token %}
@@ -94,11 +94,11 @@
 
 </div>
 
-<div class="d-flex justify-content-center">
+<div class="d-none justify-content-center horizontal-line hidden">
   <hr class="hr">
 </div>
 
-<div class="d-flex flex-column container-fluid carousel_slider align-items-center justify-content-center second-container" style="height: 100%">
+<div class="d-none flex-column container-fluid carousel_slider align-items-center justify-content-center second-container hidden" style="height: 100%">
  
   <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
   <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
@@ -174,7 +174,28 @@
 
 <script>
 
-  $(document).ready(function(){
+      $(document).ready(function(){
+
+      // Fade In and Fade Out page
+      $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
+      $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
+      $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
+
+      window.addEventListener("beforeunload", (event) => {
+        $('.first-container').fadeOut( 2000, function() {
+          $('.first-container').removeClass('d-flex').addClass('d-none')
+        });
+        
+        $('.horizontal-line').fadeOut( 1500, function() {
+          $('.horizontal-line').removeClass('d-flex').addClass('d-none')
+        });
+        
+        $('.second-container').fadeOut( 1000, function() {
+          $('.second-container').removeClass('d-flex').addClass('d-none')
+        });
+      }); 
+    
+
       $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
 
       var carousel_slides = document.getElementsByClassName("carousel-item");

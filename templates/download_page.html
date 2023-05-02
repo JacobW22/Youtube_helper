@@ -86,7 +86,7 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-flex align-items-end first-container mt-2 mt-sm-0" style="height: calc(50% - 72.39px)">
+<div class="d-none align-items-end first-container mt-2 mt-sm-0 first-container" style="height: calc(50% - 72.39px)">
 <div class="container-fluid d-flex align-items-center justify-content-center" id="main_form" style="height: auto">
 
   <!-- Card start -->
@@ -155,7 +155,7 @@
 
 <!-- Download section start -->
 
-<div class="second-container">
+<div class="d-none second-container">
     <div class="container-fluid gap-2 d-flex mt-2 mt-sm-4 justify-content-center" id="main_form">
       <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
     </div>
@@ -184,6 +184,23 @@
 <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
 <!--===============================================================================================-->
 <script type="text/javascript">
+  $(document).ready(function(){
+
+    // Fade In and Fade Out page
+    $('.first-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
+    $('.second-container').fadeIn(1000).removeClass('d-none');
+
+    window.addEventListener("beforeunload", (event) => {
+      $('.first-container').fadeOut( 2000, function() {
+        $('.first-container').removeClass('d-flex').addClass('d-none')
+      });
+      
+      $('.second-container').fadeOut( 1500, function() {
+        $('.second-container').addClass('d-none')
+      });
+    }); 
+  });
+
   $(".modal2").on('shown.bs.modal', function() {
     $('.modal-backdrop').css('opacity', '0.6');
   });
