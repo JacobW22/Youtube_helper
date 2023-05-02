@@ -88,7 +88,7 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-flex align-items-center justify-content-center main-container" style="height: calc(93% - 101.5px)">
+<div class="d-none align-items-center justify-content-center main-container" style="height: calc(93% - 101.5px)">
     <div class="insides">
         <form method="POST">
             {% csrf_token %}
@@ -173,12 +173,22 @@
 	<script src="{% static 'vendor/tilt/tilt.jquery.min.js' %}"></script>
 <!--===============================================================================================-->
 
-<script >
+<script>
         $('.js-tilt').tilt({
           scale: 1.1
         })
 
         $(document).ready(function(){
+
+            // Fade In and Fade Out page
+            $('.main-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
+      
+            window.addEventListener("beforeunload", (event) => {
+              $('.main-container').fadeOut( 2000, function() {
+                $('.main-container').removeClass('d-flex').addClass('d-none')
+              });
+            }); 
+
             $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
             var form_fields = document.getElementsByTagName("input");
 
