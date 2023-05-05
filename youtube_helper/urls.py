@@ -21,10 +21,14 @@ from ythelperapp import views as main_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_views.main_page, name='main_page'),
+    path('ai_recommendation/', main_views.ai_page, name='ai_page'),
+    path('ai_recommendation/video/', main_views.ai_video_page, name='ai_video_page'),
     path('login/', main_views.login_page, name='login_page'),
     path('sign_up/', main_views.sign_up_page, name='sign_up_page'),
     path('log_out/', main_views.logoutUser, name='logout'),
-    path('download/', main_views.download_page, name='download_page'),
-    path('download/video/', main_views.download_video, name="download_video"),
-    path('download/audio/', main_views.download_audio, name="download_audio"),
+    path('download/video/<path:parameter>', main_views.download_video, name="download_video"),
+    path('download/audio/<path:parameter>', main_views.download_audio, name="download_audio"),
+    path('download/<path:parameter>', main_views.download_page, name='download_page'),
+    path('download/<path:parameter><str:parameter_name>', main_views.download_page, name='download_page'),
+
 ]

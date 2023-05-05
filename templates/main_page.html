@@ -18,7 +18,8 @@
     <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
     <!--===============================================================================================-->
     <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
-
+    <!--===============================================================================================-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->	
@@ -47,10 +48,11 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item text-light fs-6" href="#">Action</a>
-              <a class="dropdown-item text-light fs-6" href="#">Ai Video Recommendation</a>
+              <a class="dropdown-item text-light fs-6" href="{% url 'ai_page' %}">Ai Video Recommendation</a>
+              
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item text-light fs-6" href="#"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Downloader</a>
-            </div>
+                <a class="dropdown-item text-light fs-6" href="{% url 'main_page' %}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Downloader</a>
+              </div>
           </li>
 
           <li class="nav-item">
@@ -180,20 +182,6 @@
       $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
       $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
       $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
-
-      window.addEventListener("beforeunload", (event) => {
-        $('.first-container').fadeOut( 2000, function() {
-          $('.first-container').removeClass('d-flex').addClass('d-none')
-        });
-        
-        $('.horizontal-line').fadeOut( 1500, function() {
-          $('.horizontal-line').removeClass('d-flex').addClass('d-none')
-        });
-        
-        $('.second-container').fadeOut( 1000, function() {
-          $('.second-container').removeClass('d-flex').addClass('d-none')
-        });
-      }); 
     
 
       $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
