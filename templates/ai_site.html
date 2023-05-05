@@ -1,0 +1,241 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube helper</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/template_ai_site.css' %}">
+
+
+    <!--===============================================================================================-->
+    <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+    <!--===============================================================================================-->
+    <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <!--===============================================================================================-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!--===============================================================================================-->	
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!--===============================================================================================-->
+
+</head>
+<body>
+    
+<!-- Navbar start -->
+
+<nav class="navbar navbar-expand-lg ">
+    <div class="container-fluid">
+        <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
+        <button class="navbar-toggler mt-1 ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+      <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+              <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item text-light fs-6" href="#">Action</a>
+              <a class="dropdown-item text-light fs-6" href="{% url 'main_page' %}">Downloader</a>
+              
+              <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-light fs-6" href="{% url 'ai_page' %}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Ai Video Recommendation</a>
+              </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
+          </li>
+
+          {% if logged == False %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
+          </li>
+
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </div>
+    </div>
+</nav>
+
+    
+<!-- Navbar end -->
+
+<!-- Container for centering start -->
+<!-- Centered input start -->
+<div class="d-flex main-container hidden row p-3 m-0">
+  
+        <div class="d-none first-section flex-column justify-content-center col gap-3">
+            <span class="text-light fs-1 ai-title ms-3 align-self-top mt-lg-5 text-lg-left text-sm-center">
+                <i class="fa-solid fa-brain" style="color: #ffffff;"></i>&nbsp Video Recommendation by Ai
+            </span>
+            
+            <span class="d-flex text-light ms-1 flex-column align-self-top col mt-1 mt-lg-4 gap-5 text_section">
+                <span class="ai-subtitle ps-2 fs-3">
+                How it works?
+                </span>
+                
+                <span class="ps-2 fs-4 justify-content-center">
+                  The app uses an OpenAI API to communicate with Chat GPT, an advanced language model that can provide personalized responses.
+
+                  With this app, you can send a request to Chat GPT, and receive a small comment and a YouTube video in response.<br><br>
+                  
+                  Our feature is perfect for anyone who is curious about what Ai can recommend to watch and wants to explore the Youtube world.<br><br>
+                  
+                  With Chat GPT, you can discover new ideas, learn new things, and have so much fun. So what are you waiting for? 
+
+                </span>
+            </span>
+
+
+        </div>
+
+        <div class="d-none second-section flex-column container-fluid align-items-center justify-content-center col">
+          <form method="post" class="container-fluid d-flex flex-column align-items-center justify-content-center col" id="main_form" >
+              {% csrf_token %}
+
+                  <span class="text-light fs-2 container-for-gears row">
+                      <span class="col align-self-start p-0 p-sm-1"><i class="fa-solid fa-gear" style="color: #ffffff;"></i></span>
+                      <span class="col align-self-end p-0 p-sm-1"><small><i class="fa-solid fa-gear" style="color: #ffffff;"></i></small></span>
+                  </span>
+
+                  <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default"> Recommend me a video </span>
+                  <div class="row justify-content-center">
+                      <span class="pointing-to-link text-light fs-1 mb-2 p-1 text-center " id="inputGroup-sizing-default"> <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i> </span>
+                      <button type="submit" class="btn btn-dark btn-lg rounded-pill send_request">Generate</button>
+                  </div>
+          </form>        
+        </div>
+
+</div>
+
+
+
+<!-- Modal when request start -->
+<div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body rounded">
+        <div class="d-flex align-items-center justify-content-center text-light">
+          <div class="spinner-border" role="status" aria-hidden="true"></div>
+            &nbsp
+            <strong>  Sending request...</strong>
+          </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- Modal when request end -->
+
+
+<!-- Centered input end -->
+<!-- Container for centering end -->
+
+<!--======================================Toasts===================================================-->	
+<div class="toast-container bottom-0 start-50 translate-middle-x ">
+  {% for message in messages %}
+  <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+    <div class="toast-body">
+      <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn-close fs-5 fs-sm-6 toast_dismiss" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+{% endfor %}
+<!--===============================================================================================-->	
+
+
+<!--===============================================================================================-->	
+<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+
+<script>
+
+  $(document).ready(function(){
+
+    $(window).on("pageshow", function() {
+      $('.modal').modal('hide');
+      $("#staticBackdrop").modal('hide');
+    });
+    
+    // Fade In page
+    $('.first-section').fadeIn(500).removeClass('d-none').addClass('d-flex');
+    $('.second-section').fadeIn(500).removeClass('d-none').addClass('d-flex');
+
+    $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
+  });
+
+  // Add event listener for click event on the close button
+  $('.toast .btn-close').on('click', function() {
+    var toast = $(this).closest('.toast');
+    // Animate the toast element
+    toast.animate({
+      opacity: 0,
+      height: 0,
+      marginBottom: 0
+    }, 500, function() {
+      // Remove the toast element from the DOM
+      toast.remove();
+    });
+  });
+
+  var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");
+  hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")";
+
+
+  $( ".navbar-toggler" ).click(function() {
+    var value = $(".navbar-toggler").attr('aria-expanded');
+
+    if (value == 'true') {
+      hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-compact-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67z' fill='white'%3E%3C/path%3E%3C/svg%3E\")"
+    }
+    else hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")";
+  });
+
+
+  $(".modal2").on('shown.bs.modal', function() {
+    $('.modal-backdrop').css('opacity', '0.6');
+  });
+
+	$(".send_request").click(function(){
+		$("#staticBackdrop").modal('show');
+	});
+
+
+  // Add slideDown animation to Bootstrap dropdown when expanding.
+  $('.dropdown').on('show.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
+  });
+
+  // Add slideUp animation to Bootstrap dropdown when collapsing.
+  $('.dropdown').on('hide.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
+  });
+
+</script>
+</body>
+</html>
