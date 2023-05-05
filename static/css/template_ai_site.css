@@ -106,8 +106,7 @@ html {
 }
 
 @media screen and (min-width: 2048px) {
-  .first-container,
-  .second-container {
+  .main-container{
     zoom: 175%;
   }
 
@@ -117,13 +116,6 @@ html {
 
   #main-title {
     font-size: 4rem !important;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  #main_form,
-  #result_form {
-    width: 50%;
   }
 }
 
@@ -235,6 +227,7 @@ html {
     color: #fff !important;
     font-family: Montserrat-Bold !important;
     width: 10em;
+    scale: 1.1;
   }
 
   .btn:hover {
@@ -250,8 +243,38 @@ html {
     border-left: .15em solid #f5696e;
   }
 
-  .border_bottom {
-    border-bottom: .15em solid #f5696e!important;
-    width: 1.5em;
-    margin-top: -0.1em;
+  .main-container {
+    height: 90%; 
+    max-width: 100%;
+  }
+
+  .text_section {
+    overflow: auto;
+  }
+
+  .modal-content {
+    background: #000000!important;
+    color: rgb(185, 185, 185);
+    border-radius: 15px!important
+  }
+  
+  .toast {
+    position: relative;
+    scale: 1.1;
+    margin-bottom: 2.5em;
+  }
+
+  .btn-close {
+    opacity: 1;
+    filter: invert(92%) sepia(91%) saturate(26%) hue-rotate(201deg) brightness(108%) contrast(100%);
+  }
+
+  .btn-close:hover {
+    filter: invert(0%) sepia(5%) saturate(18%) hue-rotate(192deg) brightness(94%) contrast(106%);
+  }
+
+  .btn-close:focus {
+    outline: 0;
+    box-shadow: none!important;
+    filter: invert(0%) sepia(5%) saturate(18%) hue-rotate(192deg) brightness(94%) contrast(106%);
   }

@@ -48,31 +48,31 @@
 
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
+            <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp; Tools
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item text-light fs-6" href="#">Action</a>
             <a class="dropdown-item text-light fs-6" href="#">Ai Video Recommendation</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item text-light fs-6" href="#"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Downloader</a>
+            <a class="dropdown-item text-light fs-6" href="#"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp; Downloader</a>
           </div>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
+          <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp; Home</a>
         </li>
 
         {% if logged == False %}
         <li class="nav-item">
-          <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
+          <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; Log in</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
+          <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp; Sign up</a>
         </li>
 
         {% else %}
         <li class="nav-item">
-          <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
+          <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; Log out</a>
         </li>
         {% endif %}
 
@@ -86,18 +86,30 @@
 
 <!-- Container for centering start -->
 <!-- Centered input start -->
-<div class="d-none align-items-end first-container mt-2 mt-sm-0 first-container" style="height: calc(50% - 72.39px)">
+{% if thumbnail == "couldn't find" %}
+  <div class="d-none align-items-center justify-content-center mt-2 mt-sm-0 first-container" style="height: calc(100% - 72.39px)">
+{% else %}
+  <div class="d-none align-items-end mt-2 mt-sm-0 first-container" style="height: calc(50% - 72.39px)">
+{% endif %}
+
 <div class="container-fluid d-flex align-items-center justify-content-center" id="main_form" style="height: auto">
 
   <!-- Card start -->
     <div class="card mb-3 border-0 text-light ps-sm-4 align-items-center justify-content-center" style="max-width: 100%;">
         <div class="row g-0 align-items-center justify-content-center">
           <div class="col-4 mb-4 mb-sm-0 d-flex align-items-center justify-content-center">
-            <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
+
+            {% if thumbnail == "couldn't find" %}
+              <i class="fa-solid fa-triangle-exclamation error_occured mb-2" style="color: #ffffff;"></i>
+            {% else %}
+              <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
+            {% endif %}
+
           </div>
           <div class="col-md-8">
             <div class="card-body ">
               <h5 class="card-title text-center fs-4">{{ title }}</h5>
+              <p class="card-text text-center mb-2"><a href="{{ link }}" class="link_to_video" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square" style="color: #78d4fc;"></i>&nbsp; {{ link }}</a></p>
               <p class="card-text d-flex align-items-center justify-content-center">
                 <!-- Scrollable modal -->
                     <!-- Button trigger modal -->
@@ -106,7 +118,7 @@
                     </button>
               </p>
               <p class="card-text text-center fs-6 mt-1 mt-sm-0"><i class="fa-solid fa-eye"></i></i> {{ views }}  views</p>
-              <p class="card-text text-center fs-6"><i class="fa-regular fa-clock"></i> {{ length }} &nbsp&nbsp<i class="fa-regular fa-calendar-days"></i>&nbsp {{ publish_date }}</p>
+              <p class="card-text text-center fs-6"><i class="fa-regular fa-clock"></i> {{ length }} &nbsp;&nbsp;<i class="fa-regular fa-calendar-days"></i>&nbsp; {{ publish_date }}</p>
             </div>
           </div>
         </div>
@@ -139,7 +151,7 @@
     <div class="modal-body rounded">
       <div class="d-flex align-items-center justify-content-center text-light">
         <div class="spinner-border" role="status" aria-hidden="true"></div>
-          &nbsp
+          &nbsp;
           <strong>  Downloading file for you...</strong>
         </div>
     </div>
@@ -153,31 +165,47 @@
 <!-- Centered input end -->
 <!-- Container for centering end -->
 
-<!-- Download section start -->
+{% if thumbnail != "couldn't find" %}
+  <!-- Download section start -->
+  <div class="d-none second-container">
+      <div class="container-fluid gap-2 d-flex mt-2 mt-sm-4 justify-content-center" id="main_form">
+        <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
+      </div>
 
-<div class="d-none second-container">
-    <div class="container-fluid gap-2 d-flex mt-2 mt-sm-4 justify-content-center" id="main_form">
-      <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
-    </div>
 
+      <!-- Result box start -->
+      <form class="container-fluid gap-2 d-flex mt-5 justify-content-center" id="main_form" method="post">
+          {% csrf_token %}
+          <a type="submit" class="btn btn-dark downloading login100-form-btn" name="sd_quality" href="{% url 'download_page' parameter=link parameter_name='-sd_quality' %}">SD quality</a>
+          <a type="submit" class="btn btn-dark downloading login100-form-btn" name="hd_quality" href="{% url 'download_page' parameter=link parameter_name='-hd_quality' %}">HD quality</a>
+      </form>
+      <!-- Result box end -->
 
-    <!-- Result box start -->
-    <form class="container-fluid gap-2 d-flex mt-5 justify-content-center" id="main_form" method="post">
+      <!-- Result box2 start -->
+      <form class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form" method="post">
         {% csrf_token %}
-        <a type="submit" class="btn btn-dark downloading login100-form-btn" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality">SD quality</a>
-        <a type="submit" class="btn btn-dark downloading login100-form-btn" name="hd_quality" href="{% url 'download_page' %}?link={{ link }}&name=hd_quality">HD quality</a>
-    </form>
-    <!-- Result box end -->
+        <a type="submit" class="btn btn-dark downloading login100-form-btn" name="mp3" href="{% url 'download_page' parameter=link parameter_name='-mp3' %}">MP3 only</a>
+      </form>
 
-    <!-- Result box2 start -->
-    <form class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form" method="post">
-      {% csrf_token %}
-      <a type="submit" class="btn btn-dark downloading login100-form-btn" name="mp3" href="{% url 'download_page' %}?link={{ link }}&name=mp3">MP3 only</a>
-    </form>
+      <!-- Result box2 end -->
+  </div>
+  <!-- Download section end -->
+{% endif %}
 
-    <!-- Result box2 end -->
+<!--======================================Toasts===================================================-->	
+<div class="toast-container bottom-0 start-50 translate-middle-x ">
+  {% for message in messages %}
+  <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+    <div class="toast-body">
+      <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn-close fs-5 fs-sm-6 toast_dismiss" aria-label="Close"></button>
+    </div>
+  </div>
 </div>
-<!-- Download section end -->
+{% endfor %}
+<!--===============================================================================================-->	
 
 
 <!--===============================================================================================-->	
@@ -186,23 +214,40 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
+    $(window).on("pageshow", function() {
+      $('.modal').modal('hide');
+      $("#staticBackdrop").modal('hide');
+    });
+    
     // Fade In page
     $('.first-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
     $('.second-container').fadeIn(1000).removeClass('d-none');
 
+    $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
   });
 
   $(".modal2").on('shown.bs.modal', function() {
     $('.modal-backdrop').css('opacity', '0.6');
   });
 
+  // Add event listener for click event on the close button
+  $('.toast .btn-close').on('click', function() {
+    var toast = $(this).closest('.toast');
+    // Animate the toast element
+    toast.animate({
+      opacity: 0,
+      height: 0,
+      marginBottom: 0
+    }, 500, function() {
+      // Remove the toast element from the DOM
+      toast.remove();
+    });
+  });
+  
+
 	$(".downloading").click(function(){
 		$("#staticBackdrop").modal('show');
 	});
-
-  window.addEventListener("beforeunload", (event) => {
-		$("#staticBackdrop").modal('hide');
-  }); 
 
 
   var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");

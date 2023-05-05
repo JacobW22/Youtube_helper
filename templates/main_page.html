@@ -48,10 +48,11 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item text-light fs-6" href="#">Action</a>
-              <a class="dropdown-item text-light fs-6" href="#">Ai Video Recommendation</a>
+              <a class="dropdown-item text-light fs-6" href="{% url 'ai_page' %}">Ai Video Recommendation</a>
+              
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item text-light fs-6" href="#"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Downloader</a>
-            </div>
+                <a class="dropdown-item text-light fs-6" href="{% url 'main_page' %}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Downloader</a>
+              </div>
           </li>
 
           <li class="nav-item">
