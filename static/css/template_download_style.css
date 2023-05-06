@@ -67,7 +67,7 @@ body, html {
 
   @media screen and (min-width: 2048px) {
     .first-container, .second-container {
-      zoom: 175%;
+      zoom: 200%;
     }
 
     .nav-link {
@@ -80,8 +80,16 @@ body, html {
   }
 
   @media screen and (min-width: 1200px) {
-    #main_form, #result_form {
-        width: 50%;
+    .first-container, .second-container {
+      zoom: 125%;
+    }
+
+    .cut_width {
+        width: 50%!important;
+    }
+
+    .cut_more_width {
+      width: 35%!important;
     }
   }
 
@@ -101,6 +109,14 @@ body, html {
     }
 
     ::-webkit-scrollbar { display: none; }
+
+    .main_container {
+      height: calc(100% - 61.19px);;
+    }
+
+    .cut_more_width {
+      width: 55%!important;
+    }
   }
 
   .toast {
@@ -252,8 +268,15 @@ body, html {
   
   .link_to_video:hover {
     color: #fff;
-
   }
+
+  .main_container {
+    height: calc(100% - 90px);;
+  }
+  
+
+
+
 
 
 

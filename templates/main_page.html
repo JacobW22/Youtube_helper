@@ -29,14 +29,14 @@
     <!--===============================================================================================-->
 
 </head>
-<body>
+<body onload="DragToScroll('body')">
     
 <!-- Navbar start -->
 
 <nav class="navbar navbar-expand-lg ">
     <div class="container-fluid">
         <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-        <button class="navbar-toggler mt-1 ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
       <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
@@ -192,7 +192,8 @@
       carousel_slides[0].classList.add("active");
       carousel_indicators[0].classList.add("active");
 
-      $('.carousel').carousel('99999999999')
+      $('.carousel').carousel('99999999999');
+
   });
 
   var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");

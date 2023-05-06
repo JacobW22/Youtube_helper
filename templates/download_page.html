@@ -16,8 +16,8 @@
     <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
     <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
 
-    <!--===============================================================================================-->	
-	      <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
+    <!--======================================Links===================================================-->	
+        <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>  
     <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->
@@ -84,114 +84,118 @@
   
 <!-- Navbar end -->
 
-<!-- Container for centering start -->
-<!-- Centered input start -->
-{% if thumbnail == "couldn't find" %}
-  <div class="d-none align-items-center justify-content-center mt-2 mt-sm-0 first-container" style="height: calc(100% - 72.39px)">
-{% else %}
-  <div class="d-none align-items-end mt-2 mt-sm-0 first-container" style="height: calc(50% - 72.39px)">
-{% endif %}
 
-<div class="container-fluid d-flex align-items-center justify-content-center" id="main_form" style="height: auto">
+<div class="d-flex main_container justify-content-center flex-column align-items-center">
+  <!-- Container for centering start -->
+  <!-- Centered input start -->
+  {% if thumbnail == "couldn't find" %}
+    <div class="d-none align-items-center justify-content-center mt-2 mt-sm-0 first-container" style="height: calc(100% - 72.39px)">
+  {% else %}
+    <div class="d-none align-items-end mt-2 mt-sm-0 first-container" style="height: calc(50% - 72.39px)">
+  {% endif %}
 
-  <!-- Card start -->
-    <div class="card mb-3 border-0 text-light ps-sm-4 align-items-center justify-content-center" style="max-width: 100%;">
-        <div class="row g-0 align-items-center justify-content-center">
-          <div class="col-4 mb-4 mb-sm-0 d-flex align-items-center justify-content-center">
+  <div class="container-fluid d-flex align-items-center justify-content-center cut_width" style="height: auto">
 
-            {% if thumbnail == "couldn't find" %}
-              <i class="fa-solid fa-triangle-exclamation error_occured mb-2" style="color: #ffffff;"></i>
-            {% else %}
-              <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
-            {% endif %}
+    <!-- Card start -->
+      <div class="card mb-3 border-0 text-light ps-sm-4 align-items-center justify-content-center" style="max-width: 100%;">
+          <div class="row g-0 align-items-center justify-content-center">
+            <div class="col-4 mb-4 mb-sm-0 d-flex align-items-center justify-content-center">
 
-          </div>
-          <div class="col-md-8">
-            <div class="card-body ">
-              <h5 class="card-title text-center fs-4">{{ title }}</h5>
-              <p class="card-text text-center mb-2"><a href="{{ link }}" class="link_to_video" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square" style="color: #78d4fc;"></i>&nbsp; {{ link }}</a></p>
-              <p class="card-text d-flex align-items-center justify-content-center">
-                <!-- Scrollable modal -->
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-secondary mb-2 bg-black border-0 p-3 description" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                      Show description
-                    </button>
-              </p>
-              <p class="card-text text-center fs-6 mt-1 mt-sm-0"><i class="fa-solid fa-eye"></i></i> {{ views }}  views</p>
-              <p class="card-text text-center fs-6"><i class="fa-regular fa-clock"></i> {{ length }} &nbsp;&nbsp;<i class="fa-regular fa-calendar-days"></i>&nbsp; {{ publish_date }}</p>
+              {% if thumbnail == "couldn't find" %}
+                <i class="fa-solid fa-triangle-exclamation error_occured mb-2" style="color: #ffffff;"></i>
+              {% else %}
+                <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
+              {% endif %}
+
+            </div>
+            <div class="col-md-8">
+              <div class="card-body ">
+                <h5 class="card-title text-center fs-4">{{ title }}</h5>
+                <p class="card-text text-center mb-2"><a href="{{ link }}" class="link_to_video" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square" style="color: #78d4fc;"></i>&nbsp; {{ link }}</a></p>
+                <p class="card-text d-flex align-items-center justify-content-center">
+                  <!-- Scrollable modal -->
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-secondary mb-2 bg-black border-0 p-3 description" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Show description
+                      </button>
+                </p>
+                <p class="card-text text-center fs-6 mt-1 mt-sm-0"><i class="fa-solid fa-eye"></i></i> {{ views }}  views</p>
+                <p class="card-text text-center fs-6"><i class="fa-regular fa-clock"></i> {{ length }} &nbsp;&nbsp;<i class="fa-regular fa-calendar-days"></i>&nbsp; {{ publish_date }}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-  <!-- Card end -->
-  
-  <!-- Modal with description start -->
-  <div class="modal fade modal1" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable text-dark">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">{{ title }}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          {{ description }}
-        </div>
-        <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-secondary login100-form-btn" data-bs-dismiss="modal">Close</button>
+    <!-- Card end -->
+    
+    <!-- Modal with description start -->
+    <div class="modal fade modal1" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable text-dark">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">{{ title }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text_for_modal">
+            {{ description }}
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-secondary login100-form-btn" data-bs-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-<!-- Modal with description end -->
+  <!-- Modal with description end -->
 
-<!-- Modal when downloading start -->
-<div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered">
-  <div class="modal-content">
-    <div class="modal-body rounded">
-      <div class="d-flex align-items-center justify-content-center text-light">
-        <div class="spinner-border" role="status" aria-hidden="true"></div>
-          &nbsp;
-          <strong>  Downloading file for you...</strong>
-        </div>
+  <!-- Modal when downloading start -->
+  <div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body rounded">
+        <div class="d-flex align-items-center justify-content-center text-light">
+          <div class="spinner-border" role="status" aria-hidden="true"></div>
+            &nbsp;
+            <strong>  Downloading file for you...</strong>
+          </div>
+      </div>
     </div>
   </div>
-</div>
-</div>
-<!-- Modal when downloading end -->
+  </div>
+  <!-- Modal when downloading end -->
 
-</div>
-</div>
-<!-- Centered input end -->
-<!-- Container for centering end -->
+  </div>
+  </div>
+  <!-- Centered input end -->
+  <!-- Container for centering end -->
 
-{% if thumbnail != "couldn't find" %}
-  <!-- Download section start -->
-  <div class="d-none second-container">
-      <div class="container-fluid gap-2 d-flex mt-2 mt-sm-4 justify-content-center" id="main_form">
-        <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
-      </div>
+  {% if thumbnail != "couldn't find" %}
+    <!-- Download section start -->
+    <div class="d-none second-container">
+        <div class="container-fluid gap-2 d-flex mt-2 mt-sm-4 justify-content-center">
+          <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
+        </div>
 
 
-      <!-- Result box start -->
-      <form class="container-fluid gap-2 d-flex mt-5 justify-content-center" id="main_form" method="post">
+        <!-- Result box start -->
+        <form class="container-fluid gap-2 d-flex mt-5 justify-content-center cut_width"  method="post">
+            {% csrf_token %}
+            <a type="submit" class="btn btn-dark downloading login100-form-btn" name="sd_quality" href="{% url 'download_page' parameter=link parameter_name='-sd_quality' %}">SD quality</a>
+            <a type="submit" class="btn btn-dark downloading login100-form-btn" name="hd_quality" href="{% url 'download_page' parameter=link parameter_name='-hd_quality' %}">HD quality</a>
+        </form>
+        <!-- Result box end -->
+
+        <!-- Result box2 start -->
+        <form class="container-fluid gap-2 d-flex mt-4 justify-content-center cut_more_width" method="post">
           {% csrf_token %}
-          <a type="submit" class="btn btn-dark downloading login100-form-btn" name="sd_quality" href="{% url 'download_page' parameter=link parameter_name='-sd_quality' %}">SD quality</a>
-          <a type="submit" class="btn btn-dark downloading login100-form-btn" name="hd_quality" href="{% url 'download_page' parameter=link parameter_name='-hd_quality' %}">HD quality</a>
-      </form>
-      <!-- Result box end -->
+          <a type="submit" class="btn btn-dark downloading login100-form-btn" name="mp3" href="{% url 'download_page' parameter=link parameter_name='-mp3' %}">MP3 only</a>
+        </form>
 
-      <!-- Result box2 start -->
-      <form class="container-fluid gap-2 d-flex mt-4 justify-content-center" id="main_form" method="post">
-        {% csrf_token %}
-        <a type="submit" class="btn btn-dark downloading login100-form-btn" name="mp3" href="{% url 'download_page' parameter=link parameter_name='-mp3' %}">MP3 only</a>
-      </form>
+        <!-- Result box2 end -->
+    </div>
+    <!-- Download section end -->
+  {% endif %}
 
-      <!-- Result box2 end -->
-  </div>
-  <!-- Download section end -->
-{% endif %}
 
+</div>
 <!--======================================Toasts===================================================-->	
 <div class="toast-container bottom-0 start-50 translate-middle-x ">
   {% for message in messages %}
@@ -208,9 +212,12 @@
 <!--===============================================================================================-->	
 
 
-<!--===============================================================================================-->	
+<!--======================================Scripts===================================================-->	
 <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
 <!--===============================================================================================-->
+
+
+
 <script type="text/javascript">
   $(document).ready(function(){
 

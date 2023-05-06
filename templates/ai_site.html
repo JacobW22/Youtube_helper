@@ -29,14 +29,14 @@
     <!--===============================================================================================-->
 
 </head>
-<body>
+<body onload="DragToScroll('.text_section')" onresize="DragToScroll('.text_section')">
     
 <!-- Navbar start -->
 
 <nav class="navbar navbar-expand-lg ">
     <div class="container-fluid">
         <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-        <button class="navbar-toggler mt-1 ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
       <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
@@ -90,7 +90,7 @@
                 <i class="fa-solid fa-brain" style="color: #ffffff;"></i>&nbsp Video Recommendation by Ai
             </span>
             
-            <span class="d-flex text-light ms-1 flex-column align-self-top col mt-1 mt-lg-4 gap-5 text_section">
+            <span class="d-flex text-light ms-1 flex-column align-self-top col mt-1 mt-lg-4 gap-5 text_section" >
                 <span class="ai-subtitle ps-2 fs-3">
                 How it works?
                 </span>
@@ -172,6 +172,9 @@
 <!--===============================================================================================-->
 <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
 <!--===============================================================================================-->
+<script src="{% static 'js/DragToScroll.js' %}"></script>
+<!--===============================================================================================-->
+
 
 <script>
 
