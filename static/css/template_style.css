@@ -307,4 +307,8 @@ body, html {
     border-radius: 15px!important;
   }
 
+  .first-container {
+    height: 100%;
+  }
+
 

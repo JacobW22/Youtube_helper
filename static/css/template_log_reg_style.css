@@ -85,6 +85,10 @@ body, html {
   }
 
   @media screen and (min-width: 997px) and (max-width: 2048px){
+    .main-container {
+      zoom: 105%;
+    }
+    
     .nav-link {
       font-size: 1.25rem!important;
     }
@@ -103,6 +107,18 @@ body, html {
   @media screen and (max-width: 450px) {
     .h-custom {
         height: 100%;
+    }
+    
+    .main-container {
+      padding: 15vw;
+    }
+    
+    .insides {
+      width: 100%;
+    }
+
+    form {
+      width: 100%;
     }
   }
 
@@ -201,6 +217,14 @@ body, html {
   .dropdown-item {
     border-radius: 15px!important;
   }
+
+  .full_site_container {
+    height: 100%;
+  }
+
+
+
+
 
 
 
