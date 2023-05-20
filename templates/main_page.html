@@ -29,60 +29,72 @@
     <!--===============================================================================================-->
 
 </head>
-<body onload="DragToScroll('body')">
+<body>
     
 
 
 <div class="d-flex flex-column full_site_container">
 
   <!-- Navbar start -->
-  <nav class="navbar navbar-expand-lg ">
-      <div class="container-fluid">
-          <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-          <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-          </button>
-        <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
-          <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
+  <nav class="navbar navbar-expand-lg mb-4">
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-                <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item text-light fs-6" href="#">Action</a>
-                <a class="dropdown-item text-light fs-6" href="{% url 'ai_page' %}">Ai Video Recommendation</a>
-                
-                <div class="dropdown-divider"></div>
-                  <a class="dropdown-item text-light fs-6" href="{% url 'main_page' %}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Downloader</a>
+    <div class="container-fluid">
+
+        <!-- Nav title start-->
+        <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
+        <!-- Nav title end -->
+
+        <!-- Collapse button start-->
+        <button class="navbar-toggler mt-1 ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Collapse button end -->
+
+
+        <!-- Nav items start -->
+        <div class="collapse navbar-collapse mb-4 mb-sm-2 mt-3" id="navbarSupportedContent" >
+          <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0"  style="min-height: auto;">
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+                  <i class="fa-solid fa-screwdriver-wrench"></i>&nbsp; Tools
+                </a>
+
+                <div class="dropdown-menu p-0" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item fs-6" href="#">Action</a>
+                  <a class="dropdown-item fs-6" href="#">Ai Video Recommendation</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item fs-6" href="#"><i class="fa-solid fa-location-crosshairs"></i>&nbsp; Downloader</a>
                 </div>
-            </li>
+              </li>
 
             <li class="nav-item">
-              <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
+              <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp; Home</a>
             </li>
 
             {% if logged == False %}
             <li class="nav-item">
-              <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
+              <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; Log in</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
+              <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp; Sign up</a>
             </li>
 
             {% else %}
             <li class="nav-item">
-              <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
+              <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; Log out</a>
             </li>
             {% endif %}
-
+          
           </ul>
         </div>
-      </div>
+        <!-- Nav items end -->
+
+    </div>
   </nav>
+  <!-- Navbar end -->
 
       
-  <!-- Navbar end -->
 
   <!-- Container for centering start -->
   <!-- Centered input start -->
@@ -93,7 +105,7 @@
 
                     <span class="text-light fs-2 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
                     <span class="pointing-to-link p-3 text-light fs-3 text-center mb-2" id="inputGroup-sizing-default">&darr; Paste your link here &darr;	 </span>
-                    <input type="text" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                    <input type="text" placeholder=" " name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
                     <button type="submit" class="btn btn-dark btn-lg mt-4 rounded-pill"><i class="fa-solid fa-check"></i></button>
           </form>
 
@@ -177,7 +189,6 @@
 <!--===============================================================================================-->
 <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
 <!--===============================================================================================-->
-<script src="{% static 'js/DragToScroll.js' %}"></script>
 
 <script>
 

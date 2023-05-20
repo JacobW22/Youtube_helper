@@ -1,5 +1,6 @@
 const DragToScroll = (param) => {
   const container = document.querySelector(param);
+
   container.style.cursor = 'auto';
   container.style.userSelect = 'text';
 

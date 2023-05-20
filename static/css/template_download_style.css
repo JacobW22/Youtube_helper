@@ -170,12 +170,13 @@ body, html {
     border: none!important;
     backdrop-filter: blur(2rem);
     border-radius: 15px!important;
-    width: 300%!important
   }
 
   .dropdown-item:focus, .dropdown-item:hover {
     color: black !important;
     font-size: 120%!important;
+    margin-left: 1.1em!important;
+
   }
 
   .dropdown-item:focus, .dropdown-item:hover > .fa-location-crosshairs {
@@ -194,10 +195,8 @@ body, html {
     color: #fff!important;
   }
 
-  .fa-location-crosshairs {
-    color: #fff!important;
+  .fa-solid {
     transition: filter 300ms!important;
-
   }
 
   .toast {
@@ -263,8 +262,14 @@ body, html {
     .dropdown-item {
       font-size: 150%!important;
     }
+    
     .dropdown-item:focus, .dropdown-item:hover {
       font-size: 175%!important;
+    }
+
+    .dropdown-menu {
+      margin-top: 3.2em!important;
+      width: 300%!important
     }
   }
 
@@ -303,10 +308,7 @@ body, html {
   
     .dropdown-menu {
       margin-top: 3.2em!important;
-    }
-
-    .dropdown-item:hover  {
-      margin-left: 1.1em!important;
+      width: 300%!important
     }
   }
 
