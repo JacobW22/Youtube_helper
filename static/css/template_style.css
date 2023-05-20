@@ -96,7 +96,7 @@ body, html {
     user-select: none;
   }
 
-  .fa-solid, .btn, #main-title, .navbar-toggler-icon, .carousel-inner .carousel-item > img, a, .dropdown-item, .form-conrol {
+  .fa-solid, .btn, #main-title, .navbar-toggler-icon, .carousel-inner .carousel-item > img, a, .dropdown-item, .form-control {
     -webkit-transition: all 0.4s !important;
     -o-transition: all 0.4s !important;
     -moz-transition: all 0.4s !important;

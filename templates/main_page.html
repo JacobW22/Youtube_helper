@@ -8,32 +8,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youtube helper</title>
 
+
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/template_style.css' %}">
+    
+
+    <!--===============================================================================================-->
+      <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!--===============================================================================================-->
 
 
     <!--===============================================================================================-->
-    <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+      <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <!--===============================================================================================-->
-    <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
+      <link rel="stylesheet" href="{% static 'css/template_style.css' %}">  
     <!--===============================================================================================-->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
     <!--===============================================================================================-->	
-    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <!--===============================================================================================-->
+
 
 </head>
 <body>
     
 
-
+<!-- Site container start -->
 <div class="d-flex flex-column full_site_container">
+
 
   <!-- Navbar start -->
   <nav class="navbar navbar-expand-lg mb-4">
@@ -95,10 +107,8 @@
   <!-- Navbar end -->
 
       
-
-  <!-- Container for centering start -->
-  <!-- Centered input start -->
-  <div class="d-flex my-top my-lg-auto align-items-center first-container">
+  <!-- First section start -->
+  <section class="d-flex my-top my-lg-auto align-items-center first-container">
     
           <form method="post" class="container-fluid d-flex flex-column align-items-center mb-5" id="main_form" >
               {% csrf_token %}
@@ -109,13 +119,19 @@
                     <button type="submit" class="btn btn-dark btn-lg mt-4 rounded-pill"><i class="fa-solid fa-check"></i></button>
           </form>
 
-  </div>
+  </section>
+  <!-- First section end -->
 
+
+  <!-- Horizontal line start -->
   <div class="d-flex my-auto justify-content-center horizontal-line">
     <hr class="hr">
   </div>
+  <!-- Horizontal line end -->
 
-  <div class="d-flex my-auto flex-column container-fluid carousel_slider align-items-center justify-content-center second-container" style="height: 100%">
+
+  <!-- Second section start -->
+  <section class="d-flex my-auto flex-column container-fluid carousel_slider align-items-center justify-content-center second-container" style="height: 100%">
   
     <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
     <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
@@ -158,43 +174,42 @@
         <span class="sr-only">Next</span>
       </a>
     </div>
-  </div>
+  </section>
 
-    {% else %}
-    <div class="d-flex info_for_carousel">
-      <span class="text-light fs-2 text-center text-muted"> Log in to see your download history </span>
-    <div>
-    {% endif %}
+
+  {% else %}
+  <section class="d-flex info_for_carousel">
+    <span class="text-light fs-2 text-center text-muted"> Log in to see your download history </span>
+  </section>
+  {% endif %}
+  <!-- Second section end -->
+
 
 </div>
+<!-- Site container end -->
 
-  <!--======================================Toasts===================================================-->	
-  <div class="toast-container bottom-0 start-50 translate-middle-x mb-3 ">
-    {% for message in messages %}
-    <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true"> 
-      <div class="toast-body">
-        <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
-      </div>
+
+<!-- Toasts container start -->
+<div class="toast-container bottom-0 start-50 translate-middle-x mb-3 ">
+  {% for message in messages %}
+  <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true"> 
+    <div class="toast-body">
+      <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
     </div>
   </div>
-  {% endfor %}
-  <!--===============================================================================================-->	
+</div>
+{% endfor %}
+<!-- Toasts container end -->
 
 
-<!-- Centered input end -->
-<!-- Container for centering end -->
 
-<!--===============================================================================================-->	
-<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
-<!--===============================================================================================-->
-<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-<!--===============================================================================================-->
 
-<script>
 
-      $(document).ready(function(){
+<script type="text/javascript">
+  
+  $(document).ready(function(){
 
-      // Fade In and Fade Out page
+      // Fade In page
       $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
       $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
       $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
@@ -202,16 +217,31 @@
 
       $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
 
+      // Add event listener for click event on the close button
+      $('.toast .btn-close').on('click', function() {
+        var toast = $(this).closest('.toast');
+        // Animate the toast element
+        toast.animate({
+          opacity: 0,
+          height: 0,
+          marginBottom: 0
+        }, 500, function() {
+          // Remove the toast element from the DOM
+          toast.remove();
+        });
+      });
+      
+
       var carousel_slides = document.getElementsByClassName("carousel-item");
       var carousel_indicators = document.getElementsByClassName("indicator");
 
       carousel_slides[0].classList.add("active");
       carousel_indicators[0].classList.add("active");
 
-      $('.carousel').carousel('99999999999');
-
   });
 
+
+  // Changing hamburger icon when clicked
   var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");
   hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")";
 
@@ -225,10 +255,12 @@
     else hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")";
   });
 
+
   // Add slideDown animation to Bootstrap dropdown when expanding.
   $('.dropdown').on('show.bs.dropdown', function() {
     $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
   });
+
 
   // Add slideUp animation to Bootstrap dropdown when collapsing.
   $('.dropdown').on('hide.bs.dropdown', function() {
