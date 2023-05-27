@@ -353,6 +353,95 @@ iframe {
   color: #000000;
 }
 
+.fa-greater-than {
+  visibility: hidden;
+}
+
+.animate:hover > .fa-greater-than {
+  visibility: visible;
+  animation-name: enter;
+  animation-duration: 0.35s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes enter {
+  from {margin-right: 0px;}
+  to {margin-right: 5px;}
+}
+
+
+.animate:hover {
+  color: #000000;
+  background: transparent;
+  animation: change_color infinite 4s linear;
+}
+
+.animate:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  color: black;
+  border-radius: 25px;
+
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition-property: transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+
+.animate:hover:before, .animate:focus:before, .animate:active:before {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+@keyframes change_color{
+  100%,0%{
+    color: rgb(255,0,0);
+  }
+  8%{
+    color: rgb(255,127,0);
+  }
+  16%{
+    color: rgb(255,255,0);
+  }
+  25%{
+    color: rgb(127,255,0);
+  }
+  33%{
+    color: rgb(0,255,0);
+  }
+  41%{
+    color: rgb(0,255,127);
+  }
+  50%{
+    color: rgb(0,255,255);
+  }
+  58%{
+    color: rgb(0,127,255);
+  }
+  66%{
+    color: rgb(0,0,255);
+  }
+  75%{
+    color: rgb(127,0,255);
+  }
+  83%{
+    color: rgb(255,0,255);
+  }
+  91%{
+    color: rgb(255,0,127);
+  }
+}
+
 
 
 /*------------------------------------------------------------------
