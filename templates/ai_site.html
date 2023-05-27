@@ -10,29 +10,42 @@
 
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/template_ai_site.css' %}">
+    
 
 
     <!--===============================================================================================-->
-    <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+      <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
     <!--===============================================================================================-->
-    <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
     <!--===============================================================================================-->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+      <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
     <!--===============================================================================================-->	
-    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+      <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+      <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'js/DragToScroll.js' %}"></script>
+    <!--===============================================================================================-->
+      
+    
+    
+    <!--===============================================================================================-->
+      <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <!--===============================================================================================-->
+      <link rel="stylesheet" href="{% static 'css/template_ai_site.css' %}">
+    <!--===============================================================================================-->
+      <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!--===============================================================================================-->	
+      <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+      <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <!--===============================================================================================-->
 
 </head>
 <body onload="DragToScroll('.text_section')" onresize="DragToScroll('.text_section')">
     
-<!-- Navbar start -->
 
+<!-- Navbar start -->
 <nav class="navbar navbar-expand-lg ">
     <div class="container-fluid">
         <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
@@ -77,15 +90,14 @@
       </div>
     </div>
 </nav>
-
-    
 <!-- Navbar end -->
 
-<!-- Container for centering start -->
-<!-- Centered input start -->
+
+<!-- Main container start -->
 <div class="d-flex main-container hidden row p-3 m-0">
   
-        <div class="d-none first-section flex-column justify-content-center col gap-3">
+        <!-- First section start -->
+        <section class="d-none first-section flex-column justify-content-center col gap-3">
             <span class="text-light fs-1 ai-title ms-3 align-self-top mt-lg-5 text-lg-left text-sm-center">
                 <i class="fa-solid fa-brain" style="color: #ffffff;"></i>&nbsp Video Recommendation by Ai
             </span>
@@ -108,9 +120,12 @@
             </span>
 
 
-        </div>
+        </section>
+        <!-- First section end -->
 
-        <div class="d-none second-section flex-column container-fluid align-items-center justify-content-center col">
+
+        <!-- Second section start -->
+        <section class="d-none second-section flex-column container-fluid align-items-center justify-content-center col">
           <form method="post" class="container-fluid d-flex flex-column align-items-center justify-content-center col" id="main_form" >
               {% csrf_token %}
 
@@ -125,13 +140,15 @@
                       <button type="submit" class="btn btn-dark btn-lg rounded-pill send_request">Generate</button>
                   </div>
           </form>        
-        </div>
+        </section>
+        <!-- Second section end -->
+
 
 </div>
+<!-- Main container end -->
 
 
-
-<!-- Modal when request start -->
+<!-- Modal for request start -->
 <div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -144,39 +161,29 @@
       </div>
     </div>
   </div>
-  </div>
-  <!-- Modal when request end -->
+</div>
+<!-- Modal for request end -->
 
 
-<!-- Centered input end -->
-<!-- Container for centering end -->
-
-<!--======================================Toasts===================================================-->	
+<!-- Toast container start -->
 <div class="toast-container bottom-0 start-50 translate-middle-x ">
   {% for message in messages %}
-  <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
-    <div class="toast-body">
-      <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
+    <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+      <div class="toast-body">
+        <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn-close fs-5 fs-sm-6 toast_dismiss" aria-label="Close"></button>
+      </div>
     </div>
-    <div class="modal-footer justify-content-center">
-      <button type="button" class="btn-close fs-5 fs-sm-6 toast_dismiss" aria-label="Close"></button>
-    </div>
-  </div>
+  {% endfor %}
 </div>
-{% endfor %}
-<!--===============================================================================================-->	
+<!-- Toast container end -->
 
 
-<!--===============================================================================================-->	
-<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
-<!--===============================================================================================-->
-<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-<!--===============================================================================================-->
-<script src="{% static 'js/DragToScroll.js' %}"></script>
-<!--===============================================================================================-->
 
 
-<script>
+<script type="text/javascript">
 
   $(document).ready(function(){
 

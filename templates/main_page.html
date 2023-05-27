@@ -115,7 +115,7 @@
 
                     <span class="text-light fs-2 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
                     <span class="pointing-to-link p-3 text-light fs-3 text-center mb-2" id="inputGroup-sizing-default">&darr; Paste your link here &darr;	 </span>
-                    <input type="text" placeholder=" " name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                    <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
                     <button type="submit" class="btn btn-dark btn-lg mt-4 rounded-pill"><i class="fa-solid fa-check"></i></button>
           </form>
 
@@ -158,7 +158,7 @@
 
                 {% comment %} Here make the data real time from database, try adding date or only title to database {% endcomment %}
                 <p class="mt-2 date_in_caption"><small><i class="fa-regular fa-calendar-days"></i>&nbsp {{ video.publish_date }}</small></p>
-                <a type="submit" class="mx-auto btn btn-dark downloading login100-form-btn download-button" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality"> Download </a>
+                {% comment %} <a type="submit" class="mx-auto btn btn-dark downloading login100-form-btn download-button" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality"> Download </a> {% endcomment %}
               </div>
           </div>
 

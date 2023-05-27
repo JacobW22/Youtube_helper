@@ -90,7 +90,7 @@ body, html {
       scale: 1.2;
   } 
 
-  .fa-solid, .navbar-toggler-icon, a, .dropdown-item {
+  .fa-solid, .navbar-toggler-icon, a, .dropdown-item, .btn-close {
     -webkit-transition: all 0.4s !important;
     -o-transition: all 0.4s !important;
     -moz-transition: all 0.4s !important;
@@ -202,6 +202,10 @@ body, html {
 
   .btn-close:focus {
     box-shadow: none!important;
+  }
+
+  .btn-close:hover {
+    filter: invert(100);
   }
 
   
