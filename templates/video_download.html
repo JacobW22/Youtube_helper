@@ -10,14 +10,24 @@
 
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/template_audio_video_style.css' %}">
+    
 
-    <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
-    <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <!--===============================================================================================-->	
+      <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+    <!--===============================================================================================-->
+      <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+    <!--===============================================================================================-->
 
+
+  
     <!--===============================================================================================-->	
 	      <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
+    <!--===============================================================================================-->
+        <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" href="{% static 'css/template_audio_video_style.css' %}">
     <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->
@@ -36,8 +46,8 @@
 </head>
 <body>
     
-<!-- Navbar start -->
 
+<!-- Navbar start -->
 <nav class="navbar navbar-expand-lg ">
   <div class="container-fluid">
       <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
@@ -81,13 +91,11 @@
     </div>
   </div>
 </nav>
-
-  
 <!-- Navbar end -->
 
-<!-- Container for centering start -->
-<!-- Centered input start -->
-<div class="d-flex flex-column align-items-center gap-3 justify-content-center p-2 main-container" style="height: calc(80% - 72.39px); max-width: 100%;">
+
+<!-- Main section start -->
+<section class="d-flex flex-column align-items-center gap-3 justify-content-center p-2 main-container" style="height: calc(80% - 72.39px); max-width: 100%;">
         <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
         <h2 class="card-title text-center text-light">{{ title }}</h2>
 
@@ -97,15 +105,14 @@
         </video>
         
         <a type="button" class="btn btn-dark downloading btn-lg login100-form-btn" name="sd_quality" href="{% static 'video.mp4' %}" download><i class="fa-solid fa-file-arrow-down"></i>&nbsp Download file</a>
-</div>
-<!-- Centered input end -->
-<!-- Container for centering end -->
+</section>
+<!-- Main section end -->
 
-<!--===============================================================================================-->	
-<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
-<!--===============================================================================================-->
 
-<script>
+
+
+<script type="text/javascript">
+
   $(document).ready(function(){
 
     // Fade In page

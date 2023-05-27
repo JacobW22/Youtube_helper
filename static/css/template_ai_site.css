@@ -133,6 +133,11 @@ html {
   .nav-link {
     font-size: 1.5rem !important;
   }
+
+  .main-container {
+    height: calc(100% - 62px)!important; 
+    max-height: calc(100% - 62px)!important;
+  }
 }
 
 .toast {
@@ -172,10 +177,10 @@ html {
   background: black;
 }
 
-#navbar-toggler {
+.navbar-toggler {
   background: transparent !important;
   border: none;
-  padding: 0 !important;
+  padding: 0!important;
 }
 
 .dropdown-menu {
@@ -244,7 +249,8 @@ html {
   }
 
   .main-container {
-    height: 90%; 
+    height: 80%; 
+    max-height: 80%;
     max-width: 100%;
   }
 
@@ -278,3 +284,5 @@ html {
     box-shadow: none!important;
     filter: invert(0%) sepia(5%) saturate(18%) hue-rotate(192deg) brightness(94%) contrast(106%);
   }
+
+  
