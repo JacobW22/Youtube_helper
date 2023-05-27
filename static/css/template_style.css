@@ -64,6 +64,7 @@ body, html {
     text-align: left;
   }
 
+
   .form-control:not(:placeholder-shown) {
     border-color: #7cf569!important;
 
@@ -313,6 +314,10 @@ body, html {
     #main_form, #result_form {
       width: 75%;
     }  
+
+    .form-control::placeholder {
+      font-size: 2.9vw!important;
+    }
   }
 
   @media screen and (min-width: 997px) and (max-width: 2048px){
@@ -363,6 +368,10 @@ body, html {
 
     .full_site_container {
       height: calc(200% + 48px + 62px);
+    }
+
+    .form-control::placeholder {
+      font-size: 3.5vw!important;
     }
   }
 

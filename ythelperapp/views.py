@@ -37,7 +37,7 @@ def main_page(request, login_context):
         )
 
         # Use download history for slides on the main page
-        # Get random item from history
+        # Get random items from history
         # Eliminate repetitions
 
         Download_videos_informations = []
@@ -45,14 +45,14 @@ def main_page(request, login_context):
         Download_history = random.sample(
             storage.download_history, len(storage.download_history)
         )
-        Download_history = Download_history[
-            :10
-        ]  # Limit to 10 slides / random 10 elements from history
+
+        # Limit to 10 slides / random 10 elements from history
+        Download_history = Download_history[:10]  
 
         for item in Download_history:
             it_is_in_dict = False
 
-            # First item in history (always append)
+            # First item in download history (always add)
             if Download_videos_informations == []:
                 Download_videos_informations.append(
                     {
@@ -62,11 +62,13 @@ def main_page(request, login_context):
                         "link": item[0],
                     }
                 )
-            else:  # If it's not the first item, check if already exists
+            else:  
+                # If it's not the first item, check if already exists
                 for dictionary in Download_videos_informations:
                     if item[0] in dictionary.values():
                         it_is_in_dict = True
 
+                
                 if it_is_in_dict == False:
                     Download_videos_informations.append(
                         {
@@ -100,7 +102,7 @@ def login_page(request, login_context):
 
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
+        if user:
             login(request, user)
             msg.success(request, "Welcome " + username)
             return redirect(main_page)
