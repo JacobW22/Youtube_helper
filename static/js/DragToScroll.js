@@ -1,35 +1,56 @@
-const body = document.querySelector("body");
-let MouseisDown = false;
-let startY;
-let scrollLeft;
+const DragToScroll = (param) => {
+  const container = document.querySelector(param);
 
-body.addEventListener("mousedown", (e) => {
-  MouseisDown = true;
+  container.style.cursor = 'auto';
+  container.style.userSelect = 'text';
 
-  body.classList.add("active");
-  body.style.cursor = 'grabbing';
-  body.style.userSelect = 'none';
+  if ((container.scrollHeight > container.clientHeight) == true) {
+    let MouseisDown = false;
+    let startY;
 
-  startY = e.pageY - body.offsetTop;
-  scrollTop = body.scrollTop;
-});
+    container.addEventListener("mouseover", () => {
+      container.style.cursor = 'grab';
+    });
 
-body.addEventListener("mouseleave", () => {
-  MouseisDown = false;
-  body.classList.remove("active");
-});
+    container.addEventListener("mousedown", (e) => {
 
-body.addEventListener("mouseup", () => {
-  MouseisDown = false;
-  body.classList.remove("active");
-  body.style.cursor = 'grab';
-});
+      MouseisDown = true;
 
-body.addEventListener("mousemove", (e) => {
-  if (!MouseisDown) return;
-  e.preventDefault();
+      container.classList.add("active");
+      container.style.cursor = 'grabbing';
+      container.style.userSelect = 'none';
 
-  const y = e.pageY - body.offsetTop;
-  const accelerate = (y - startY) * 1.5; // How fast 
-  body.scrollTop = scrollTop - accelerate;
-});
+      startY = e.pageY - container.offsetTop;
+      scrollTop = container.scrollTop;
+    });
+
+    container.addEventListener("mouseleave", () => {
+
+      MouseisDown = false;
+      container.classList.remove("active");
+    });
+
+    container.addEventListener("mouseup", () => {
+
+      MouseisDown = false;
+      container.classList.remove("active");
+      container.style.cursor = 'grab';
+    });
+
+    container.addEventListener("mousemove", (e) => {
+
+      if (!MouseisDown) return;
+      e.preventDefault();
+
+      const y = e.pageY - container.offsetTop;
+      const accelerate = (y - startY) * 1.5; // How fast 
+      container.scrollTop = scrollTop - accelerate;
+      
+    });
+
+    
+  } else {
+    container.replaceWith(container.cloneNode(true));
+  }
+
+}

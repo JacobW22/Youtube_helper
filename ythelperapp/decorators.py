@@ -13,7 +13,7 @@ def login_check(view_func):
     return wrapper_func
 
 
-def not_authenticated(view_func):
+def not_authenticated_only(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('main_page')

@@ -4,7 +4,7 @@ from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
 from django.utils.http import urlencode
 from .forms import CreateUserForm
-from .decorators import login_check, not_authenticated
+from .decorators import login_check, not_authenticated_only
 from .models import user_data_storage, User
 
 import datetime
@@ -37,7 +37,7 @@ def main_page(request, login_context):
         )
 
         # Use download history for slides on the main page
-        # Get random item from history
+        # Get random items from history
         # Eliminate repetitions
 
         Download_videos_informations = []
@@ -45,11 +45,14 @@ def main_page(request, login_context):
         Download_history = random.sample(
             storage.download_history, len(storage.download_history)
         )
-        Download_history = Download_history[:10]  # Limit to 10 slides
+
+        # Limit to 10 slides / random 10 elements from history
+        Download_history = Download_history[:10]  
 
         for item in Download_history:
-            it_is_in_dict = 0
+            it_is_in_dict = False
 
+            # First item in download history (always add)
             if Download_videos_informations == []:
                 Download_videos_informations.append(
                     {
@@ -59,12 +62,14 @@ def main_page(request, login_context):
                         "link": item[0],
                     }
                 )
-            else:
+            else:  
+                # If it's not the first item, check if already exists
                 for dictionary in Download_videos_informations:
                     if item[0] in dictionary.values():
-                        it_is_in_dict += 1
+                        it_is_in_dict = True
 
-                if it_is_in_dict == 0:
+                
+                if it_is_in_dict == False:
                     Download_videos_informations.append(
                         {
                             "title": item[1],
@@ -87,7 +92,7 @@ def main_page(request, login_context):
 
 
 @login_check
-@not_authenticated
+@not_authenticated_only
 def login_page(request, login_context):
     form = CreateUserForm()
 
@@ -97,7 +102,7 @@ def login_page(request, login_context):
 
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
+        if user:
             login(request, user)
             msg.success(request, "Welcome " + username)
             return redirect(main_page)
@@ -119,7 +124,7 @@ def logoutUser(request):
 
 
 @login_check
-@not_authenticated
+@not_authenticated_only
 def sign_up_page(request, login_context):
     form = CreateUserForm()
 
@@ -276,6 +281,7 @@ def ai_page(request, login_context):
                 model="gpt-3.5-turbo", messages=messages
             )
             reply = chat.choices[0].message.content
+
         except openai.RateLimitError:
             msg.success("Ai model is currently overloaded, please wait a second")
             return redirect(ai_page)
@@ -285,13 +291,17 @@ def ai_page(request, login_context):
 
         print(reply)
         try:
+            #  Youtube feed/trending ~ delete this 
             # reply = "I would like to recommend \"How to Travel the World with Almost No Money\" by Tomislav Perko. It's an insightful TEDx talk that shares Tomislav's personal journey of quitting his job and choosing to travel the world for four years on a tight budget. The talk offers tips and advice that can be useful to anyone who wants to travel on a budget: https://www.youtube.com/watch?v=HN6s6sOZwM8";
             # reply = "I would like to recommend \"How to Travel the World with Almost No Money\" by Tomislav Perko. It's an insightful TEDx talk that shares Tomislav's personal journey of quitting his job and choosing to travel the world for four years on a tight budget. The talk offers tips and advice that can be useful to anyone who wants to travel on a budget: https://www.youtube.com/watch?v=v8oXuK3f39Q";
             reply_link = re.search("(?P<url>https?://[^\s]+)", reply).group("url")
-            msg.success(request, "Ai response:  " + reply)
+
         except AttributeError:
             msg.success(request, "No video link in Ai response, please try again")
             return redirect(ai_page)
+    
+    
+        msg.success(request, "Ai response:  " + reply)
 
         return redirect(download_page, parameter=str(reply_link))
 
