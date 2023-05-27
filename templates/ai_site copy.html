@@ -94,14 +94,12 @@
 
 
 <!-- Main container start -->
-<div class="d-flex main-container flex-column flex-md-row p-3 m-0 gap-3">
+<div class="d-flex main-container hidden row p-3 m-0">
   
         <!-- First section start -->
-        <section class="d-flex first-section flex-column mx-auto gap-3 w-100 col-md-6">
-          <!-- Content container start -->
-          <div class="d-flex content flex-column h-75 my-auto">
-            <span class="text-light fs-1 ai-title ms-3 align-self-top mt-lg-4 text-lg-left text-sm-center">
-                <i class="fa-solid fa-brain" style="color: #ffffff;"></i>&nbsp Generate Video Thumbnail with Ai
+        <section class="d-none first-section flex-column justify-content-center col gap-3">
+            <span class="text-light fs-1 ai-title ms-3 align-self-top mt-lg-5 text-lg-left text-sm-center">
+                <i class="fa-solid fa-brain" style="color: #ffffff;"></i>&nbsp Video Recommendation by Ai
             </span>
             
             <span class="d-flex text-light ms-1 flex-column align-self-top col mt-1 mt-lg-4 gap-5 text_section" >
@@ -120,29 +118,27 @@
 
                 </span>
             </span>
-          </div>
-          <!-- Content container end -->
+
+
         </section>
         <!-- First section end -->
 
 
         <!-- Second section start -->
-        <section class="d-flex second-section flex-column container-fluid mx-auto w-100 col-md-6">
-          <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto mx-auto form-container" id="main_form" >
+        <section class="d-none second-section flex-column container-fluid align-items-center justify-content-center col">
+          <form method="post" class="container-fluid d-flex flex-column align-items-center justify-content-center col" id="main_form" >
               {% csrf_token %}
 
-                  <span class="text-light fs-2 container-for-gears row gap-1">
+                  <span class="text-light fs-2 container-for-gears row">
                       <span class="col align-self-start p-0 p-sm-1"><i class="fa-solid fa-gear" style="color: #ffffff;"></i></span>
                       <span class="col align-self-end p-0 p-sm-1"><small><i class="fa-solid fa-gear" style="color: #ffffff;"></i></small></span>
                   </span>
 
-                  <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default"> Generate a thumbnail for me </span>
-                 
-                  <span class="pointing-to-link text-light fs-1 mb-2 p-1 text-center " id="inputGroup-sizing-default"> <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i> </span>
-                  <input type="text" name="sended_link" placeholder="Programming tutorial, Cooking a pizza, Gameplay footage" class="form-control text-light mb-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
-                  <span class="fs-6 text-light text-muted text-center mb-5">Describe your video up here</span>
-                  <button type="submit" class="btn btn-dark btn-lg rounded-pill send_request mt-lg-3 mb-3">Generate</button>
-                  
+                  <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default"> Recommend me a video </span>
+                  <div class="row justify-content-center">
+                      <span class="pointing-to-link text-light fs-1 mb-2 p-1 text-center " id="inputGroup-sizing-default"> <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i> </span>
+                      <button type="submit" class="btn btn-dark btn-lg rounded-pill send_request">Generate</button>
+                  </div>
           </form>        
         </section>
         <!-- Second section end -->
