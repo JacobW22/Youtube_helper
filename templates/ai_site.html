@@ -93,6 +93,9 @@
 <!-- Navbar end -->
 
 
+{% if not image_link %}
+
+
 <!-- Main container start -->
 <div class="d-flex main-container flex-column flex-md-row p-3 m-0 gap-3">
   
@@ -139,7 +142,7 @@
                   <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default"> Generate a thumbnail for me </span>
                  
                   <span class="pointing-to-link text-light fs-1 mb-2 p-1 text-center " id="inputGroup-sizing-default"> <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i> </span>
-                  <input type="text" name="sended_link" placeholder="Programming tutorial, Cooking a pizza, Gameplay footage" class="form-control text-light mb-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                  <input type="text" name="description" placeholder="Programming tutorial, Cooking a pizza, Gameplay footage etc." class="form-control text-light mb-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
                   <span class="fs-6 text-light text-muted text-center mb-5">Describe your video up here</span>
                   <button type="submit" class="btn btn-dark btn-lg rounded-pill send_request mt-lg-3 mb-3">Generate</button>
                   
@@ -148,25 +151,46 @@
         <!-- Second section end -->
 
 
+        <!-- Modal for request start -->
+        <div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="d-flex align-items-center justify-content-center modal_text">
+                    &nbsp;
+                    &nbsp;
+                    <strong>  Sending request</strong>
+                    &nbsp;
+                    <div class="spinner-grow mt-2 ms-1 me-1" role="status"></div>
+                    <div class="spinner-grow mt-2 me-1" id="spinner_2" role="status"></div>
+                    <div class="spinner-grow mt-2" id="spinner_3" role="status"></div>
+
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal for request end -->
+
+
+{% else %}
+
+
+  <!-- Main container start -->
+  <div class="main-container center_container d-inline-block">
+      <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto img_container">
+        <span class="text-light fs-1 fst-italic fw-bold text-center mb-5 truncate" id="inputGroup-sizing-default"> {{ image_title }} &nbsp; <small><i class="fa-solid fa-tag"></i></small></span>
+        <img src="{{ image_link }}" class="img-fluid ai_generated_thumbnail" alt="Video_thumbnail"><!-- Main container end -->
+        <a type="button" class="btn btn-dark btn-lg rounded-pill download_file mt-4" href="{{ image_link }}" target="_blank" rel="noopener noreferrer" download="Thumbnail"> Download &nbsp;<i class="fa-solid fa-up-right-from-square"></i></a>
+      </div>
+  </div>
+  <!-- Main container end -->
+
+
+{% endif %}
+
 </div>
 <!-- Main container end -->
-
-
-<!-- Modal for request start -->
-<div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body rounded">
-        <div class="d-flex align-items-center justify-content-center text-light">
-          <div class="spinner-border" role="status" aria-hidden="true"></div>
-            &nbsp
-            <strong>  Sending request...</strong>
-          </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal for request end -->
 
 
 <!-- Toast container start -->
@@ -190,17 +214,23 @@
 <script type="text/javascript">
 
   $(document).ready(function(){
-
+    
     $(window).on("pageshow", function() {
       $('.modal').modal('hide');
       $("#staticBackdrop").modal('hide');
     });
-    
+
     // Fade In page
     $('.first-section').fadeIn(500).removeClass('d-none').addClass('d-flex');
     $('.second-section').fadeIn(500).removeClass('d-none').addClass('d-flex');
 
-    $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
+    $(".toast").toast("show").slideUp(1).fadeIn( 2000 );  
+    
+    $('.send_request').hover(function() {
+      $('.form-control').addClass('align-text-center');
+    }, function() {
+      $('.form-control').removeClass('align-text-center');
+    });
   });
 
   // Add event listener for click event on the close button
@@ -238,6 +268,7 @@
 	$(".send_request").click(function(){
 		$("#staticBackdrop").modal('show');
 	});
+
 
 
   // Add slideDown animation to Bootstrap dropdown when expanding.

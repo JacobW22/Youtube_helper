@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
-from pytube import YouTube
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
 from django.utils.http import urlencode
+from django.http import HttpResponse
+from django.dispatch import Signal, receiver
 from .forms import CreateUserForm
 from .decorators import login_check, not_authenticated_only
 from .models import user_data_storage, User
+
 
 import datetime
 import random
@@ -14,10 +16,14 @@ import re
 import openai
 import backoff
 import pytube
-from pytube.cli import on_progress
+import requests
 
+
+from pytube import YouTube
+from pytube.cli import on_progress
 from datetime import datetime as dt
 from dotenv import load_dotenv, find_dotenv
+from urllib.parse import quote, unquote
 
 # Hide it from Github
 load_dotenv(find_dotenv())
@@ -265,56 +271,51 @@ def download_audio(request, login_context, parameter):
 
 
 @login_check
-def ai_page(request, login_context):
+def ai_page(request, login_context, parameter="", parameter_title=""):
+
     if request.method == "POST":
-        message = (
-            f"What video would you recommend to watch on Youtube, send me with link"
-        )
 
-        messages = []
+        description = request.POST.get("description")
 
-        if message:
-            messages.append({"role": "user", "content": message})
-
+    
         try:
-            chat = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo", messages=messages
+            response_data = openai.Image.create(
+                prompt=description,
+                n=1,
+                size="1024x1024"
             )
-            reply = chat.choices[0].message.content
 
-        except openai.RateLimitError:
+            link = response_data["data"][0]["url"]
+
+            fixed_link = quote(link, safe=':/?&=%')
+
+        except openai.error.RateLimitError:
             msg.success("Ai model is currently overloaded, please wait a second")
             return redirect(ai_page)
 
-        messages.append({"role": "assistant", "content": reply})
-        messages.clear()
 
-        print(reply)
-        try:
-            #  Youtube feed/trending ~ delete this 
-            # reply = "I would like to recommend \"How to Travel the World with Almost No Money\" by Tomislav Perko. It's an insightful TEDx talk that shares Tomislav's personal journey of quitting his job and choosing to travel the world for four years on a tight budget. The talk offers tips and advice that can be useful to anyone who wants to travel on a budget: https://www.youtube.com/watch?v=HN6s6sOZwM8";
-            # reply = "I would like to recommend \"How to Travel the World with Almost No Money\" by Tomislav Perko. It's an insightful TEDx talk that shares Tomislav's personal journey of quitting his job and choosing to travel the world for four years on a tight budget. The talk offers tips and advice that can be useful to anyone who wants to travel on a budget: https://www.youtube.com/watch?v=v8oXuK3f39Q";
-            reply_link = re.search("(?P<url>https?://[^\s]+)", reply).group("url")
-
-        except AttributeError:
-            msg.success(request, "No video link in Ai response, please try again")
-            return redirect(ai_page)
+        print(link)
     
-    
-        msg.success(request, "Ai response:  " + reply)
 
-        return redirect(download_page, parameter=str(reply_link))
+        return redirect(ai_page, parameter = fixed_link, parameter_title = description)
 
     context = {}
     context.update(login_context)
+
+    if parameter != "":
+        context.update({
+            "image_link": parameter.replace('%25', '%'),
+            "image_title" : parameter_title,
+        })
 
     return render(request, "ai_site.html", context)
 
 
-@login_check
-def ai_video_page(request, login_context):
+
+def ai_page_show_image(request, login_context, parameter):
+    
     context = {}
 
     context.update(login_context)
 
-    return render(request, "ai_video.html", context)
+    return render(request, "ai_site.html", context)
