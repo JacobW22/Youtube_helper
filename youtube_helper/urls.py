@@ -21,6 +21,7 @@ from ythelperapp import views as main_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_views.main_page, name='main_page'),
+    path('comments/', main_views.comments, name='comments'),
     path('ai_generator/', main_views.ai_page, name='ai_page'),
     path('ai_generator/<path:parameter>/<str:parameter_title>', main_views.ai_page, name='ai_page'),
     path('login/', main_views.login_page, name='login_page'),

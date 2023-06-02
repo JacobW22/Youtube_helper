@@ -311,11 +311,11 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
     return render(request, "ai_site.html", context)
 
 
-
-def ai_page_show_image(request, login_context, parameter):
+@login_check
+def comments(request, login_context):
     
     context = {}
 
     context.update(login_context)
 
-    return render(request, "ai_site.html", context)
+    return render(request, "comments.html", context)

@@ -1,0 +1,263 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube helper</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    
+    <!--===============================================================================================-->
+      <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+    <!--===============================================================================================-->
+      <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <!--===============================================================================================-->	
+      <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!--===============================================================================================-->
+      <script src="{% static 'js/DragToScroll.js' %}"></script>
+    <!--===============================================================================================-->
+      
+    
+    
+    <!--===============================================================================================-->
+      <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <!--===============================================================================================-->
+      <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
+    <!--===============================================================================================-->
+      <link rel="stylesheet" href="{% static 'css/template_comments_style.css' %}">
+    <!--===============================================================================================-->
+      <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!--===============================================================================================-->	
+      <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+      <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!--===============================================================================================-->
+
+</head>
+<body>
+    
+
+<!-- Navbar start -->
+<nav class="navbar navbar-expand-lg main-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
+        <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+      <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+              <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item fs-6" href="#">Action</a>
+              <a class="dropdown-item fs-6" href="{% url 'main_page' %}">Downloader</a>
+              
+              <div class="dropdown-divider"></div>
+                <a class="dropdown-item fs-6" href="{% url 'ai_page' %}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Ai Video Recommendation</a>
+              </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
+          </li>
+
+          {% if logged == False %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
+          </li>
+
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </div>
+    </div>
+</nav>
+<!-- Navbar end -->
+
+
+<!-- Main container start -->
+<div class="d-flex main-container px-4 pt-5 flex-column gap-4">
+  
+
+<!-- Comments section start -->
+<section class="d-flex container-fluid flex-column comments_container col-12 p-0">
+   
+
+  <!-- Comments nav start-->
+  <nav class="navbar navbar-expand-lg" >
+    <div class="container-fluid">
+        <h2 class="navbar-brand text-light fs-4">Search options</h2>
+        <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+      <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
+        <ul class="navbar-nav me-2 gap-3 mb-sm-0">
+
+          <li class="nav-item">
+            <input class="form-control text-light" type="search" placeholder="Search" aria-label="Search">
+          </li>
+          <li class="nav-item nav_select d-flex justify-content-center">
+            <h2 class="navbar-brand text-light fs-4 mt-1"> Results per page:</h2>
+
+            <select class="form-select" id="maxResults" aria-label="Default select example">
+              <option value="25" selected>25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </li>
+
+          <li class="nav-item dropdown text-center">
+            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+              <i class="fa-solid fa-arrow-up-wide-short"></i></i>&nbsp Sort by
+            </a>
+            <div class="dropdown-menu sort_menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item fs-5" href="#"><i class="fa-solid fa-arrow-down-long"></i>&nbsp; Time (oldest)</a>
+              <a class="dropdown-item fs-5" href="#"><i class="fa-solid fa-arrow-up-long"></i>&nbsp; Time (newest)</a>
+              <a class="dropdown-item fs-5" href="{% url 'main_page' %}">Revelance</a>
+              <a class="dropdown-item fs-5" href="{% url 'ai_page' %}"></i>Rating</a>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Comments nav end -->
+
+
+  <!-- Comments container start-->
+  <section class="d-flex comments_insides container-fluid">
+
+
+    <!-- Pagination footer start-->
+      <footer class="page_navigation mx-auto mt-auto mb-3">
+        <ul class="pagination justify-content-center" >
+          <li class="page-item"><a class="page-link" href="#" tabindex="-1" id="pagination_first_element"><span aria-hidden="true">&laquo;</span></a></li>
+          
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">4</a></li>
+          <li class="page-item"><a class="page-link" href="#">5</a></li>
+
+          <li class="page-item"><a class="page-link" href="#" tabindex="-1"  id="pagination_last_element"><span aria-hidden="true">&raquo;</span></a></li>
+
+        </ul>
+      </footer>
+    <!-- Pagination footer end-->
+
+
+  </section>
+  <!-- Comments container end-->
+
+
+</section>
+<!-- Comments section end -->
+
+<button class="btn rounded-pill mx-auto">Cancel</button>
+
+</div>
+<!-- Main container end -->
+
+
+
+
+<!-- Toast container start -->
+<div class="toast-container bottom-0 start-50 translate-middle-x ">
+  {% for message in messages %}
+    <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+      <div class="toast-body">
+        <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn-close fs-5 fs-sm-6 toast_dismiss" aria-label="Close"></button>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<!-- Toast container end -->
+
+
+
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+
+    $(window).on("pageshow", function() {
+      $('.modal').modal('hide');
+    });
+
+    $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
+
+    dselect(document.querySelector('#maxResults'));
+
+    $(".dselect-wrapper").children("div").addClass("selection-menu");
+    $(".dselect-wrapper").find(".dropdown-item").addClass("selection-menu");
+    $(".dselect-wrapper").find(".form-select").addClass("mx-auto");
+
+
+  });
+
+
+  // Add event listener for click event on the close button
+  $('.toast .btn-close').on('click', function() {
+    var toast = $(this).closest('.toast');
+    // Animate the toast element
+    toast.animate({
+      opacity: 0,
+      height: 0,
+      marginBottom: 0
+    }, 500, function() {
+      // Remove the toast element from the DOM
+      toast.remove();
+    });
+  });
+
+
+  $(".navbar-toggler-icon").css("background-image", "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")");
+
+  $( ".navbar-toggler" ).click(function() {
+    var icon = $(this).children("span");
+    var value = $(this).attr('aria-expanded');
+
+    if (value == 'true') {
+      icon.css("background-image", "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-compact-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67z' fill='white'%3E%3C/path%3E%3C/svg%3E\")")
+    }
+    else icon.css("background-image", "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")");
+  });
+
+
+  // Add slideDown animation to Bootstrap dropdown when expanding.
+  $('.dropdown').on('show.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
+  });
+
+  // Add slideUp animation to Bootstrap dropdown when collapsing.
+  $('.dropdown').on('hide.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
+  });
+
+</script>
+</body>
+</html>

@@ -184,6 +184,7 @@ html {
   border-radius: 15px!important;
   box-shadow: 0px 0px 15px 1px black;
   text-align: center;
+  
 }
 
 .form-control:focus {
@@ -399,6 +400,26 @@ html {
     font-size: 4rem !important;
   }
 
+  .nav-link:hover {
+    font-size: 2.5em!important;
+  }
+  
+  .nav-link[aria-expanded="true"] {
+    font-size: 2.5em!important; 
+  }
+
+  .dropdown-item {
+    font-size: 150%!important;
+  }
+  .dropdown-item:focus, .dropdown-item:hover {
+    font-size: 175%!important;
+  }
+
+  .dropdown-menu {
+    margin-top: 3.2em!important;
+    width: 300%!important
+  }
+
   .main-container, .img_container {
     height: calc(100vh - 111px);
   }
@@ -412,6 +433,21 @@ html {
 
   #main-title {
     font-size: 2.5rem !important;
+  }
+
+  .navbar {
+    margin-top: 2.3em;
+    height: 0;   
+  }
+
+  .nav-item {
+    max-height: 0;
+    margin-bottom: 3.1em;
+  }
+
+  .dropdown-menu {
+    margin-top: 3.2em!important;
+    width: 300%!important
   }
   
   .form-control {
