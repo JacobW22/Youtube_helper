@@ -4,8 +4,9 @@ body, html {
     margin: 0;
     background: linear-gradient(-45deg, #b6202b, #ac434b,#786269, #2c3e50, #1F1C2C, #1D2B64);
     background-size: 800% 800%;
-	animation: gradient 15s ease infinite;
-    overflow: hidden;
+	  animation: gradient 15s ease infinite;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   
   * {
@@ -62,6 +63,21 @@ body, html {
     width: auto!important;
   }
 
+  .datepicker {
+    background-color: transparent!important;
+    border: 0.15em solid #fff;
+    border-radius: 15px;
+    text-align: center;
+  }
+
+  .datepicker:focus {
+    border-color: red!important;
+  }
+
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
   .form-control {
     background-color: transparent!important;
     font-size: 1rem!important;
@@ -107,14 +123,15 @@ body, html {
     color:black!important;
   }
   
-  .nav-link:hover {
-    font-size: 1.5em!important;
-  }
-  
-  .nav-link[aria-expanded="true"] {
-    font-size: 1.5em!important; 
+  .nav-link:hover, .nav-link[aria-expanded="true"]  {
+    transform: scale(1.2)!important;
+    transform-origin: top;
   }
 
+  #navbarDropdown2:hover, #navbarDropdown2[aria-expanded="true"] {
+    transform-origin: center;
+  }
+  
   .nav-link[aria-expanded="true"] > .fa-solid {
     color: black!important;
   }
@@ -138,20 +155,6 @@ body, html {
     padding: 0!important;
   }
 
-  input::placeholder {
-    text-align: center;
-    font-size: 1rem;
-  }
-
-  input {
-    text-align: center;
-  }
-
-  input:focus {
-    text-align: left;
-  }
-
-
   .dropdown-menu {
     background: transparent!important;
     border: none!important;
@@ -161,9 +164,9 @@ body, html {
 
   .dropdown-item:not(.selection-menu .d-flex .dropdown-item):focus , .dropdown-item:not(.selection-menu .d-flex .dropdown-item):hover {
     color: black !important;
-    font-size: 120%!important;
+    transform: scale(1.2);
+    transform-origin: bottom;
     margin-left: 1.1em!important;
-
   }
 
   .dropdown-item:focus, .dropdown-item:hover > .fa-location-crosshairs {
@@ -264,8 +267,18 @@ body, html {
     border-radius: 0 15px 15px 0;
   }
 
+  .page-item .page-link:hover {
+    transform: scale(1.5);
+    transform-origin: bottom!important;
 
-  
+  }
+
+  .page-item {
+    height: 0!important;
+    margin-bottom: 1.5em!important;
+    transition: transform 0.3s ease-in-out;
+  }
+
 
   @media screen and (min-width: 2270px) {
     .main-container {
@@ -360,6 +373,38 @@ body, html {
     }
   }
 
+  @media screen and (max-width: 1533px) {
+    .sort_menu {
+      max-width: 100%!important;
+    }
+
+    .sort_menu .dropdown-item {
+      text-align: center;
+      max-width: 15em!important;
+    }
+
+    .dropdown-menu {
+      margin-top: 0!important;
+      width: auto!important
+    }
+
+    .dropdown-item:not(.selection-menu .d-flex .dropdown-item):focus, 
+    .dropdown-item:not(.selection-menu .d-flex .dropdown-item):hover {
+      transform: scale(1.2)!important;
+      margin-left: auto!important;
+      transform:translate(1em);
+    }
+
+    .selection-menu .d-flex .dselect-items {
+      justify-content: center!important;
+      display: flex!important;
+    }
+    .nav_select {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
   @media screen and (max-width: 992px) {
     .nav-link {
       font-size: 1.5rem!important;
@@ -392,6 +437,7 @@ body, html {
       text-align: center!important;
     }
   }
+
 
 
 

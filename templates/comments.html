@@ -104,20 +104,37 @@
    
 
   <!-- Comments nav start-->
-  <nav class="navbar navbar-expand-lg" >
-    <div class="container-fluid">
-        <h2 class="navbar-brand text-light fs-4">Search options</h2>
+  <nav class="navbar navbar-expand-xxl" >
+    <div class="container-fluid comments_navbar">
+        <h2 class="navbar-brand text-light fs-6">Search options</h2>
         <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
       <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
-        <ul class="navbar-nav me-2 gap-3 mb-sm-0">
+        <ul class="navbar-nav gap-3 mb-sm-0">
+
 
           <li class="nav-item">
-            <input class="form-control text-light" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control mx-auto text-light p-1 mt-2 px-2" type="search" placeholder="Search" aria-label="Search">
           </li>
-          <li class="nav-item nav_select d-flex justify-content-center">
-            <h2 class="navbar-brand text-light fs-4 mt-1"> Results per page:</h2>
+
+          <li class="nav-item d-flex justify-content-center">
+            <div class="date_from">
+              <label class="text-light" for="date_from">From</label>
+              <input type="date" id="date_from" class="mt-2 p-1 ms-2 datepicker text-light">
+            </div>
+          </li>
+          
+          <li class="nav-item d-flex justify-content-center ">
+            <div class="date_to">
+              <label class="text-light" for="date_to">To</label>
+              <input type="date" id="date_to" class="mt-2 p-1 ms-2 datepicker text-light">
+            </div>
+          </li>
+
+
+          <li class="nav-item nav_select d-flex justify-content-center gap-2">
+            <h2 class="navbar-brand text-light fs-6 mt-xxl-2 me-0"> Results per page:</h2>
 
             <select class="form-select" id="maxResults" aria-label="Default select example">
               <option value="25" selected>25</option>
@@ -126,17 +143,19 @@
             </select>
           </li>
 
+
           <li class="nav-item dropdown text-center">
-            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-              <i class="fa-solid fa-arrow-up-wide-short"></i></i>&nbsp Sort by
+            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown2" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+              <i class="fa-solid fa-arrow-up-wide-short fs-6"></i></i>&nbsp Sort by
             </a>
-            <div class="dropdown-menu sort_menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item fs-5" href="#"><i class="fa-solid fa-arrow-down-long"></i>&nbsp; Time (oldest)</a>
-              <a class="dropdown-item fs-5" href="#"><i class="fa-solid fa-arrow-up-long"></i>&nbsp; Time (newest)</a>
-              <a class="dropdown-item fs-5" href="{% url 'main_page' %}">Revelance</a>
-              <a class="dropdown-item fs-5" href="{% url 'ai_page' %}"></i>Rating</a>
+            <div class="dropdown-menu sort_menu" aria-labelledby="navbarDropdown2">
+              <a class="dropdown-item fs-6 mx-auto" href="#"><i class="fa-solid fa-arrow-down-long"></i>&nbsp; Time (oldest)</a>
+              <a class="dropdown-item fs-6 mx-auto" href="#"><i class="fa-solid fa-arrow-up-long"></i>&nbsp; Time (newest)</a>
+              <a class="dropdown-item fs-6 mx-auto" href="{% url 'main_page' %}">Revelance</a>
+              <a class="dropdown-item fs-6 mx-auto" href="{% url 'ai_page' %}"></i>Rating</a>
             </div>
           </li>
+
 
         </ul>
       </div>
@@ -216,6 +235,19 @@
     $(".dselect-wrapper").find(".dropdown-item").addClass("selection-menu");
     $(".dselect-wrapper").find(".form-select").addClass("mx-auto");
 
+    // Add slideDown animation to Bootstrap dropdown when expanding.
+    $('.dropdown').on('show.bs.dropdown', function() {
+      $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
+    });
+
+    // Add slideUp animation to Bootstrap dropdown when collapsing.
+    $('.dropdown').on('hide.bs.dropdown', function() {
+      $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
+    });
+
+    $('.datepicker').on('change', function() {
+      $(this).css('border-color', '#7cf569');
+    });
 
   });
 
@@ -245,17 +277,6 @@
       icon.css("background-image", "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-compact-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67z' fill='white'%3E%3C/path%3E%3C/svg%3E\")")
     }
     else icon.css("background-image", "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")");
-  });
-
-
-  // Add slideDown animation to Bootstrap dropdown when expanding.
-  $('.dropdown').on('show.bs.dropdown', function() {
-    $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
-  });
-
-  // Add slideUp animation to Bootstrap dropdown when collapsing.
-  $('.dropdown').on('hide.bs.dropdown', function() {
-    $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
   });
 
 </script>
