@@ -244,6 +244,11 @@ body, html {
     height: 100%!important;
   }
 
+  #comments_navbar {
+    position: absolute!important;
+    z-index: 100;
+  }
+
   .page-link {
     background-color: transparent!important;
     border: none!important;
@@ -330,7 +335,7 @@ body, html {
     }  
   }
 
-  @media screen and (min-width: 992px) and (max-width: 2270px){
+  @media screen and (min-width: 1400px) and (max-width: 2270px){
     .main-container {
       zoom: 105%;
     }
@@ -353,7 +358,7 @@ body, html {
       margin-bottom: 3.1em;
     }
   
-    .dropdown-menu {
+    .dropdown-menu:not(.sort_menu) {
       margin-top: 3.2em!important;
       width: 300%!important
     }
@@ -373,19 +378,17 @@ body, html {
     }
   }
 
-  @media screen and (max-width: 1533px) {
+  
+  @media screen and (min-width: 0px) {
     .sort_menu {
-      max-width: 100%!important;
+      margin-top: 3.2em!important;
     }
 
     .sort_menu .dropdown-item {
       text-align: center;
       max-width: 15em!important;
-    }
+      font-size: 1.2rem!important;
 
-    .dropdown-menu {
-      margin-top: 0!important;
-      width: auto!important
     }
 
     .dropdown-item:not(.selection-menu .d-flex .dropdown-item):focus, 
@@ -394,18 +397,16 @@ body, html {
       margin-left: auto!important;
       transform:translate(1em);
     }
+  }
 
-    .selection-menu .d-flex .dselect-items {
-      justify-content: center!important;
-      display: flex!important;
-    }
-    .nav_select {
-      flex-direction: column;
-      align-items: center;
+  @media screen and (max-width: 1400px) {
+    .sort_menu {
+      margin-top: 0!important;
     }
   }
 
-  @media screen and (max-width: 992px) {
+
+  @media screen and (max-width: 1400px) {
     .nav-link {
       font-size: 1.5rem!important;
     }
@@ -435,6 +436,10 @@ body, html {
 
     .sort_menu .dropdown-item {
       text-align: center!important;
+    }
+
+    .sort_menu .dropdown-item {
+      margin-top: 1em!important;
     }
   }
 

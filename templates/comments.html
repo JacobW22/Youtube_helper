@@ -104,9 +104,9 @@
    
 
   <!-- Comments nav start-->
-  <nav class="navbar navbar-expand-xxl" >
+  <nav class="navbar navbar-expand-xxl w-100" id="comments_navbar" >
     <div class="container-fluid comments_navbar">
-        <h2 class="navbar-brand text-light fs-6">Search options</h2>
+        <h2 class="navbar-brand text-light fs-6 d-xxl-none">Search options</h2>
         <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -148,7 +148,7 @@
             <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown2" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
               <i class="fa-solid fa-arrow-up-wide-short fs-6"></i></i>&nbsp Sort by
             </a>
-            <div class="dropdown-menu sort_menu" aria-labelledby="navbarDropdown2">
+            <div class="dropdown-menu sort_menu gap-xxl-0" aria-labelledby="navbarDropdown2">
               <a class="dropdown-item fs-6 mx-auto" href="#"><i class="fa-solid fa-arrow-down-long"></i>&nbsp; Time (oldest)</a>
               <a class="dropdown-item fs-6 mx-auto" href="#"><i class="fa-solid fa-arrow-up-long"></i>&nbsp; Time (newest)</a>
               <a class="dropdown-item fs-6 mx-auto" href="{% url 'main_page' %}">Revelance</a>
