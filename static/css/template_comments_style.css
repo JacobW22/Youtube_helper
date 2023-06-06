@@ -76,6 +76,7 @@ body, html {
 
   ::-webkit-calendar-picker-indicator {
     filter: invert(1);
+    cursor: pointer;
   }
 
   .form-control {
@@ -119,6 +120,10 @@ body, html {
     transition: all 0.4s !important;
   }
 
+  .navbar {
+    z-index: 99;
+  }
+
   .nav-link:hover > .fa-solid {
     color:black!important;
   }
@@ -155,11 +160,19 @@ body, html {
     padding: 0!important;
   }
 
-  .dropdown-menu {
+  .dropdown-menu, .comments_navbar {
     background: transparent!important;
     border: none!important;
-    backdrop-filter: blur(2rem);
     border-radius: 15px!important;
+  }
+
+  .dropdown-menu {
+    backdrop-filter: blur(2rem);
+  }
+
+  .black {
+    background-color: rgba(0, 0, 0, 0.5)!important;
+    border-radius: 25px!important;
   }
 
   .dropdown-item:not(.selection-menu .d-flex .dropdown-item):focus , .dropdown-item:not(.selection-menu .d-flex .dropdown-item):hover {
@@ -235,19 +248,36 @@ body, html {
     filter: invert(100);
   }
 
+  .main-container {
+    min-height: 26em!important;
+  }
+
   .comments_container {
     border: 0.15em solid #fff;
     border-radius: 25px;
-  }
-
-  .comments_insides {
+    max-height: 100%!important;
     height: 100%!important;
   }
 
-  #comments_navbar {
+  .comments_results {
+    z-index: 0;
+  }
+
+  .card-body, .comments_insides, .card_container {
+    height: 100%!important;
+  }
+
+  .card_container {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-radius: 50px;
+
+  }
+
+  .comments_navbar_absolute {
     position: absolute!important;
     z-index: 100;
-  }
+  } 
 
   .page-link {
     background-color: transparent!important;
@@ -282,6 +312,18 @@ body, html {
     height: 0!important;
     margin-bottom: 1.5em!important;
     transition: transform 0.3s ease-in-out;
+  }
+
+  #background {
+    border-radius: 25px;
+    background-color: transparent!important;
+    border-color: transparent!important;
+    height: 100%!important;
+  }
+
+  .comment_background {
+    border-radius: 15px!important; 
+    background-color: rgba(255, 255, 255, 0.8)!important;
   }
 
 
@@ -362,7 +404,7 @@ body, html {
       margin-top: 3.2em!important;
       width: 300%!important
     }
-
+    
     .main-container {
         height: calc(100vh - 90px);
         padding-bottom: 5em!important;
@@ -375,6 +417,10 @@ body, html {
 
     .form-select {
         margin-top: 5px;
+    }
+
+    .comments_results {
+      height: calc(100% - 25px - 75px)!important;
     }
   }
 
@@ -402,6 +448,14 @@ body, html {
   @media screen and (max-width: 1400px) {
     .sort_menu {
       margin-top: 0!important;
+    }
+
+    .comments_results {
+      height: calc(100% - 25px - 60px)!important;
+    }
+
+    .form-control, .form-control:focus {
+      background-color: black!important;
     }
   }
 

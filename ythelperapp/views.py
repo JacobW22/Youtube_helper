@@ -24,11 +24,17 @@ from pytube.cli import on_progress
 from datetime import datetime as dt
 from dotenv import load_dotenv, find_dotenv
 from urllib.parse import quote, unquote
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+
 
 # Hide it from Github
 load_dotenv(find_dotenv())
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
+google_api_key = os.environ.get("GOOGLE_API_KEY")
+
+youtube = build('youtube', 'v3', developerKey=google_api_key)
 
 
 @login_check
@@ -313,7 +319,29 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
 
 @login_check
 def comments(request, login_context):
-    
+    video_id = "c4mJ6_k0dFA"
+
+    # try:
+    #     # Retrieve the comments for the specified video
+    #     comments = youtube.commentThreads().list(
+    #         part='snippet',
+    #         videoId=video_id,
+    #         textFormat='html'
+    #     ).execute()
+
+    #     # Process the comments
+    #     for comment in comments['items']:
+    #         # Extract the comment snippet
+    #         snippet = comment['snippet']['topLevelComment']['snippet']
+    #         author = snippet['authorDisplayName']
+    #         text = snippet['textDisplay']
+    #         likes = snippet['likeCount']
+
+
+    # except HttpError as e:
+    #     print(f'An HTTP error {e.resp.status} occurred: {e.content}')
+
+
     context = {}
 
     context.update(login_context)
