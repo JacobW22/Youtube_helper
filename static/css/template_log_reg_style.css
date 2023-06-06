@@ -48,16 +48,11 @@ body, html {
   }
 
   .form-control {
-    background-color:rgba(0, 0, 0, 0);
+    background-color: transparent;
   }
 
   .form-control:focus {
-    background-color:rgba(0, 0, 0, 0);
-  }
-
-  .container {
-    width: 100%;
-    height: 100%;
+    background-color: transparent;
   }
 
   button {
@@ -77,9 +72,6 @@ body, html {
       flex: 1;
       height: 1px;
       background: #eee;
-  }
-  .h-custom {
-      height: calc(100% - 73px);
   }
 
   .form-label {
@@ -172,12 +164,6 @@ body, html {
 
   .dropdown-item:focus, .dropdown-item:hover > .fa-location-crosshairs {
     color: black !important;
-  }
-
-  .dropdown-item.active, .dropdown-item:active {
-    color: #fff!important;
-    text-decoration: none;
-    background-color: #fff!important;
   }
 
   .dropdown-item.active, .dropdown-item:active {
@@ -284,11 +270,7 @@ body, html {
     }
   }
 
-  @media screen and (max-width: 450px) {
-    .h-custom {
-        height: 100%;
-    }
-    
+  @media screen and (max-width: 450px) { 
     .main-container {
       padding: 15vw;
     }
