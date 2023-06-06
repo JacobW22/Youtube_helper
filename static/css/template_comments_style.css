@@ -7,11 +7,13 @@ body, html {
 	  animation: gradient 15s ease infinite;
     overflow-y: auto;
     overflow-x: hidden;
+
   }
   
   * {
     box-sizing: border-box;
   }
+
 
   @keyframes gradient {
   0%   { background-position: 0% 50%;   }
@@ -54,6 +56,11 @@ body, html {
     border: 0.15em solid #fff;
     color: #fff;
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='white' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E");
+  }
+
+  .form-select:focus, .dselect-wrapper .form-select.show {
+    border-color: #7cf569;
+    box-shadow: none;
   }
 
 
@@ -122,6 +129,10 @@ body, html {
 
   .navbar {
     z-index: 99;
+  }
+
+  .main-navbar {
+    z-index: 100;
   }
 
   .nav-link:hover > .fa-solid {
