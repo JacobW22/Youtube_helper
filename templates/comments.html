@@ -9,7 +9,6 @@
     <title>Youtube helper</title>
 
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     
     <!--===============================================================================================-->
       <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
@@ -111,7 +110,7 @@
   <nav class="d-flex flex-grow-0 navbar navbar-expand-xxl w-100 comments_navbar">
     <div class="container-fluid comments_navbar_container">
         <h2 class="navbar-brand text-light fs-6 d-xxl-none">Search options</h2>
-        <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler ms-0 me-lg-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
       <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
@@ -169,91 +168,35 @@
 
 
     <!-- Comments results start-->
-    <div class=" d-flex flex-grow-0 justify-content-center w-100 m-0 comments_results mb-auto">
+    <div class=" d-flex flex-grow-0 justify-content-center w-100 m-0 comments_results mb-1">
       <div class="col-12 col-md-10 p-0 my-auto card_container">
 
         <div class="card" id="background">
 
           <div class="card-body">
 
+            {% for comment in comments %}
+            
             <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">Hello and thank you for visiting MDBootstrap. Please click the video
-                  below.</p>
+              <img src="{{ comment.profile_image_url }}" class="mt-2 rounded" alt="avatar 1" style="width: 45px; height: 100%;">
+              <div class="d-flex flex-column">
+                <div class="ms-3">
+                  <p class="fs-6 mb-0 text-light">{{ comment.author }}</p>
+                </div>
+                <div class="p-3 ms-3 comment_background">
+                  <p class="fs-6 mb-0 comment_text">{{ comment.text|safe }}</p>
+                </div>
+                <div class="ms-3">
+                  <p class="fs-6 mb-0 text-muted comment_text"><small>{{ comment.publish_date }}</small></p>
+                </div>
+                
               </div>
+              <span class="mt-auto badge rounded-pill bg-danger">
+                <i class="fa-solid fa-thumbs-up me-1"></i> {{ comment.likes }}
+              </span>
             </div>
 
-
-
-            <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 60px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">...</p>
-              </div>
-            </div>
-
- <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">...</p>
-              </div>
-            </div>
-            
- <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">...</p>
-              </div>
-            </div>
-            
- <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">...</p>
-              </div>
-            </div>
-            
- <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">...</p>
-              </div>
-            </div>
-            
- <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">...</p>
-              </div>
-            </div> <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">...</p>
-              </div>
-            </div> <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">...</p>
-              </div>
-            </div>
-            
- <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="avatar 1" style="width: 45px; height: 100%;">
-              <div class="p-3 ms-3 comment_background">
-                <p class="fs-6 mb-0 text-dark">...</p>
-              </div>
-            </div>
+            {% endfor%}
             
 
           </div>
@@ -281,6 +224,7 @@
       </footer>
     <!-- Pagination footer end-->
 
+    <button class="btn rounded-pill mx-auto">Cancel</button>
 
   </section>
   <!-- Comments container end-->
@@ -289,7 +233,6 @@
 </section>
 <!-- Comments section end -->
 
-<button class="btn rounded-pill mx-auto">Cancel</button>
 
 </div>
 <!-- Main container end -->
@@ -325,6 +268,9 @@
 
     $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
 
+    $(".comment_text").find("a").attr("target", "_blank");
+    $(".comment_text").find("a").addClass("link_in_comments");
+
     dselect(document.querySelector('#maxResults'));
 
     $(".dselect-wrapper").children("div").addClass("selection-menu");
@@ -342,6 +288,10 @@
     });
 
     $('.datepicker').on('change', function() {
+      $(this).css('border-color', '#7cf569');
+    });
+    
+    $('.form-select').on('focus', function() {
       $(this).css('border-color', '#7cf569');
     });
 

@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
 from django.utils.http import urlencode
-from django.http import HttpResponse
 from django.dispatch import Signal, receiver
+from django.http import JsonResponse, HttpResponse
+
 from .forms import CreateUserForm
 from .decorators import login_check, not_authenticated_only
 from .models import user_data_storage, User
@@ -17,7 +18,8 @@ import openai
 import backoff
 import pytube
 import requests
-
+import asyncio
+import json
 
 from pytube import YouTube
 from pytube.cli import on_progress
@@ -26,6 +28,7 @@ from dotenv import load_dotenv, find_dotenv
 from urllib.parse import quote, unquote
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from dateutil.parser import isoparse
 
 
 # Hide it from Github
@@ -317,33 +320,76 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
     return render(request, "ai_site.html", context)
 
 
+async def get_video_comments(video_id):
+
+    try:
+        # Retrieve the comments for the specified video
+        request = youtube.commentThreads().list(
+            part='snippet',
+            videoId=video_id,
+            textFormat='html',
+            order='relevance'
+        )
+        response = await asyncio.to_thread(request.execute)
+
+        # Process the comments
+        processed_comments = []
+        for comment in response['items']:
+            # Extract the comment snippet
+            snippet = comment['snippet']['topLevelComment']['snippet']
+            author = snippet['authorDisplayName']
+            text = snippet['textDisplay']
+            likes = snippet['likeCount']
+            profile_image_url = snippet['authorProfileImageUrl']
+            publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
+
+
+
+
+
+            # Add the processed comment to the list
+            processed_comments.append({
+                'author': author,
+                'text': text,
+                'likes': likes,
+                'profile_image_url': profile_image_url,
+                'publish_date': publish_date
+            })
+
+        return processed_comments
+
+    except HttpError as e:
+        error_message = f'An HTTP error {e.resp.status} occurred: {e.content}'
+        raise HttpError(e.resp, error_message)
+
+
+
+async def get_video_comments_view_async(video_id):
+
+    if not video_id:
+        return JsonResponse({'error': 'No video_id parameter provided'}, status=400)
+
+    try:
+        comments = await get_video_comments(video_id)
+        return {'comments': comments}
+
+    except HttpError as e:
+        error_message = f'An HTTP error {e.resp.status} occurred: {e.content}'
+        return JsonResponse({'error': error_message}, status=500)
+
+
 @login_check
 def comments(request, login_context):
-    video_id = "c4mJ6_k0dFA"
+    video_id = "0sOvCWFmrtA"
 
-    # try:
-    #     # Retrieve the comments for the specified video
-    #     comments = youtube.commentThreads().list(
-    #         part='snippet',
-    #         videoId=video_id,
-    #         textFormat='html'
-    #     ).execute()
-
-    #     # Process the comments
-    #     for comment in comments['items']:
-    #         # Extract the comment snippet
-    #         snippet = comment['snippet']['topLevelComment']['snippet']
-    #         author = snippet['authorDisplayName']
-    #         text = snippet['textDisplay']
-    #         likes = snippet['likeCount']
-
-
-    # except HttpError as e:
-    #     print(f'An HTTP error {e.resp.status} occurred: {e.content}')
-
+     # Create a new event loop
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    comments = loop.run_until_complete(get_video_comments_view_async(video_id))
 
     context = {}
 
     context.update(login_context)
+    context.update(comments)
 
     return render(request, "comments.html", context)
