@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.utils.http import urlencode
 from django.dispatch import Signal, receiver
 from django.http import JsonResponse, HttpResponse
+from django.urls import reverse
 
 from .forms import CreateUserForm
 from .decorators import login_check, not_authenticated_only
@@ -20,6 +21,8 @@ import pytube
 import requests
 import asyncio
 import json
+import time
+
 
 from pytube import YouTube
 from pytube.cli import on_progress
@@ -320,42 +323,45 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
     return render(request, "ai_site.html", context)
 
 
-async def get_video_comments(video_id):
+
+async def get_video_comments(video_id, order, maxResults, pageToken):
 
     try:
+
         # Retrieve the comments for the specified video
         request = youtube.commentThreads().list(
             part='snippet',
             videoId=video_id,
             textFormat='html',
-            order='relevance'
+            order=order,
+            maxResults=maxResults,
         )
         response = await asyncio.to_thread(request.execute)
 
         # Process the comments
         processed_comments = []
-        for comment in response['items']:
-            # Extract the comment snippet
-            snippet = comment['snippet']['topLevelComment']['snippet']
-            author = snippet['authorDisplayName']
-            text = snippet['textDisplay']
-            likes = snippet['likeCount']
-            profile_image_url = snippet['authorProfileImageUrl']
-            publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
+
+        response = request.execute()
+        if 'items' in response:
+            for comment in response['items']:
+                # Extract the comment snippet
+                snippet = comment['snippet']['topLevelComment']['snippet']
+                author = snippet['authorDisplayName']
+                text = snippet['textDisplay']
+                likes = snippet['likeCount']
+                profile_image_url = snippet['authorProfileImageUrl']
+                publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
 
 
-
-
-
-            # Add the processed comment to the list
-            processed_comments.append({
-                'author': author,
-                'text': text,
-                'likes': likes,
-                'profile_image_url': profile_image_url,
-                'publish_date': publish_date
-            })
-
+                # Add the processed comment to the list
+                processed_comments.append({
+                    'author': author,
+                    'text': text,
+                    'likes': likes,
+                    'profile_image_url': profile_image_url,
+                    'publish_date': publish_date
+                })
+        # if next_page > 1 then skip pages only for page token
         return processed_comments
 
     except HttpError as e:
@@ -364,13 +370,13 @@ async def get_video_comments(video_id):
 
 
 
-async def get_video_comments_view_async(video_id):
+async def get_video_comments_view_async(video_id, order, maxResults, pageToken):
 
     if not video_id:
         return JsonResponse({'error': 'No video_id parameter provided'}, status=400)
 
     try:
-        comments = await get_video_comments(video_id)
+        comments = await get_video_comments(video_id, order, maxResults, pageToken)
         return {'comments': comments}
 
     except HttpError as e:
@@ -380,16 +386,33 @@ async def get_video_comments_view_async(video_id):
 
 @login_check
 def comments(request, login_context):
-    video_id = "0sOvCWFmrtA"
-
-     # Create a new event loop
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    comments = loop.run_until_complete(get_video_comments_view_async(video_id))
-
     context = {}
 
-    context.update(login_context)
-    context.update(comments)
+    if request.GET.get("order") != None:
+        video_id = "qFnHWMxlOBc"
+        order = request.GET.get("order")
+        maxResults = request.GET.get("maxResults")
+        pageToken = request.GET.get("pageToken")
 
-    return render(request, "comments.html", context)
+        context = {
+            'order': order,
+            'maxResults': maxResults,
+            'pageToken': int(pageToken)
+        }
+
+        # Create a new event loop
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        comments = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, pageToken))
+
+        context.update(comments)
+        context.update({'count' : len(comments['comments'])})
+        context.update(login_context)
+
+        return render(request, "comments.html", context)
+    
+    else:
+
+        context.update(login_context)
+
+        return render(request, "comments.html", context)
