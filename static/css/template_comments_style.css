@@ -302,10 +302,16 @@ body, html {
     border-radius: 0 15px 15px 0;
   }
 
-  .page-item .page-link:hover {
+  .active_page {
+    color: yellow!important;
+    transform-origin: center!important;
+    box-shadow: inset 1em 1em 1em -0.5em red;
+    border-radius: 100%!important;
+  }
+
+  .page-item .page-link:hover{
     transform: scale(1.5);
     transform-origin: bottom!important;
-
   }
 
   .page-item {
@@ -381,7 +387,6 @@ body, html {
 
     .main-container {
         height: calc(100vh - 111px);
-        padding-bottom: 2em!important;
     }
     
     .form-control {
@@ -426,7 +431,6 @@ body, html {
     
     .main-container {
         height: calc(100vh - 97px);
-        padding-bottom: 2em!important;
     }
 
     .form-control {
@@ -468,7 +472,6 @@ body, html {
   @media screen and (min-width: 997px) and (max-width: 1400px) {
     .main-container {
       height: calc(100vh - 97px)!important;
-      padding-bottom: 2em!important;
     }
   }
 
@@ -495,7 +498,6 @@ body, html {
 
     .main-container {
         height: calc(100vh - 62px);
-        padding-bottom: 2em!important;
     }
 
       .form-select {

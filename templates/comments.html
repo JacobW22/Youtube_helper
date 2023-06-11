@@ -211,26 +211,29 @@
     <!-- Pagination footer start-->
       <footer class="d-flex flex-grow-0 page_navigation mx-auto mt-auto mb-3">
         <ul class="pagination justify-content-center" >
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:-1 }}')" tabindex="-1" id="pagination_first_element"><span aria-hidden="true">&laquo;</span></a></li>
           
-          {% if pageToken > 2 %}
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:-2 }}')">{{ pageToken|add:-2 }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:-1 }}')">{{ pageToken|add:-1 }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken }}')">{{ pageToken }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:1 }}')">{{ pageToken|add:1 }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:2 }}')">{{ pageToken|add:2 }}</a></li>
+          {% if last_page %}
+          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')" tabindex="-1" id="pagination_first_element"><span aria-hidden="true">&laquo;</span></a></li>
 
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:1 }}')" tabindex="-1"  id="pagination_last_element"><span aria-hidden="true">&raquo;</span></a></li>
+          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">{{ pageID|add:-1 }}</a></li>
+          <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+          
+          {% elif pageID > 1 %}
+
+          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')" tabindex="-1" id="pagination_first_element"><span aria-hidden="true">&laquo;</span></a></li>
+
+          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">{{ pageID|add:-1 }}</a></li>
+          <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}</a></li>
+
+          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')" tabindex="-1"  id="pagination_last_element"><span aria-hidden="true">&raquo;</span></a></li>
 
           {% else %}
 
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken }}')">{{ pageToken }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:1 }}')">{{ pageToken|add:1 }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:2 }}')">{{ pageToken|add:2 }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:3 }}')">{{ pageToken|add:3 }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:4 }}')">{{ pageToken|add:4 }}</a></li>
-
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageToken|add:1 }}')" tabindex="-1"  id="pagination_last_element"><span aria-hidden="true">&raquo;</span></a></li>
+          <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}</a></li>
+         
+          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')" tabindex="-1"  id="pagination_last_element"><span aria-hidden="true">&raquo;</span></a></li>
 
           {% endif %}
 
@@ -326,10 +329,12 @@
   
     {% if maxResults %}
       var selectedValue = '{{ maxResults }}';
+
       $('#maxResults').val(selectedValue);
-      $('#maxResults').find('button.form-select').text(selectedValue); 
-      <!-- To do -->
+      $('.dselect-wrapper').find('button.form-select').html(selectedValue);
+      $('.form-select').css('border-color', '#7cf569');
     {% endif %}
+
   });
 
 
@@ -369,15 +374,15 @@
     maxResults = document.getElementById("maxResults").value;
 
 
-    var url = "{% url 'comments' %}?order="+order+"&maxResults="+maxResults+"&pageToken="+page+"";
+    var url = "{% url 'comments' %}?order="+order+"&maxResults="+maxResults+"&previousPageID="+{{ pageID }}+"&pageID="+page+"";
 
     window.location.href = url;
   }
   
-  {% if pageToken %}
+  {% if pageID %}
   function changePageWithValue(page) {
 
-    var url = "{% url 'comments' %}?order="+{{ order }}+"&maxResults="+{{ maxResults }}+"&pageToken="+page+"";
+    var url = "{% url 'comments' %}?order="+'{{ order }}'+"&maxResults="+{{ maxResults }}+"&previousPageID="+{{ pageID }}+"&pageID="+page+"";
     window.location.href = url;
   }
   {% endif %}

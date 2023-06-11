@@ -33,7 +33,6 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from dateutil.parser import isoparse
 
-
 # Hide it from Github
 load_dotenv(find_dotenv())
 
@@ -322,12 +321,11 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
 
     return render(request, "ai_site.html", context)
 
+pageTokens = [None]
 
-
-async def get_video_comments(video_id, order, maxResults, pageToken):
+async def get_video_comments(video_id, order, maxResults, previousPageID, pageID):
 
     try:
-
         # Retrieve the comments for the specified video
         request = youtube.commentThreads().list(
             part='snippet',
@@ -335,13 +333,42 @@ async def get_video_comments(video_id, order, maxResults, pageToken):
             textFormat='html',
             order=order,
             maxResults=maxResults,
+            pageToken = pageTokens[-1]
         )
-        response = await asyncio.to_thread(request.execute)
+        
 
         # Process the comments
         processed_comments = []
 
-        response = request.execute()
+        match (int(pageID) - int(previousPageID)):
+
+            case 1:
+                response = await asyncio.to_thread(request.execute)
+
+                if 'nextPageToken' in response:
+                    pageTokens.append(response['nextPageToken'])
+                    request = youtube.commentThreads().list_next(request, response)
+
+            case 0: 
+                pass
+
+            case -1:
+                pageTokens.pop()
+                request = youtube.commentThreads().list(
+                    part='snippet',
+                    videoId=video_id,
+                    textFormat='html',
+                    order=order,
+                    maxResults=maxResults,
+                    pageToken = pageTokens[-1]
+                )
+
+        response = await asyncio.to_thread(request.execute)
+
+        if 'nextPageToken' not in response:
+            processed_comments.append('last_page')
+
+
         if 'items' in response:
             for comment in response['items']:
                 # Extract the comment snippet
@@ -361,7 +388,8 @@ async def get_video_comments(video_id, order, maxResults, pageToken):
                     'profile_image_url': profile_image_url,
                     'publish_date': publish_date
                 })
-        # if next_page > 1 then skip pages only for page token
+
+            
         return processed_comments
 
     except HttpError as e:
@@ -370,13 +398,13 @@ async def get_video_comments(video_id, order, maxResults, pageToken):
 
 
 
-async def get_video_comments_view_async(video_id, order, maxResults, pageToken):
+async def get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID):
 
     if not video_id:
         return JsonResponse({'error': 'No video_id parameter provided'}, status=400)
 
     try:
-        comments = await get_video_comments(video_id, order, maxResults, pageToken)
+        comments = await get_video_comments(video_id, order, maxResults, previousPageID, pageID)
         return {'comments': comments}
 
     except HttpError as e:
@@ -389,25 +417,32 @@ def comments(request, login_context):
     context = {}
 
     if request.GET.get("order") != None:
-        video_id = "qFnHWMxlOBc"
+        video_id = "5Y7_0j0hNKw"    
         order = request.GET.get("order")
         maxResults = request.GET.get("maxResults")
-        pageToken = request.GET.get("pageToken")
+        previousPageID = request.GET.get("previousPageID")
+        pageID = request.GET.get("pageID")
 
         context = {
             'order': order,
             'maxResults': maxResults,
-            'pageToken': int(pageToken)
+            'pageID': int(pageID)
         }
 
         # Create a new event loop
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        comments = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, pageToken))
+        comments = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID))
+
 
         context.update(comments)
         context.update({'count' : len(comments['comments'])})
         context.update(login_context)
+
+
+        if 'last_page' in comments['comments']:
+            context.update({'last_page': True})
+            comments['comments'].remove('last_page')
 
         return render(request, "comments.html", context)
     
