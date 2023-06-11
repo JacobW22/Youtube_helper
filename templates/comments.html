@@ -95,11 +95,11 @@
 
 
 <!-- Main container start -->
-<div class="d-flex main-container px-4 pt-5 flex-column gap-4">
+<div class="d-flex main-container px-4 pt-5 flex-column">
   
 
 <!-- Comments section start -->
-<section class="d-flex container-fluid flex-column comments_container col-12 p-0">
+<section class="d-flex container-fluid flex-column comments_container p-0">
    
 
 
@@ -178,7 +178,7 @@
             {% for comment in comments %}
             
             <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="{{ comment.profile_image_url }}" class="mt-2 rounded" alt="avatar 1" style="width: 45px; height: 100%;">
+              <img src="{{ comment.profile_image_url }}" class="mt-2 rounded" alt="avatar 1" style="width: 45px; height: 100%;" loading="lazy">
               <div class="d-flex flex-column">
                 <div class="ms-3">
                   <p class="fs-6 mb-0 text-light">{{ comment.author }}</p>
@@ -205,50 +205,52 @@
       </div>
     </div>
     <!-- Comments results end-->
-
-    <span class="mx-auto text-light mb-1">Comments: &nbsp;{{ count }}</span>
-
-    <!-- Pagination footer start-->
-      <footer class="d-flex flex-grow-0 page_navigation mx-auto mt-auto mb-3">
-        <ul class="pagination justify-content-center" >
-          
-          {% if last_page %}
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')" tabindex="-1" id="pagination_first_element"><span aria-hidden="true">&laquo;</span></a></li>
-
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">{{ pageID|add:-1 }}</a></li>
-          <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-          
-          {% elif pageID > 1 %}
-
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')" tabindex="-1" id="pagination_first_element"><span aria-hidden="true">&laquo;</span></a></li>
-
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">{{ pageID|add:-1 }}</a></li>
-          <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}</a></li>
-
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')" tabindex="-1"  id="pagination_last_element"><span aria-hidden="true">&raquo;</span></a></li>
-
-          {% else %}
-
-          <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}</a></li>
-         
-          <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')" tabindex="-1"  id="pagination_last_element"><span aria-hidden="true">&raquo;</span></a></li>
-
-          {% endif %}
-
-        </ul>
-      </footer>
-    <!-- Pagination footer end-->
-
-    <button class="btn rounded-pill mx-auto">Cancel</button>
+    
 
   </section>
   <!-- Comments container end-->
 
 
+  <span class="mx-auto text-light mt-3 mb-2">Comments: &nbsp;{{ count }}</span>
+
+  <!-- Pagination footer start-->
+    <footer class="d-flex flex-grow-0 page_navigation mx-auto mb-4">
+      <ul class="pagination justify-content-center" >
+        
+        {% if last_page %}
+        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')" tabindex="-1" id="pagination_first_element"><span aria-hidden="true">&laquo;</span></a></li>
+
+        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">{{ pageID|add:-1 }}</a></li>
+        <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+        
+        {% elif pageID > 1 %}
+
+
+        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">... {{ pageID|add:-1 }}</a></li>
+        <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }} ...</a></li>
+
+
+        {% else %}
+
+        <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}</a></li>
+       
+        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')" tabindex="-1"  id="pagination_last_element"><span aria-hidden="true">&raquo;</span></a></li>
+
+        {% endif %}
+
+      </ul>
+    </footer>
+  <!-- Pagination footer end-->
+
+
+  <button class="btn rounded-pill mx-auto">Cancel</button>
+
+
 </section>
 <!-- Comments section end -->
+
 
 
 </div>
@@ -367,24 +369,26 @@
 
 
 
-
   function submitFormWithValue(order) {
-    page = 1
 
     maxResults = document.getElementById("maxResults").value;
 
 
-    var url = "{% url 'comments' %}?order="+order+"&maxResults="+maxResults+"&previousPageID="+{{ pageID }}+"&pageID="+page+"";
+    var url = "{% url 'comments' %}?order="+order+"&maxResults="+maxResults+"&previousPageID="+1+"&pageID="+1+"";
 
     window.location.href = url;
   }
   
+
   {% if pageID %}
+
   function changePageWithValue(page) {
 
     var url = "{% url 'comments' %}?order="+'{{ order }}'+"&maxResults="+{{ maxResults }}+"&previousPageID="+{{ pageID }}+"&pageID="+page+"";
     window.location.href = url;
   }
+
+
   {% endif %}
 
 </script>

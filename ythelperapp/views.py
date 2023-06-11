@@ -417,7 +417,7 @@ def comments(request, login_context):
     context = {}
 
     if request.GET.get("order") != None:
-        video_id = "5Y7_0j0hNKw"    
+        video_id = "uod9IJ4-47s"    
         order = request.GET.get("order")
         maxResults = request.GET.get("maxResults")
         previousPageID = request.GET.get("previousPageID")
@@ -429,6 +429,11 @@ def comments(request, login_context):
             'pageID': int(pageID)
         }
 
+        if previousPageID == '1' and pageID == '1':
+            pageTokens.clear()
+            pageTokens.append(None)
+
+        
         # Create a new event loop
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
