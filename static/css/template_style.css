@@ -1,13 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap');
 
-body, html {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    background: linear-gradient(black,red, white);
-    background-size: 800% 800%;
-    overflow: auto;
-  }
+  body, html {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: linear-gradient(black,red, white);
+      background-size: 800% 800%;
+      overflow: auto;
+      zoom: 115%;
+    }
   
   * {
     box-sizing: border-box;
@@ -17,6 +18,10 @@ body, html {
     -webkit-font-smoothing: antialiased!important;
     -moz-osx-font-smoothing: grayscale!important;
     -webkit-text-size-adjust: 100%!important;
+  }
+
+  *:not(.fa-solid, .fa-regular) {
+    font-family: 'Quicksand', sans-serif!important;
   }
 
   ::-webkit-scrollbar-track {
@@ -41,13 +46,11 @@ body, html {
   }
 
   h2 {
-    font-family: 'Montserrat', sans-serif;
     user-select: none;
   }
 
   .form-control {
     background-color: transparent!important;
-    font-size: 1.5rem!important;
     border-color: white!important;
     border-radius: 15px!important;
     box-shadow: 0px 0px 15px 1px black;
@@ -67,6 +70,11 @@ body, html {
     border-color: #7cf569!important;
   }
 
+  .form-control::placeholder {
+    user-select: none;
+    font-size: 1.2rem!important;
+  }
+
   .container {
     width: 100%;
     height: 100%;
@@ -77,16 +85,18 @@ body, html {
   }
 
   .btn {
-    background: #000000 !important;
-    color: #fff !important;
-    font-family: 'Montserrat', sans-serif;
-    scale: 1.1;
+    background: black !important;
+    color: white;
+    border-radius: 15px!important;
+    outline: none!important;
+    border: none!important;
+    box-shadow: 0em 0em 0.1em 0.03em white!important;
   }
 
   .btn:hover {
-    background: #fff !important;
-    color: #000000 !important;
+    box-shadow: none!important;
   }
+
 
   .toast {
     position: relative;
@@ -101,6 +111,14 @@ body, html {
     transition: all 0.4s !important;
   }
 
+  .navbar {
+    zoom: 75%!important;
+  }
+
+  .nav-link {
+    font-family: Poppins-Regular, sans-serif!important;
+  }
+  
   .nav-link:hover > .fa-solid:not(.fa-screwdriver-wrench) {
     color:yellow!important;
   }
@@ -122,7 +140,7 @@ body, html {
   }
 
   #main-title:hover {
-    color: #000000;
+    color: black;
   }
 
   ::selection {
@@ -137,8 +155,8 @@ body, html {
   }
 
   .pointing-to-link, .slider_info {
-    font-family: 'Montserrat', sans-serif;
     user-select: none;
+    font-family: 'Quicksand', sans-serif;
   }
 
   .carousel-inner .carousel-item > img  {
@@ -231,20 +249,20 @@ body, html {
   }
 
   .dropdown-item.active, .dropdown-item:active {
-    color: #fff!important;
+    color: white!important;
     text-decoration: none;
-    background-color: #fff!important;
+    background-color: white!important;
   }
 
   .dropdown-item.active, .dropdown-item:active {
-    color: #fff!important;
+    color: white!important;
     text-decoration: none;
-    background-color: #fff!important;
+    background-color: white!important;
   }
 
   .dropdown-item {
     border-radius: 15px!important;
-    color: #fff!important;
+    color: white!important;
   }
 
   .fa-solid {
@@ -311,15 +329,11 @@ body, html {
     #main_form, #result_form {
       width: 75%;
     }  
-
-    .form-control::placeholder {
-      font-size: 2.9vw!important;
-    }
   }
 
   @media screen and (min-width: 997px) and (max-width: 2048px){
     .nav-link {
-      font-size: 1.25rem!important;
+      font-size: 1.2rem!important;
     }
 
     #main-title {
@@ -351,6 +365,9 @@ body, html {
       width: 65%!important;
     }
 
+    #main-title {
+      font-size: 2.5rem!important;
+    }
     .carousel-caption,.date_in_caption {
       font-size: 2vw!important;
     }
@@ -367,8 +384,8 @@ body, html {
       height: calc(200% + 48px + 62px);
     }
 
-    .form-control::placeholder {
-      font-size: 3.5vw!important;
+    html {
+      zoom: 110%;
     }
   }
 

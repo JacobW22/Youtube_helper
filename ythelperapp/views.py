@@ -125,6 +125,7 @@ def login_page(request, login_context):
             return redirect(main_page)
         else:
             msg.info(request, "Username or Password is incorrect")
+            return redirect(login_page)
 
     context = {
         "form": form,

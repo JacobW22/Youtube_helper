@@ -54,7 +54,7 @@
     
 
 <!-- Site container start -->
-<div class="d-flex flex-column full_site_container">
+<div class="d-flex flex-column full_site_container" style="height: calc(100% - 125px);">
 
 
   <!-- Navbar start -->
@@ -150,22 +150,6 @@
                           Log in
                       </button>
                   </div>
-
-                  <div class="text-center p-t-12">
-                      <span class="txt1">
-                          Forgot
-                      </span>
-                      <a class="txt2" href="#">
-                          Username / Password?
-                      </a>
-                  </div>
-
-                  <div class="text-center p-t-12">
-                      <a class="txt2" href="{% url 'sign_up_page' %}">
-                          Need a new account? Sign up
-                          <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-                      </a>
-                  </div>
                 </form>
               </div>
             </div>
@@ -173,6 +157,22 @@
         </form>
       </div>
     </div>
+
+    <div class="text-center p-t-50">
+      <span class="txt1">
+          Forgot
+      </span>
+      <a class="txt2" href="#">
+          Username / Password?
+      </a>
+  </div>
+
+  <div class="text-center p-t-12">
+      <a class="txt2" href="{% url 'sign_up_page' %}">
+          Need a new account? Sign up
+          <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+      </a>
+  </div>
   </section>
   <!-- Main container end -->
 
@@ -265,6 +265,7 @@
     };
 
     form_fields[1].placeholder = "Username";
+    form_fields[1].classList.add('username');
     form_fields[1].style.fontWeight = "bold";
     form_fields[2].placeholder = "Password";
 

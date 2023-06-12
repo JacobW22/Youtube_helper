@@ -55,7 +55,7 @@
 
 
 <!-- Site container start -->
-<div class="d-flex flex-column full_site_container">
+<div class="d-flex flex-column full_site_container" style="height: calc(100% - 40px);">
 
 
   <!-- Navbar start -->
@@ -125,7 +125,7 @@
                     </span>
                 </div>
 
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                <div class="wrap-input100 validate-input mt-4" data-validate = "Valid email is required: ex@abc.xyz">
                     {{ form.email }}
                     <span class="focus-input100"></span>
                     <span class="symbol-input100">
@@ -156,20 +156,22 @@
                       Sign up
                     </button>
                 </div>
-
-
-                <div class="text-center p-t-12">
-                    <a class="txt2" href="{% url 'login_page' %}">
-                        Already have an account? Log in 
-                        <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-                    </a>
-                </div>
               </form>
             </div>
           </div>
         </div>
       </form>
     </div>
+
+
+    <div class="text-center">
+      <a class="txt2" href="{% url 'login_page' %}">
+          Already have an account? Log in 
+          <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+      </a>
+  </div>
+
+
   </section>
   <!-- Main container end -->
 
