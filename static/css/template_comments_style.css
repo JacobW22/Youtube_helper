@@ -8,11 +8,16 @@ body, html {
     background-size: 800% 800%;
     overflow-y: auto;
     overflow-x: hidden;
-
   }
   
   * {
     box-sizing: border-box;
+    font-synthesis: none!important;
+    text-rendering: optimizeLegibility!important;
+    font-smooth: auto!important;
+    -webkit-font-smoothing: antialiased!important;
+    -moz-osx-font-smoothing: grayscale!important;
+    -webkit-text-size-adjust: 100%!important;
   }
 
   ::-webkit-scrollbar-track {
@@ -254,8 +259,6 @@ body, html {
   }
 
   .comments_container {
-    background-color: rgba(255, 0, 0, 0.05);
-    border-radius: 25px;
     max-height: 100%!important;
     height: 100%!important;
   }
@@ -264,8 +267,14 @@ body, html {
     z-index: 0;
   }
 
-  .card-body, .comments_insides, .card_container {
-    height: 90%!important;
+  .comments_insides {
+    background-color: rgba(255, 0, 0, 0.05);
+    border-radius: 25px;
+    height: 80%!important
+  }
+
+  .card-body, .card_container {
+    height: 100%!important;
   }
 
 
@@ -302,10 +311,17 @@ body, html {
     border-radius: 0 15px 15px 0;
   }
 
-  .page-item .page-link:hover {
+  .active_page {
+    color: yellow!important;
+    transform-origin: center!important;
+    box-shadow: inset 1em 1em 1em -0.5em red;
+    border-radius: 100%!important;
+    height: 2.1em!important;
+  }
+
+  .page-item .page-link:hover{
     transform: scale(1.5);
     transform-origin: bottom!important;
-
   }
 
   .page-item {
@@ -341,7 +357,7 @@ body, html {
 
   .badge {
     height: 1.5em!important;
-    margin-bottom: 1.2em!important;
+    margin-bottom: 1.1em!important;
     transform: translate(-60%,-50%)!important;
   }
 
@@ -381,7 +397,6 @@ body, html {
 
     .main-container {
         height: calc(100vh - 111px);
-        padding-bottom: 2em!important;
     }
     
     .form-control {
@@ -426,7 +441,6 @@ body, html {
     
     .main-container {
         height: calc(100vh - 97px);
-        padding-bottom: 2em!important;
     }
 
     .form-control {
@@ -468,7 +482,6 @@ body, html {
   @media screen and (min-width: 997px) and (max-width: 1400px) {
     .main-container {
       height: calc(100vh - 97px)!important;
-      padding-bottom: 2em!important;
     }
   }
 
@@ -495,7 +508,6 @@ body, html {
 
     .main-container {
         height: calc(100vh - 62px);
-        padding-bottom: 2em!important;
     }
 
       .form-select {
