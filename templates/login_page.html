@@ -54,11 +54,11 @@
     
 
 <!-- Site container start -->
-<div class="d-flex flex-column full_site_container" style="height: calc(100% - 125px);">
+<div class="d-flex flex-column full_site_container">
 
 
   <!-- Navbar start -->
-  <nav class="navbar navbar-expand-lg mb-4">
+  <nav class="navbar navbar-expand-xl p-0">
     <div class="container-fluid">
       
         <!-- Nav title start-->
@@ -117,7 +117,7 @@
 
 
   <!-- Main container start -->
-  <section class="d-none my-auto align-items-center justify-content-center main-container">
+  <section class="d-none flex-column my-auto pt-0 pb-0 px-5 align-items-center justify-content-center main-container">
       <div class="insides">
           <form method="POST">
               {% csrf_token %}
@@ -152,30 +152,28 @@
                   </div>
                 </form>
               </div>
-            </div>
-          </div>
-        </form>
+          </form>
       </div>
-    </div>
+  </section>
+  <!-- Main container end -->
 
-    <div class="text-center p-t-50">
+  <div class="d-block mt-5 mb-3">
+    <div class="text-center">
       <span class="txt1">
           Forgot
       </span>
       <a class="txt2" href="#">
           Username / Password?
       </a>
-  </div>
+    </div>
 
-  <div class="text-center p-t-12">
-      <a class="txt2" href="{% url 'sign_up_page' %}">
-          Need a new account? Sign up
-          <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-      </a>
+    <div class="text-center p-t-12 mb-3">
+        <a class="txt2" href="{% url 'sign_up_page' %}">
+            Need a new account? Sign up
+            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+        </a>
+    </div>
   </div>
-  </section>
-  <!-- Main container end -->
-
 
 </div>
 <!-- Site container end -->

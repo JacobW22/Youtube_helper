@@ -55,11 +55,11 @@
 
 
 <!-- Site container start -->
-<div class="d-flex flex-column full_site_container" style="height: calc(100% - 40px);">
+<div class="d-flex flex-column full_site_container">
 
 
   <!-- Navbar start -->
-  <nav class="navbar navbar-expand-lg ">
+  <nav class="navbar navbar-expand-xl ">
     <div class="container-fluid">
         <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
         <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,74 +106,72 @@
 
 
   <!-- Main container start -->
-  <section class="d-none my-auto align-items-center justify-content-center main-container">
+  <section class="d-none my-auto pt-0 pb-0 px-5 align-items-center justify-content-center main-container">
       <div class="insides">
-          <form method="POST">
-            {% csrf_token %}
-            <div class="limiter">
-              <form class="login100-form validate-form">
-                <span class="login100-form-title">
-                  <span class="text-light fs-2 me-2 text-center"> <i class="fa-solid fa-user-plus" style="color: #ffffff;"></i> </span>
-                    Sign up 
-                </span>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="limiter">
+            <form class="login100-form validate-form">
+              <span class="login100-form-title">
+                <span class="text-light fs-2 me-2 text-center"> <i class="fa-solid fa-user-plus" style="color: #ffffff;"></i> </span>
+                  Sign up 
+              </span>
 
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-                    {{ form.username }}
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                    </span>
-                </div>
+              <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                  {{ form.username }}
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                      <i class="fa fa-user" aria-hidden="true"></i>
+                  </span>
+              </div>
 
-                <div class="wrap-input100 validate-input mt-4" data-validate = "Valid email is required: ex@abc.xyz">
-                    {{ form.email }}
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                    </span>
-                </div>
+              <div class="wrap-input100 validate-input mt-4" data-validate = "Valid email is required: ex@abc.xyz">
+                  {{ form.email }}
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>
+                  </span>
+              </div>
 
-                <div class="wrap-input100 validate-input" data-validate = "Password is required">
-                    {{ form.password1 }}
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-                        <i class="fa fa-lock" aria-hidden="true"></i>
-                    </span>
-                </div>
+              <div class="wrap-input100 validate-input" data-validate = "Password is required">
+                  {{ form.password1 }}
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                      <i class="fa fa-lock" aria-hidden="true"></i>
+                  </span>
+              </div>
 
-                <div class="wrap-input100 validate-input" data-validate = "Password is required">
-                    {{ form.password2 }}
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-                        <i class="fa fa-lock" aria-hidden="true"></i>
-                    </span>
-                </div>
+              <div class="wrap-input100 validate-input" data-validate = "Password is required">
+                  {{ form.password2 }}
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                      <i class="fa fa-lock" aria-hidden="true"></i>
+                  </span>
+              </div>
 
-                
-                <div class="container-login100-form-btn">
-                    <button class="login100-form-btn animate" type="submit">
-                      <i class="fa-solid fa-greater-than"></i>
-                      Sign up
-                    </button>
-                </div>
-              </form>
-            </div>
+              
+              <div class="container-login100-form-btn">
+                  <button class="login100-form-btn animate" type="submit">
+                    <i class="fa-solid fa-greater-than"></i>
+                    Sign up
+                  </button>
+              </div>
+            </form>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>   
+      </div>
+  </section>
+  <!-- Main container end -->
 
 
-    <div class="text-center">
+  <div class="d-block mt-5 mb-3">
+    <div class="text-center mt-3 mb-3">
       <a class="txt2" href="{% url 'login_page' %}">
           Already have an account? Log in 
           <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
       </a>
+    </div>
   </div>
-
-
-  </section>
-  <!-- Main container end -->
 
 
 </div>

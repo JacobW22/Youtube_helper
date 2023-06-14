@@ -8,6 +8,7 @@
       background-size: 800% 800%;
       overflow: auto;
       zoom: 115%;
+      scroll-snap-type: y mandatory!important;
     }
   
   * {
@@ -31,7 +32,7 @@
   }
 
   ::-webkit-scrollbar {
-      scrollbar-color: #ff9a9e #F5F5F5;
+      scrollbar-color: black #910000;
       height: 7px;
       width: 7px;
       background-color: transparent;
@@ -73,6 +74,12 @@
   .form-control::placeholder {
     user-select: none;
     font-size: 1.2rem!important;
+  }
+
+
+
+  section:not(.first-container), nav {
+    scroll-snap-align: center!important;
   }
 
   .container {
@@ -343,6 +350,8 @@
     .full_site_container {
       height: calc(200% + 48px + 90px);
     }
+
+
 
     .navbar {
       margin-top: 2.3em;
