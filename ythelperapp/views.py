@@ -380,7 +380,6 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
                 profile_image_url = snippet['authorProfileImageUrl']
                 publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
 
-
                 # Add the processed comment to the list
                 processed_comments.append({
                     'author': author,
@@ -390,7 +389,15 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
                     'publish_date': publish_date
                 })
 
-            
+
+        if order == 'time':
+            date_format = "%Y-%m-%d %H:%M:%S"
+            date1 = dt.strptime(processed_comments[0].get('publish_date'), date_format)
+            date2 = dt.strptime(processed_comments[1].get('publish_date'), date_format)
+
+            if date1 < date2:
+                    processed_comments[0]['pinned'] = True
+
         return processed_comments
 
     except HttpError as e:
@@ -413,23 +420,21 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
         return JsonResponse({'error': error_message}, status=500)
 
 
-@login_check
-def comments(request, login_context):
+
+def show_comments(order, maxResults, pageID, previousPageID, video_id, login_context):
     context = {}
 
-    if request.GET.get("order") != None:
-        video_id = "uod9IJ4-47s"    
-        order = request.GET.get("order")
-        maxResults = request.GET.get("maxResults")
-        previousPageID = request.GET.get("previousPageID")
-        pageID = request.GET.get("pageID")
-
+    if video_id != None:
+        
         context = {
             'order': order,
             'maxResults': maxResults,
-            'pageID': int(pageID)
+            'pageID': int(pageID),
+            'video_id' : video_id
         }
 
+
+        # Reset previous saved pageTokens
         if previousPageID == '1' and pageID == '1':
             pageTokens.clear()
             pageTokens.append(None)
@@ -450,10 +455,44 @@ def comments(request, login_context):
             context.update({'last_page': True})
             comments['comments'].remove('last_page')
 
-        return render(request, "comments.html", context)
-    
+        return context
+
     else:
 
         context.update(login_context)
 
+        return context
+            
+
+@login_check
+def comments(request, login_context):
+    if request.method == "POST":
+        try:
+            video_url = request.POST.get("video_url")   
+            video_id = video_url.split("=", 1)[1]
+
+            
+            order = 'relevance'
+            maxResults = 25
+            pageID = 1
+            previousPageID = 1
+
+            context = show_comments(order, maxResults, pageID, previousPageID, video_id, login_context)
+            return render(request, "comments.html", context)
+        
+        except Exception as err:
+            print(err)
+            msg.info(request, "Url is incorrect")
+            return redirect(comments)
+        
+    else:
+        order = request.GET.get("order")
+        maxResults = request.GET.get("maxResults")
+        previousPageID = request.GET.get("previousPageID")
+        pageID = request.GET.get("pageID")
+        video_id = request.GET.get("video_id")
+
+        context = show_comments(order, maxResults, pageID, previousPageID, video_id, login_context)
         return render(request, "comments.html", context)
+
+        

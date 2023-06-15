@@ -94,166 +94,185 @@
 <!-- Navbar end -->
 
 
-<!-- Main container start -->
-<div class="d-flex main-container px-4 pt-5 flex-column">
-  
-
-<!-- Comments section start -->
-<section class="d-flex container-fluid flex-column comments_container p-0">
-   
-
-
-  <!-- Comments container start-->
-  <section class="d-flex flex-column comments_insides container-fluid p-0">
-
-      <!-- Comments nav start-->
-  <nav class="d-flex flex-grow-0 navbar navbar-expand-xxl w-100 comments_navbar">
-    <div class="container-fluid comments_navbar_container">
-        <h2 class="navbar-brand text-light fs-6 d-xxl-none">Search options</h2>
-        <button class="navbar-toggler ms-0 me-lg-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-      <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
-        <ul class="navbar-nav gap-3 mb-sm-0">
-
-
-          <li class="nav-item">
-            <input class="form-control mx-auto text-light p-1 mt-2 px-2" type="search" placeholder="Search" aria-label="Search">
-          </li>
-
-          <li class="nav-item d-flex justify-content-center">
-            <div class="date_from">
-              <label class="text-light" for="date_from">From</label>
-              <input type="date" id="date_from" class="mt-2 p-1 ms-2 datepicker text-light">
-            </div>
-          </li>
-          
-          <li class="nav-item d-flex justify-content-center ">
-            <div class="date_to">
-              <label class="text-light" for="date_to">To</label>
-              <input type="date" id="date_to" class="mt-2 p-1 ms-2 datepicker text-light">
-            </div>
-          </li>
-
-
-          <li class="nav-item nav_select d-flex justify-content-center gap-2">
-            <h2 class="navbar-brand text-light fs-6 mt-xxl-2 me-0"> Results per page:</h2>
-
-            <select class="form-select" id="maxResults" aria-label="Default select example">
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-          </li>
-
-
-          <li class="nav-item dropdown text-center">
-            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown2" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-              <i class="fa-solid fa-arrow-up-wide-short fs-6"></i></i>&nbsp Sort by
-            </a>
-            
-            <div class="dropdown-menu sort_menu gap-xxl-0" aria-labelledby="navbarDropdown2">
-              <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('time')"><i class="fa-solid fa-arrow-down-long"></i>&nbsp; Time (newest)</a>
-              <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('relevance')">Revelance</a>
-              <a class="dropdown-item fs-6 mx-auto" href="{% url 'ai_page' %}"></i>Rating</a>
-            </div>
-          </li>
-
-
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- Comments nav end -->
-
-
-    <!-- Comments results start-->
-    <div class=" d-flex flex-grow-0 justify-content-center w-100 m-0 comments_results mb-1">
-      <div class="col-12 col-md-10 p-0 my-auto card_container">
-
-        <div class="card" id="background">
-
-          <div class="card-body">
-
-            {% for comment in comments %}
-            
-            <div class="d-flex flex-row justify-content-start mb-4">
-              <img src="{{ comment.profile_image_url }}" class="mt-2 rounded" alt="avatar 1" style="width: 45px; height: 100%;" loading="lazy">
-              <div class="d-flex flex-column">
-                <div class="ms-3">
-                  <p class="fs-6 mb-0 text-light">{{ comment.author }}</p>
-                </div>
-                <div class="p-3 ms-3 comment_background">
-                  <p class="fs-6 mb-0 comment_text">{{ comment.text|safe }}</p>
-                </div>
-                <div class="ms-3">
-                  <p class="fs-6 mb-0 text-muted comment_text"><small>{{ comment.publish_date }}</small></p>
-                </div>
-                
-              </div>
-              <span class="mt-auto badge rounded-pill bg-danger">
-                <i class="fa-solid fa-thumbs-up me-1"></i> {{ comment.likes }}
-              </span>
-            </div>
-
-            {% endfor%}
-            
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <!-- Comments results end-->
+{% if video_id %}
+  <!-- Main container start -->
+  <div class="d-flex main-container px-4 pt-5 flex-column">
     
 
-  </section>
-  <!-- Comments container end-->
+    <!-- Comments section start -->
+    <section class="d-flex container-fluid flex-column comments_container p-0">
+      
+
+      <!-- Comments container start-->
+      <section class="d-flex flex-column comments_insides container-fluid p-0">
 
 
-  <span class="mx-auto text-light mt-3 mb-2">Comments: &nbsp;{{ count }}</span>
+        <!-- Comments nav start-->
+        <nav class="d-flex flex-grow-0 navbar navbar-expand-xxl w-100 comments_navbar">
+          <div class="container-fluid comments_navbar_container">
+              <h2 class="navbar-brand text-light fs-6 d-xxl-none">Search options</h2>
+              <button class="navbar-toggler ms-0 me-lg-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+              </button>
+            <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
+              <ul class="navbar-nav gap-3 mb-sm-0">
 
-  <!-- Pagination footer start-->
-    <footer class="d-flex flex-grow-0 page_navigation mx-auto mb-4">
-      <ul class="pagination justify-content-center" >
+
+                <li class="nav-item">
+                  <input class="form-control mx-auto text-light p-1 mt-2 px-2" type="search" placeholder="Search" aria-label="Search">
+                </li>
+
+                <li class="nav-item d-flex justify-content-center">
+                  <div class="date_from">
+                    <label class="text-light" for="date_from">From</label>
+                    <input type="date" id="date_from" class="mt-2 p-1 ms-2 datepicker text-light">
+                  </div>
+                </li>
+                
+                <li class="nav-item d-flex justify-content-center ">
+                  <div class="date_to">
+                    <label class="text-light" for="date_to">To</label>
+                    <input type="date" id="date_to" class="mt-2 p-1 ms-2 datepicker text-light">
+                  </div>
+                </li>
+
+
+                <li class="nav-item nav_select d-flex justify-content-center gap-2">
+                  <h2 class="navbar-brand text-light fs-6 mt-xxl-2 me-0"> Results per page:</h2>
+
+                  <select class="form-select" id="maxResults" aria-label="Default select example">
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </li>
+
+
+                <li class="nav-item dropdown text-center">
+                  <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown2" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-arrow-up-wide-short fs-6"></i></i>&nbsp Sort by
+                  </a>
+                  
+                  <div class="dropdown-menu sort_menu gap-xxl-0" aria-labelledby="navbarDropdown2">
+                    <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('time')"><i class="fa-solid fa-arrow-down-long"></i>&nbsp; Time (newest)</a>
+                    <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('relevance')">Revelance</a>
+                    <a class="dropdown-item fs-6 mx-auto" href="{% url 'ai_page' %}"></i>Rating</a>
+                  </div>
+                </li>
+
+
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <!-- Comments nav end -->
+
+
+        <!-- Comments results start-->
+        <div class=" d-flex flex-grow-0 justify-content-center w-100 m-0 comments_results mb-1">
+          <div class="col-12 col-md-10 p-0 my-auto card_container">
+
+            <div class="card" id="background">
+
+              <div class="card-body">
+
+                {% for comment in comments %}
+                
+                <div class="d-flex flex-row justify-content-start mb-4">
+                  <img src="{{ comment.profile_image_url }}" class="mt-2 rounded" alt="avatar 1" style="width: 45px; height: 100%;" loading="lazy">
+                  <div class="d-flex flex-column">
+
+                    <div class="ms-3">
+                      <p class="fs-6 mb-0 text-light">{{ comment.author }}</p>
+                    </div>
+      
+                    <div class="p-3 ms-3 comment_background d-flex flex-row">
+                      {% if comment.pinned == True %}
+                      <div class="pinned me-2 my-auto">
+                        <i class="fa-solid fa-thumbtack"></i>
+                      </div>
+                      {% endif %}
+                      <p class="fs-6 mb-0 comment_text">{{ comment.text|safe }}</p>
+                    </div>
+
+                    <div class="ms-3">
+                      <p class="fs-6 mb-0 text-muted comment_text"><small>{{ comment.publish_date }}</small></p>
+                    </div>
+
+                  </div>
+                  <span class="mt-auto badge rounded-pill bg-danger">
+                    <i class="fa-solid fa-thumbs-up me-1"></i> {{ comment.likes }}
+                  </span>
+                </div>
+
+
+                {% endfor%}
+                
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Comments results end-->
         
-        {% if last_page %}
-        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')" tabindex="-1" id="pagination_first_element"><span aria-hidden="true">&laquo;</span></a></li>
 
-        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">{{ pageID|add:-1 }}</a></li>
-        <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-        
-        {% elif pageID > 1 %}
+      </section>
+      <!-- Comments container end-->
 
 
-        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">... {{ pageID|add:-1 }}</a></li>
-        <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }} ...</a></li>
+      <span class="mx-auto text-light mt-3 mb-2">Comments: &nbsp;{{ count }}</span>
+
+      <!-- Pagination footer start-->
+        <footer class="d-flex flex-grow-0 page_navigation mx-auto mb-4">
+          <ul class="pagination justify-content-center" >
+            
+            {% if last_page %}
+
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">...{{ pageID|add:-1 }}</a></li>
+            <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+            
+            {% elif pageID > 1 %}
 
 
-        {% else %}
-
-        <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}</a></li>
-       
-        <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')" tabindex="-1"  id="pagination_last_element"><span aria-hidden="true">&raquo;</span></a></li>
-
-        {% endif %}
-
-      </ul>
-    </footer>
-  <!-- Pagination footer end-->
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">... {{ pageID|add:-1 }}</a></li>
+            <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }} ...</a></li>
 
 
-  <button class="btn rounded-pill mx-auto">Cancel</button>
+            {% else %}
+
+            <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}...</a></li>
+          
+            {% endif %}
+
+          </ul>
+        </footer>
+      <!-- Pagination footer end-->
+
+
+      <button class="btn rounded-pill mx-auto mb-3">Cancel</button>
+
+
+    </section>
+    <!-- Comments section end -->
+
+
+{% else%}
+  <!-- Main container start -->
+  <div class="d-flex main-container px-4 flex-column">
+
+    <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto before_search_container gap-4 p-0" id="main_form" >
+        {% csrf_token %}
+
+        <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
+        <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="video_url" class="form-control video_url_input text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+        <button type="submit" class="btn btn-dark input_submit btn-lg animate mt-2">Confirm</button>
+    </form>
+{% endif %}
 
 
 </section>
-<!-- Comments section end -->
-
-
-
-</div>
 <!-- Main container end -->
 
 
@@ -290,11 +309,14 @@
     $(".comment_text").find("a").attr("target", "_blank");
     $(".comment_text").find("a").addClass("link_in_comments");
 
+    {% if pageID %}
     dselect(document.querySelector('#maxResults'));
+
 
     $(".dselect-wrapper").children("div").addClass("selection-menu");
     $(".dselect-wrapper").find(".dropdown-item").addClass("selection-menu");
     $(".dselect-wrapper").find(".form-select").addClass("mx-auto");
+    {% endif %}
 
     // Add slideDown animation to Bootstrap dropdown when expanding.
     $('.dropdown').on('show.bs.dropdown', function() {
@@ -368,23 +390,24 @@
   });
 
 
-
+  {% if video_id %}
   function submitFormWithValue(order) {
 
     maxResults = document.getElementById("maxResults").value;
 
 
-    var url = "{% url 'comments' %}?order="+order+"&maxResults="+maxResults+"&previousPageID="+1+"&pageID="+1+"";
+    var url = "{% url 'comments' %}?video_id="+'{{ video_id }}'+"&order="+order+"&maxResults="+maxResults+"&previousPageID="+1+"&pageID="+1+"";
 
     window.location.href = url;
   }
-  
+  {% endif %}
+
 
   {% if pageID %}
 
   function changePageWithValue(page) {
 
-    var url = "{% url 'comments' %}?order="+'{{ order }}'+"&maxResults="+{{ maxResults }}+"&previousPageID="+{{ pageID }}+"&pageID="+page+"";
+    var url = "{% url 'comments' %}?video_id="+'{{ video_id }}'+"&order="+'{{ order }}'+"&maxResults="+{{ maxResults }}+"&previousPageID="+{{ pageID }}+"&pageID="+page+"";
     window.location.href = url;
   }
 
