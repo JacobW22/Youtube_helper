@@ -96,7 +96,7 @@
 
 {% if video_id %}
   <!-- Main container start -->
-  <div class="d-flex main-container px-4 pt-5 flex-column">
+  <div class="d-flex main-container px-4 pt-3 flex-column">
     
 
     <!-- Comments section start -->
@@ -107,66 +107,74 @@
       <section class="d-flex flex-column comments_insides container-fluid p-0">
 
 
-        <!-- Comments nav start-->
-        <nav class="d-flex flex-grow-0 navbar navbar-expand-xxl w-100 comments_navbar">
-          <div class="container-fluid comments_navbar_container">
-              <h2 class="navbar-brand text-light fs-6 d-xxl-none">Search options</h2>
-              <button class="navbar-toggler ms-0 me-lg-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-              </button>
-            <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
-              <ul class="navbar-nav gap-3 mb-sm-0">
-
-
-                <li class="nav-item">
-                  <input class="form-control mx-auto text-light p-1 mt-2 px-2" type="search" placeholder="Search" aria-label="Search">
-                </li>
-
-                <li class="nav-item d-flex justify-content-center">
-                  <div class="date_from">
-                    <label class="text-light" for="date_from">From</label>
-                    <input type="date" id="date_from" class="mt-2 p-1 ms-2 datepicker text-light">
-                  </div>
-                </li>
+        <div class="position-relative">
+          <!-- Comments nav start-->
+          <nav class="d-flex flex-grow-0 navbar navbar-expand-xxl w-100 comments_navbar">
+            <div class="container-fluid comments_navbar_container">
+                <h2 class="navbar-brand text-light fs-6 d-xxl-none">Search options</h2>
+                <button class="navbar-toggler ms-0 me-lg-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+              <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
+                <ul class="navbar-nav gap-3 mb-sm-0">
                 
-                <li class="nav-item d-flex justify-content-center ">
-                  <div class="date_to">
-                    <label class="text-light" for="date_to">To</label>
-                    <input type="date" id="date_to" class="mt-2 p-1 ms-2 datepicker text-light">
-                  </div>
-                </li>
+                  <form method="POST" class="d-none hidden_form" id="hidden_form">
+                    {% csrf_token %}
+                    <input class="d-none" type="hidden" name="order" id="orderInput">
+                    <input class="d-none" type="hidden" name="maxResults" id="maxResultsInput">
+                    <input class="d-none" type="hidden" name="previousPageID" id="previousPageIdInput">
+                    <input class="d-none" type="hidden" name="pageID" id="pageIdInput">
+                    <input class="d-none" type="hidden" name="video_id" id="video_idInput">
+                  </form>
 
 
-                <li class="nav-item nav_select d-flex justify-content-center gap-2">
-                  <h2 class="navbar-brand text-light fs-6 mt-xxl-2 me-0"> Results per page:</h2>
+                    <li class="nav-item">
+                      <input class="form-control mx-auto text-light p-1 mt-2 px-2" type="search" placeholder="Search" aria-label="Search">
+                    </li>
 
-                  <select class="form-select" id="maxResults" aria-label="Default select example">
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                  </select>
-                </li>
-
-
-                <li class="nav-item dropdown text-center">
-                  <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown2" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-                    <i class="fa-solid fa-arrow-up-wide-short fs-6"></i></i>&nbsp Sort by
-                  </a>
-                  
-                  <div class="dropdown-menu sort_menu gap-xxl-0" aria-labelledby="navbarDropdown2">
-                    <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('time')"><i class="fa-solid fa-arrow-down-long"></i>&nbsp; Time (newest)</a>
-                    <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('relevance')">Revelance</a>
-                    <a class="dropdown-item fs-6 mx-auto" href="{% url 'ai_page' %}"></i>Rating</a>
-                  </div>
-                </li>
+                    <li class="nav-item d-flex justify-content-center">
+                      <div class="date_from">
+                        <label class="text-light" for="date_from">From</label>
+                        <input type="date" id="date_from" class="mt-2 p-1 ms-2 datepicker text-light">
+                      </div>
+                    </li>
+                    
+                    <li class="nav-item d-flex justify-content-center ">
+                      <div class="date_to">
+                        <label class="text-light" for="date_to">To</label>
+                        <input type="date" id="date_to" class="mt-2 p-1 ms-2 datepicker text-light">
+                      </div>
+                    </li>
 
 
-              </ul>
+                    <li class="nav-item nav_select d-flex justify-content-center gap-2">
+                      <h2 class="navbar-brand text-light fs-6 mt-xxl-2 me-0"> Results per page:</h2>
+
+                      <select class="form-select" id="maxResults" aria-label="Default select example">
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </li>
+
+
+                    <li class="nav-item dropdown text-center">
+                      <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown2" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-solid fa-arrow-up-wide-short fs-6"></i></i>&nbsp Sort by
+                      </a>
+                      
+                      <div class="dropdown-menu sort_menu gap-xxl-0" aria-labelledby="navbarDropdown2">
+                        <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('time')"><i class="fa-solid fa-arrow-down-long"></i>&nbsp; Time (newest)</a>
+                        <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('relevance')">Relevance</a>
+                      </div>
+                    </li>
+
+                </ul>
+              </div>
             </div>
-          </div>
-        </nav>
-        <!-- Comments nav end -->
-
+          </nav>
+          <!-- Comments nav end -->
+      </div>
 
         <!-- Comments results start-->
         <div class=" d-flex flex-grow-0 justify-content-center w-100 m-0 comments_results mb-1">
@@ -179,30 +187,49 @@
                 {% for comment in comments %}
                 
                 <div class="d-flex flex-row justify-content-start mb-4">
-                  <img src="{{ comment.profile_image_url }}" class="mt-2 rounded" alt="avatar 1" style="width: 45px; height: 100%;" loading="lazy">
-                  <div class="d-flex flex-column">
+                  <a href="{{ comment.channel_url }}" style="width: 45px; height: 100%;"><img src="{{ comment.profile_image_url }}" class="mt-2 rounded" alt="avatar 1" loading="lazy"></a>
+                    <div class="d-flex flex-column">
 
-                    <div class="ms-3">
-                      <p class="fs-6 mb-0 text-light">{{ comment.author }}</p>
-                    </div>
-      
-                    <div class="p-3 ms-3 comment_background d-flex flex-row">
-                      {% if comment.pinned == True %}
-                      <div class="pinned me-2 my-auto">
-                        <i class="fa-solid fa-thumbtack"></i>
-                      </div>
-                      {% endif %}
-                      <p class="fs-6 mb-0 comment_text">{{ comment.text|safe }}</p>
+                        <div class="ms-3">
+                          <p class="fs-6 mb-0 text-light">{{ comment.author }}</p>
+                        </div>
+        
+
+                        <div class="p-3 ms-3 comment_background d-flex flex-row">
+                          <p class="fs-6 mb-0 comment_text">{{ comment.text|safe }}</p>
+                        </div>
+                        
+                        {% if comment.pinned == True %} 
+                        <div class="ms-3">
+                          <p class="fs-6 mb-0 text-muted comment_text"><small>
+                            <i class="fa-solid fa-thumbtack"></i> Pinned by the author         
+                          </small></p>        
+                        </div>
+
+                        <div class="ms-3">
+                          <p class="fs-6 mb-0 text-muted comment_text"><small>{{ comment.publish_date }}</small></p>
+                        </div>
+
+                        {% else %}
+
+
+                        <div class="ms-3">
+                          <p class="fs-6 mb-0 text-muted comment_text"><small>{{ comment.publish_date }}</small></p>
+                        </div>
+
+                        {% endif %}  
+
+
                     </div>
 
-                    <div class="ms-3">
-                      <p class="fs-6 mb-0 text-muted comment_text"><small>{{ comment.publish_date }}</small></p>
-                    </div>
-
-                  </div>
+                  {% if comment.pinned == True %}
+                  <span class="mt-auto badge badge_with_pinned rounded-pill bg-danger">
+                  {% else %}
                   <span class="mt-auto badge rounded-pill bg-danger">
+                  {% endif %}
                     <i class="fa-solid fa-thumbs-up me-1"></i> {{ comment.likes }}
                   </span>
+
                 </div>
 
 
@@ -251,7 +278,7 @@
       <!-- Pagination footer end-->
 
 
-      <button class="btn rounded-pill mx-auto mb-3">Cancel</button>
+      <a class="btn input_submit animate change_url_btn mb-3 mx-auto" href="{% url 'comments' %}">Change URL</a>
 
 
     </section>
@@ -264,7 +291,8 @@
 
     <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto before_search_container gap-4 p-0" id="main_form" >
         {% csrf_token %}
-
+        
+        <span class="text-light fs-1 text-center"><i class="fa-solid fa-comments"></i></span>
         <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
         <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="video_url" class="form-control video_url_input text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
         <button type="submit" class="btn btn-dark input_submit btn-lg animate mt-2">Confirm</button>
@@ -306,7 +334,8 @@
 
     $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
 
-    $(".comment_text").find("a").attr("target", "_blank");
+    $(".card_body").attr("target", "_blank");
+    $(".card_body").attr("rel", "noopener noreferrer");
     $(".comment_text").find("a").addClass("link_in_comments");
 
     {% if pageID %}
@@ -395,22 +424,50 @@
 
     maxResults = document.getElementById("maxResults").value;
 
+    var form = document.getElementById('hidden_form');
 
-    var url = "{% url 'comments' %}?video_id="+'{{ video_id }}'+"&order="+order+"&maxResults="+maxResults+"&previousPageID="+1+"&pageID="+1+"";
 
-    window.location.href = url;
+    var orderInput = document.getElementById('orderInput');
+    var maxResultsInput = document.getElementById('maxResultsInput');
+    var previousPageIdInput = document.getElementById('previousPageIdInput');
+    var pageIdInput = document.getElementById('pageIdInput');
+    var video_idInput = document.getElementById('video_idInput');
+
+    
+    orderInput.value = order;
+    maxResultsInput.value = maxResults;
+    previousPageIdInput.value = 1;
+    pageIdInput.value = 1;
+    video_idInput.value = '{{ video_id }}';
+
+    form.submit();
+
   }
+
   {% endif %}
 
 
   {% if pageID %}
-
   function changePageWithValue(page) {
 
-    var url = "{% url 'comments' %}?video_id="+'{{ video_id }}'+"&order="+'{{ order }}'+"&maxResults="+{{ maxResults }}+"&previousPageID="+{{ pageID }}+"&pageID="+page+"";
-    window.location.href = url;
-  }
+    var form = document.getElementById('hidden_form');
 
+
+    var orderInput = document.getElementById('orderInput');
+    var maxResultsInput = document.getElementById('maxResultsInput');
+    var previousPageIdInput = document.getElementById('previousPageIdInput');
+    var pageIdInput = document.getElementById('pageIdInput');
+    var video_idInput = document.getElementById('video_idInput');
+
+    orderInput.value = '{{ order }}';
+    maxResultsInput.value = {{ maxResults }};
+    previousPageIdInput.value = {{ pageID }};
+    pageIdInput.value = page;
+    video_idInput.value = '{{ video_id }}';
+
+    form.submit();
+
+  }
 
   {% endif %}
 
