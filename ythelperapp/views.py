@@ -326,7 +326,7 @@ pageTokens = [None]
 previous_request_previousPageID = [0]
 previous_request_pageID = [0]
 
-async def get_video_comments(video_id, order, maxResults, previousPageID, pageID, quotaUser):
+async def get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser):
 
     try:
         # Retrieve the comments for the specified video
@@ -374,27 +374,58 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
         if 'nextPageToken' not in response:
             processed_comments.append('last_page')
 
+        if searchInput != "":
 
-        if 'items' in response:
-            for comment in response['items']:
-                # Extract the comment snippet
-                snippet = comment['snippet']['topLevelComment']['snippet']
-                author = snippet['authorDisplayName']
-                channel_url = snippet['authorChannelUrl']
-                text = snippet['textDisplay']
-                likes = f"{snippet['likeCount']:,}"
-                profile_image_url = snippet['authorProfileImageUrl']
-                publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
+            if 'items' in response:
+                filtered_comments = [comment for comment in response['items'] if re.search(re.escape(searchInput), comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"], re.IGNORECASE)]
 
-                # Add the processed comment to the list
-                processed_comments.append({
-                    'author': author,
-                    'channel_url' : channel_url,
-                    'text': text,
-                    'likes': likes,
-                    'profile_image_url': profile_image_url,
-                    'publish_date': publish_date
-                })
+                for comment in filtered_comments:
+                    snippet = comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"]
+                    highlighted_comment = re.sub(f'({re.escape(searchInput)})', r'<mark>\1</mark>', snippet, flags=re.IGNORECASE)
+                    comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"] = highlighted_comment
+                
+                for comment in filtered_comments:
+                    # Extract the comment snippet
+                    snippet = comment['snippet']['topLevelComment']['snippet']
+
+
+                    author = snippet['authorDisplayName']
+                    channel_url = snippet['authorChannelUrl']
+                    text = snippet['textDisplay']
+                    likes = f"{snippet['likeCount']:,}"
+                    profile_image_url = snippet['authorProfileImageUrl']
+                    publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
+
+                    # Add the processed comment to the list
+                    processed_comments.append({
+                        'author': author,
+                        'channel_url' : channel_url,
+                        'text': text,
+                        'likes': likes,
+                        'profile_image_url': profile_image_url,
+                        'publish_date': publish_date
+                    })
+        else:
+            if 'items' in response:
+                for comment in response['items']:
+                    # Extract the comment snippet
+                    snippet = comment['snippet']['topLevelComment']['snippet']
+                    author = snippet['authorDisplayName']
+                    channel_url = snippet['authorChannelUrl']
+                    text = snippet['textDisplay']
+                    likes = f"{snippet['likeCount']:,}"
+                    profile_image_url = snippet['authorProfileImageUrl']
+                    publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
+
+                    # Add the processed comment to the list
+                    processed_comments.append({
+                        'author': author,
+                        'channel_url' : channel_url,
+                        'text': text,
+                        'likes': likes,
+                        'profile_image_url': profile_image_url,
+                        'publish_date': publish_date
+                    })
 
 
         if order == 'time':
@@ -413,13 +444,13 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
 
 
 
-async def get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, quotaUser):
+async def get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser):
 
     if not video_id:
         return JsonResponse({'error': 'No video_id parameter provided'}, status=400)
 
     try:
-        comments = await get_video_comments(video_id, order, maxResults, previousPageID, pageID, quotaUser)
+        comments = await get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser)
         return {'comments': comments}
 
     except HttpError as e:
@@ -428,7 +459,7 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
 
 
 
-def show_comments(order, maxResults, pageID, previousPageID, video_id, login_context):
+def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context):
     context = {}
 
     if video_id != None:
@@ -437,7 +468,8 @@ def show_comments(order, maxResults, pageID, previousPageID, video_id, login_con
             'order': order,
             'maxResults': maxResults,
             'pageID': int(pageID),
-            'video_id' : video_id
+            'video_id' : video_id,
+            'searchInput': searchInput
         }
 
 
@@ -481,7 +513,7 @@ def show_comments(order, maxResults, pageID, previousPageID, video_id, login_con
         # Create a new event loop
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        comments = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, quotaUser))
+        comments = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser))
 
 
         context.update(comments)
@@ -515,13 +547,15 @@ def comments(request, login_context):
                     previousPageID = request.POST.get("previousPageID")
                     pageID = request.POST.get("pageID")
                     video_id = request.POST.get("video_id")
+                    searchInput = request.POST.get("searchInput")
 
 
-                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, login_context)
+                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context)
                     return render(request, "comments.html", context)
                 
                 except Exception as err:
                     print(err)
+                    pageTokens.clear()
                     msg.info(request, "Something went wrong, please try again")
                     return redirect(comments)
     
@@ -536,8 +570,9 @@ def comments(request, login_context):
                     maxResults = 25
                     pageID = 1
                     previousPageID = 1
+                    searchInput = ""
 
-                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, login_context)
+                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context)
                     return render(request, "comments.html", context)
                 
                 except Exception as err:

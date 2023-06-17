@@ -118,34 +118,21 @@
               <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
                 <ul class="navbar-nav gap-3 mb-sm-0">
                 
-                  <form method="POST" class="d-none hidden_form" id="hidden_form">
+                  <form method="POST" class=" hidden_form" id="hidden_form">
                     {% csrf_token %}
-                    <input class="d-none" type="hidden" name="order" id="orderInput">
-                    <input class="d-none" type="hidden" name="maxResults" id="maxResultsInput">
-                    <input class="d-none" type="hidden" name="previousPageID" id="previousPageIdInput">
-                    <input class="d-none" type="hidden" name="pageID" id="pageIdInput">
-                    <input class="d-none" type="hidden" name="video_id" id="video_idInput">
-                  </form>
+                    <input class="d-none" type="hidden" name="order" value="{{ order }}" id="orderInput">
+                    <input class="d-none" type="hidden" name="maxResults" value={{ maxResults }} id="maxResultsInput">
+                    <input class="d-none" type="hidden" name="previousPageID" value={{ pageID }} id="previousPageIdInput">
+                    <input class="d-none" type="hidden" name="pageID" value={{ pageID }} id="pageIdInput">
+                    <input class="d-none" type="hidden" name="video_id" value="{{ video_id }}" id="video_idInput">
+                  
 
 
                     <li class="nav-item">
-                      <input class="form-control mx-auto text-light p-1 mt-2 px-2" type="search" placeholder="Search" aria-label="Search">
+                      <input class="form-control mx-auto text-light p-1 mt-2 px-2" type="search" name="searchInput" value="{{ searchInput }}" placeholder="Search" aria-label="Search">
                     </li>
 
-                    <li class="nav-item d-flex justify-content-center">
-                      <div class="date_from">
-                        <label class="text-light" for="date_from">From</label>
-                        <input type="date" id="date_from" class="mt-2 p-1 ms-2 datepicker text-light">
-                      </div>
-                    </li>
-                    
-                    <li class="nav-item d-flex justify-content-center ">
-                      <div class="date_to">
-                        <label class="text-light" for="date_to">To</label>
-                        <input type="date" id="date_to" class="mt-2 p-1 ms-2 datepicker text-light">
-                      </div>
-                    </li>
-
+                  </form>
 
                     <li class="nav-item nav_select d-flex justify-content-center gap-2">
                       <h2 class="navbar-brand text-light fs-6 mt-xxl-2 me-0"> Results per page:</h2>
@@ -387,6 +374,11 @@
       $('#maxResults').val(selectedValue);
       $('.dselect-wrapper').find('button.form-select').html(selectedValue);
       $('.form-select').css('border-color', '#7cf569');
+
+      $('.dselect-wrapper').find('button.form-select').on('DOMSubtreeModified', function() {
+        var MaxResults = $(this).html();
+        changePageWithMaxResults(MaxResults);
+      });
     {% endif %}
 
   });
@@ -464,6 +456,27 @@
     maxResultsInput.value = {{ maxResults }};
     previousPageIdInput.value = {{ pageID }};
     pageIdInput.value = page;
+    video_idInput.value = '{{ video_id }}';
+
+    form.submit();
+
+  }
+
+  function changePageWithMaxResults(maxResults) {
+
+    var form = document.getElementById('hidden_form');
+
+
+    var orderInput = document.getElementById('orderInput');
+    var maxResultsInput = document.getElementById('maxResultsInput');
+    var previousPageIdInput = document.getElementById('previousPageIdInput');
+    var pageIdInput = document.getElementById('pageIdInput');
+    var video_idInput = document.getElementById('video_idInput');
+
+    orderInput.value = '{{ order }}';
+    maxResultsInput.value = maxResults;
+    previousPageIdInput.value = {{ pageID }};
+    pageIdInput.value = {{ pageID }};
     video_idInput.value = '{{ video_id }}';
 
     form.submit();
