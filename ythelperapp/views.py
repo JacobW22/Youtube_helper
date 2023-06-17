@@ -323,10 +323,10 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
     return render(request, "ai_site.html", context)
 
 pageTokens = [None]
-previous_request_previousPageID = [None]
-previous_request_pageID = [None]
+previous_request_previousPageID = [0]
+previous_request_pageID = [0]
 
-async def get_video_comments(video_id, order, maxResults, previousPageID, pageID, quotaUser, stopRequest):
+async def get_video_comments(video_id, order, maxResults, previousPageID, pageID, quotaUser):
 
     try:
         # Retrieve the comments for the specified video
@@ -347,15 +347,12 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
 
         match (int(pageID) - int(previousPageID)):
 
-            case 1:                
-                if stopRequest == True:
-                        response = await asyncio.to_thread(request.execute)
+            case 1:            
+                response = await asyncio.to_thread(request.execute)
 
-                        if 'nextPageToken' in response:
-                            pageTokens.append(response['nextPageToken'])
-                            request = youtube.commentThreads().list_next(request, response)
-                else:
-                    pass
+                if 'nextPageToken' in response:
+                    pageTokens.append(response['nextPageToken'])
+                    request = youtube.commentThreads().list_next(request, response)
 
             case 0: 
                 pass
@@ -416,13 +413,13 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
 
 
 
-async def get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, quotaUser, stopRequest):
+async def get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, quotaUser):
 
     if not video_id:
         return JsonResponse({'error': 'No video_id parameter provided'}, status=400)
 
     try:
-        comments = await get_video_comments(video_id, order, maxResults, previousPageID, pageID, quotaUser, stopRequest)
+        comments = await get_video_comments(video_id, order, maxResults, previousPageID, pageID, quotaUser)
         return {'comments': comments}
 
     except HttpError as e:
@@ -457,8 +454,6 @@ def show_comments(order, maxResults, pageID, previousPageID, video_id, login_con
 
         # E.g. previousPage = 1 and Page = 2, so if refreshed next api request won't be sent
 
-        stopRequest = False
-
         match str(previous_request_pageID[-1]) == str(pageID):
             case True:
                 stopRequest = True
@@ -472,18 +467,21 @@ def show_comments(order, maxResults, pageID, previousPageID, video_id, login_con
 
         match str(previous_request_previousPageID[-1]) == str(previousPageID):
             case True:
-                stopRequest = True
+                stopRequest2 = True
             case False:
                 previous_request_previousPageID.pop(0)
                 previous_request_previousPageID.append(previousPageID)
 
-                stopRequest = False
+                stopRequest2 = False
 
 
+        if stopRequest == True and stopRequest2 == True:
+            previousPageID = pageID
+        
         # Create a new event loop
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        comments = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, quotaUser, stopRequest))
+        comments = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, quotaUser))
 
 
         context.update(comments)
