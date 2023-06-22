@@ -1,0 +1,56 @@
+
+<!-- Navbar start -->
+<nav class="navbar navbar-expand-lg main-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
+        <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+      <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
+
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
+                </a>
+
+                <div class="dropdown-menu top_menu" aria-labelledby="navbarDropdown">
+                    {% for value,key in sites_context.items  %}
+                        {% url value as the_url %}
+                            {% if the_url != active_site_url %}
+                                <a class="dropdown-item fs-6" href={{ the_url }}>{{ key|safe }}</a>
+                            {% endif %}
+                    {% endfor %}
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item fs-6" href="{{ active_site_url }}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp {{ active_site_name }} <span class="text-muted float-end">Now</span></a>
+                
+                </div>
+            </li>
+
+
+
+          <li class="nav-item">
+            <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
+          </li>
+
+          {% if logged == False %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
+          </li>
+
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </div>
+    </div>
+</nav>
+<!-- Navbar end -->

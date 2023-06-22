@@ -91,6 +91,11 @@ body, html {
     text-align: center;
     margin-top: 10px;
   }
+
+  .form-control::selection {
+    color: black;
+    background: white;
+  }
   
   .form-control:focus {
     border-color: #f5696e!important;
@@ -432,13 +437,13 @@ body, html {
     .main-container {
       zoom: 105%;
     }
-    
-    .nav-link {
-      font-size: 1.25rem!important;
-    }
 
     #main-title {
       font-size: 2.5rem!important;
+    }
+    
+    .nav-link {
+      font-size: 1.25rem!important;
     }
 
     .main-navbar {
@@ -500,9 +505,12 @@ body, html {
     .main-container {
       height: calc(100vh - 97px)!important;
     }
+
+    #main-title {
+      font-size: 2.5rem!important;
+    }
   }
 
-  
   @media screen and (max-width: 1400px) {
     .sort_menu {
       margin-top: 0!important;
@@ -511,10 +519,7 @@ body, html {
     .comments_results {
       height: calc(100% - 25px - 30px)!important;
     }
-  }
 
-
-  @media screen and (max-width: 1400px) {
     .nav-link {
       font-size: 1.5rem!important;
     }
@@ -547,6 +552,12 @@ body, html {
 
     .sort_menu .dropdown-item {
       margin-top: 1em!important;
+    }
+  }
+
+  @media screen and (max-width: 997px) {
+    body::-webkit-scrollbar {
+      display: none;
     }
   }
 

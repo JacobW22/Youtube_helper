@@ -41,6 +41,11 @@ google_api_key = os.environ.get("GOOGLE_API_KEY")
 
 youtube = build('youtube', 'v3', developerKey=google_api_key)
 
+sites_context = {
+  "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
+  "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai thumbnail generator",
+  "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT comments filtering"
+}
 
 @login_check
 def main_page(request, login_context):
@@ -100,6 +105,7 @@ def main_page(request, login_context):
         context.update({"videos_informations": Download_videos_informations})
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
 
     if request.method == "POST":
         link = request.POST.get("sended_link")
@@ -132,6 +138,7 @@ def login_page(request, login_context):
     }
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
 
     return render(request, "login_page.html", context)
 
@@ -169,6 +176,7 @@ def sign_up_page(request, login_context):
     context = {"form": form}
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
 
     return render(request, "sign_up_page.html", context)
 
@@ -251,6 +259,8 @@ def download_page(request, login_context, parameter):
     }
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
+
     return render(request, "download_page.html", context)
 
 
@@ -264,6 +274,8 @@ def download_video(request, login_context, parameter):
     }
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
+
 
     return render(request, "video_download.html", context)
 
@@ -278,6 +290,8 @@ def download_audio(request, login_context, parameter):
     }
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
+
 
     return render(request, "audio_download.html", context)
 
@@ -304,15 +318,14 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
         except openai.error.RateLimitError:
             msg.success("Ai model is currently overloaded, please wait a second")
             return redirect(ai_page)
-
-
-        print(link)
     
 
         return redirect(ai_page, parameter = fixed_link, parameter_title = description)
 
     context = {}
     context.update(login_context)
+    context.update({'sites_context': sites_context})
+
 
     if parameter != "":
         context.update({
@@ -321,6 +334,8 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
         })
 
     return render(request, "ai_site.html", context)
+
+
 
 pageTokens = [None]
 previous_request_previousPageID = [0]
@@ -519,6 +534,8 @@ def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInp
         context.update(comments)
         context.update({'count' : len(comments['comments'])})
         context.update(login_context)
+        context.update({'sites_context': sites_context})
+
 
 
         if 'last_page' in comments['comments']:
@@ -530,6 +547,7 @@ def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInp
     else:
 
         context.update(login_context)
+        context.update({'sites_context': sites_context})
 
         return context
             
@@ -584,6 +602,8 @@ def comments(request, login_context):
     # On first load
     context = {}
     context.update(login_context)
+    context.update({'sites_context': sites_context})
+
     return render(request, "comments.html", context)
 
 
