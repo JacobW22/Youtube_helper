@@ -12,7 +12,9 @@
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-                    <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
+                  <span>  
+                  <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
+                  </span>
                 </a>
 
                 <div class="dropdown-menu top_menu" aria-labelledby="navbarDropdown">
@@ -24,7 +26,7 @@
                     {% endfor %}
 
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item fs-6" href="{{ active_site_url }}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp {{ active_site_name }} <span class="text-muted float-end">Now</span></a>
+                    <a class="dropdown-item fs-6" href="{{ active_site_url }}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp {{ active_site_name }} <span class="text-muted ms-2">Now</span></a>
                 
                 </div>
             </li>
@@ -32,20 +34,20 @@
 
 
           <li class="nav-item">
-            <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
+            <a class="nav-link text-light" aria-current="page" href="{% url 'main_page' %}"><span><i class="fa-solid fa-house"></i>&nbsp Home</span></a>
           </li>
 
           {% if logged == False %}
           <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
+            <a class="nav-link text-light" href="{% url 'login_page' %}"><span><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
+            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><span><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</span></a>
           </li>
 
           {% else %}
           <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
+            <a class="nav-link text-light" href="{% url 'logout' %}"><span><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</span></a>
           </li>
           {% endif %}
 

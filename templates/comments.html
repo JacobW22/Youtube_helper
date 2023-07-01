@@ -33,8 +33,10 @@
     <!--===============================================================================================-->
       <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
     <!--===============================================================================================-->
-      <link rel="stylesheet" href="{% static 'css/template_comments_style.css' %}">
+      <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     <!--===============================================================================================-->
+      <link rel="stylesheet" href="{% static 'css/template_comments_style.css' %}">
+    <!--===============================================================================================-->   
       <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->	
       <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
@@ -85,7 +87,7 @@
 
 
                     <li class="nav-item">
-                      <input class="form-control mx-auto text-light p-1 mt-2 px-2" type="search" name="searchInput" value="{{ searchInput }}" placeholder="Search" aria-label="Search">
+                      <input class="form-control text-light p-1 mt-2 px-2" type="search" name="searchInput" value="{{ searchInput }}" placeholder="Search" aria-label="Search">
                     </li>
 
                   </form>
@@ -287,6 +289,7 @@
     $(".dselect-wrapper").children("div").addClass("selection-menu");
     $(".dselect-wrapper").find(".dropdown-item").addClass("selection-menu");
     $(".dselect-wrapper").find(".form-select").addClass("mx-auto");
+
 
     {% endif %}
 
