@@ -7,7 +7,7 @@
         <span class="navbar-toggler-icon"></span>
         </button>
       <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
+        <ul class="navbar-nav me-lg-2 gap-4 gap-lg-3 mb-sm-0">
 
 
             <li class="nav-item dropdown">
@@ -21,12 +21,12 @@
                     {% for value,key in sites_context.items  %}
                         {% url value as the_url %}
                             {% if the_url != active_site_url %}
-                                <a class="dropdown-item fs-6" href={{ the_url }}>{{ key|safe }}</a>
+                                <a class="dropdown-item fs-6 mt-lg-0 mt-3" href={{ the_url }}>{{ key|safe }}</a>
                             {% endif %}
                     {% endfor %}
 
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item fs-6" href="{{ active_site_url }}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp {{ active_site_name }} <span class="text-muted ms-2">Now</span></a>
+                    <div class="dropdown-divider mt-lg-0 mt-3"></div>
+                    <a class="dropdown-item fs-6 mt-lg-0 mt-3" href="{{ active_site_url }}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp {{ active_site_name }} <span class="text-muted ms-2">Now</span></a>
                 
                 </div>
             </li>

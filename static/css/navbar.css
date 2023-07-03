@@ -15,7 +15,7 @@ a,
   z-index: 100;
 }
 
-.nav-link:hover > .fa-solid {
+.nav-link:hover > span .fa-solid {
   color: yellow !important;
 }
 
@@ -25,7 +25,7 @@ a,
   transform-origin: top;
 }
 
-.nav-link[aria-expanded="true"] > .fa-solid {
+.nav-link[aria-expanded="true"] > span .fa-solid {
   color: lightblue !important;
 }
 
@@ -34,7 +34,7 @@ a,
 }
 
 #main-title:hover {
-  color: #000000;
+  color: black;
 }
 
 .navbar-toggler {
@@ -65,15 +65,15 @@ a,
 .dropdown-item:not(.selection-menu .d-flex .dropdown-item, .sort_menu .dropdown-item):focus,
 .dropdown-item:not(.selection-menu .d-flex .dropdown-item, .sort_menu .dropdown-item):hover {
   color: black !important;
-  transform: scale(1.2);
-  transform-origin: bottom;
-  margin-left: 1.1em !important;
+  font-size: 120%!important;
+  margin-left: 1.1em!important;
 }
 
 .dropdown-item:focus,
 .dropdown-item:hover > .fa-location-crosshairs {
   color: black !important;
 }
+
 
 .dropdown-item:not(.selection-menu .d-flex .dropdown-item):active {
   color: #000 !important;
@@ -115,13 +115,17 @@ h2 {
   .dropdown-item {
     font-size: 150% !important;
   }
+
   .dropdown-item:focus,
   .dropdown-item:hover {
     font-size: 175% !important;
   }
 
-  .dropdown-menu {
+  .dropdown-menu:not(.sort_menu) {
     margin-top: 3.2em !important;
+  }
+  
+  .dropdown-menu:not(.sort_menu, .selection-menu) {
     width: 300% !important;
   }
 }
@@ -170,21 +174,36 @@ h2 {
   #main-title {
     font-size: 2.5rem !important;
   }
+
+  .dropdown-menu:not(.sort_menu, .selection-menu) {
+    width: 300% !important;
+  }
+}
+
+
+@media screen and (min-width: 992px) {
+  .main-navbar .navbar-nav{
+    margin-left: auto!important;
+  }
 }
 
 @media screen and (max-width: 1400px) {
   .nav-link {
-    font-size: 1.5rem !important;
+    font-size: 1.25em !important;
   }
 }
 
-@media screen and (max-width: 997px) {
+@media screen and (max-width: 1080px) {
   body::-webkit-scrollbar {
     display: none;
   }
+}
 
+@media screen and (max-width: 992px) {
   .navbar-nav {
     max-width: 90%!important;
+    margin-left: auto!important;
+    margin-right: auto!important;
   }
 
   .nav-link {

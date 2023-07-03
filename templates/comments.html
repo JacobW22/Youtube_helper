@@ -47,9 +47,11 @@
 </head>
 <body>
     
+
+<!-- Navbar start -->
 {% url 'comments' as the_url %}
 {% include "navbar.html" with sites_context=sites_context active_site_name="YT comments" active_site_url=the_url %}
-
+<!-- Navbar end -->
 
 
 {% if video_id %}
@@ -74,7 +76,7 @@
                 <span class="navbar-toggler-icon"></span>
                 </button>
               <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
-                <ul class="navbar-nav gap-3 mb-sm-0">
+                <ul class="navbar-nav comments_navbar_ul gap-3 mb-sm-0">
                 
                   <form method="POST" class=" hidden_form" id="hidden_form">
                     {% csrf_token %}
@@ -131,12 +133,16 @@
 
                 {% for comment in comments %}
                 
-                <div class="d-flex flex-row justify-content-start mb-4">
-                  <a href="{{ comment.channel_url }}" style="width: 45px; height: 100%;"><img src="{{ comment.profile_image_url }}" class="mt-2 rounded" alt="avatar 1" loading="lazy"></a>
+                <div class="d-flex flex-row justify-content-start mb-4 comments_body">
+                  <a href="{{ comment.channel_url }}" style="width: 45px; height: 100%;"><img src="{{ comment.profile_image_url }}" class="mt-2 rounded profile_img" alt="avatar 1" loading="lazy"></a>
                     <div class="d-flex flex-column">
 
                         <div class="ms-3">
-                          <p class="fs-6 mb-0 text-light">{{ comment.author }}</p>
+                          <p class="fs-6 mb-0 text-light">
+                            <a href="{{ comment.channel_url }}" class="author_name">
+                              {{ comment.author }}
+                            </a>
+                          </p>
                         </div>
         
 
@@ -170,7 +176,7 @@
                   {% if comment.pinned == True %}
                   <span class="mt-auto badge badge_with_pinned rounded-pill bg-danger">
                   {% else %}
-                  <span class="mt-auto badge rounded-pill bg-danger">
+                  <span class="mt-auto badge rounded-pill bg-danger" title="likes">
                   {% endif %}
                     <i class="fa-solid fa-thumbs-up me-1"></i> {{ comment.likes }}
                   </span>
@@ -197,8 +203,12 @@
       <!-- Pagination footer start-->
         <footer class="d-flex flex-grow-0 page_navigation mx-auto mb-4">
           <ul class="pagination justify-content-center" >
-            
-            {% if last_page %}
+
+            {% if last_page and pageID == 1 %}
+
+            <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+
+            {% elif last_page %}
 
             <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">...{{ pageID|add:-1 }}</a></li>
             <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
@@ -210,7 +220,7 @@
             <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
             <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }} ...</a></li>
 
-
+    
             {% else %}
 
             <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
@@ -236,11 +246,13 @@
 
     <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto before_search_container gap-4 p-0" id="main_form" >
         {% csrf_token %}
+        
         <span class="text-light fs-1 text-center"><i class="fa-solid fa-comments"></i></span>
         <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
         <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="video_url" class="form-control video_url_input text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
         <button type="submit" class="btn btn-dark input_submit btn-lg animate mt-2">Confirm</button>
     </form>
+
 {% endif %}
 
 
@@ -309,6 +321,18 @@
     
     $('.form-select').on('focus', function() {
       $(this).css('border-color', '#7cf569');
+    }); 
+    
+    $('.comments_body').find('.author_name').hover( function() {
+      $(this).closest('.comments_body').find('.profile_img').css('box-shadow', '0px 0px 10px 0.5px yellow');
+    }, function() {
+      $(this).closest('.comments_body').find('.profile_img').css('box-shadow', '0px 0px 10px 0.5px red');
+    });
+    
+    $('.comments_body').find('.profile_img').hover( function() {
+      $(this).css('box-shadow', '0px 0px 10px 0.5px yellow');
+    }, function() {
+      $(this).css('box-shadow', '0px 0px 10px 0.5px red');
     });
 
     $(".comments_navbar").click(function() {

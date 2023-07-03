@@ -574,6 +574,7 @@ def comments(request, login_context):
                 except Exception as err:
                     print(err)
                     pageTokens.clear()
+                    pageTokens.append(None)
                     msg.info(request, "Something went wrong, please try again")
                     return redirect(comments)
     
@@ -596,6 +597,7 @@ def comments(request, login_context):
                 except Exception as err:
                     print(err)
                     pageTokens.clear()
+                    pageTokens.append(None)
                     msg.info(request, "Url is incorrect")
                     return redirect(comments)
                 

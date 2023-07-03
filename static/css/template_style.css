@@ -7,7 +7,7 @@
       background: linear-gradient(black,red, white);
       background-size: 800% 800%;
       overflow: auto;
-      zoom: 115%;
+      overflow-x: hidden;
       scroll-snap-type: y mandatory!important;
     }
   
@@ -19,10 +19,6 @@
     -webkit-font-smoothing: antialiased!important;
     -moz-osx-font-smoothing: grayscale!important;
     -webkit-text-size-adjust: 100%!important;
-  }
-
-  *:not(.fa-solid, .fa-regular) {
-    font-family: 'Quicksand', sans-serif!important;
   }
 
   ::-webkit-scrollbar-track {
@@ -52,12 +48,16 @@
 
   .form-control {
     background-color: black!important;
-    border: 0.1em solid #fff!important;
+    border: 0.15em solid #fff!important;
     border-color: white!important;
     border-radius: 15px!important;
     box-shadow: 0px 0px 15px 1px black;
     text-align: center;
-
+    font-size: 1.2rem !important;
+    overflow: hidden !important;
+    max-width: 90%;
+    width: 35rem !important;
+    margin-top: 10px;
   }
 
   .form-control:focus {
@@ -66,17 +66,17 @@
     text-align: left;
   }
 
-
   .form-control:not(:placeholder-shown) {
     border-color: #7cf569!important;
   }
 
   .form-control::placeholder {
     user-select: none;
-    font-size: 1.2rem!important;
   }
 
-
+  #main_form {
+    transform: scale(1.1) translateY(-15%);
+  }
 
   section:not(.first-container), nav {
     scroll-snap-align: center!important;
@@ -118,30 +118,6 @@
     transition: all 0.4s !important;
   }
 
-  .navbar {
-    zoom: 75%!important;
-  }
-
-  .nav-link {
-    font-family: Poppins-Regular, sans-serif!important;
-  }
-  
-  .nav-link:hover > .fa-solid:not(.fa-screwdriver-wrench) {
-    color:yellow!important;
-  }
-  
-  .nav-link:hover {
-    font-size: 1.5em!important;
-  }
-  
-  .nav-link[aria-expanded="true"] {
-    font-size: 1.5em!important; 
-  }
-
-  .nav-link[aria-expanded="true"] > .fa-solid {
-    color: lightblue!important;
-  }
-
   #main-title {
     font-family: 'Quicksand', sans-serif;
   }
@@ -153,12 +129,6 @@
   ::selection {
     color: white;
     background: black;
-  }
-
-  .navbar-toggler {
-    background: transparent !important;
-    border: none;
-    padding: 0!important;
   }
 
   .pointing-to-link, .slider_info {
@@ -237,45 +207,6 @@
 
   }
 
-  .dropdown-menu {
-    background: transparent!important;
-    border: none!important;
-    backdrop-filter: blur(2rem);
-    border-radius: 15px!important;
-  }
-
-  .dropdown-item:focus, .dropdown-item:hover {
-    color: black !important;
-    font-size: 120%!important;
-    margin-left: 1.1em!important;
-
-  }
-
-  .dropdown-item:focus, .dropdown-item:hover > .fa-location-crosshairs {
-    color: black !important;
-  }
-
-  .dropdown-item.active, .dropdown-item:active {
-    color: white!important;
-    text-decoration: none;
-    background-color: white!important;
-  }
-
-  .dropdown-item.active, .dropdown-item:active {
-    color: white!important;
-    text-decoration: none;
-    background-color: white!important;
-  }
-
-  .dropdown-item {
-    border-radius: 15px!important;
-    color: white!important;
-  }
-
-  .fa-solid {
-    transition: filter 300ms!important;
-  }
-
   .first-container {
     height: 100%;
   }
@@ -285,87 +216,28 @@
       zoom: 175%;
     }
 
-    .nav-link {
-      font-size: 2rem!important;
-    }
-
     .carousel-caption, .date_in_caption {
       font-size: 0.75vw!important;
-    }
-
-    #main-title {
-      font-size: 4rem!important;
     }
 
     .full_site_container {
       height: calc(200% + 48px + 111px);
     }
-
-    .nav-link:hover {
-      font-size: 2.5em!important;
-    }
-    
-    .nav-link[aria-expanded="true"] {
-      font-size: 2.5em!important; 
-    }
-
-    .dropdown-item {
-      font-size: 150%!important;
-    }
-    .dropdown-item:focus, .dropdown-item:hover {
-      font-size: 175%!important;
-    }
-
-    .dropdown-menu {
-      margin-top: 3.2em!important;
-      width: 300%!important
-    }
   }
 
   @media screen and (min-width: 1200px) {
-    #main_form, #result_form {
-      width: 50%;
-    }  
-
     .slider_info {
       margin-bottom: 6rem!important;
     }
-  }
 
-  @media screen and (min-width: 768px) and (max-width: 1200px) {
-    #main_form, #result_form {
-      width: 75%;
-    }  
+    .first-container, .second-container {
+      zoom: 105%;
+    }
   }
 
   @media screen and (min-width: 997px) and (max-width: 2048px){
-    .nav-link {
-      font-size: 1.2rem!important;
-    }
-
-    #main-title {
-      font-size: 2.5rem!important;
-    }
-
     .full_site_container {
       height: calc(200% + 48px + 90px);
-    }
-
-
-
-    .navbar {
-      margin-top: 2.3em;
-      height: 0;   
-    }
-
-    .nav-item {
-      max-height: 0;
-      margin-bottom: 3.1em;
-    }
-  
-    .dropdown-menu {
-      margin-top: 3.2em!important;
-      width: 300%!important
     }
   }
 
@@ -374,15 +246,8 @@
       width: 65%!important;
     }
 
-    #main-title {
-      font-size: 2.5rem!important;
-    }
     .carousel-caption,.date_in_caption {
       font-size: 2vw!important;
-    }
-
-    .nav-link {
-      font-size: 1.5rem!important;
     }
 
     hr {
@@ -391,10 +256,6 @@
 
     .full_site_container {
       height: calc(200% + 48px + 62px);
-    }
-
-    html {
-      zoom: 110%;
     }
   }
 
