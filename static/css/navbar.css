@@ -95,6 +95,19 @@ h2 {
   user-select: none;
 }
 
+.navbar-toggler {
+  border: 0.1em solid #fff!important;
+  border-radius: 50%!important;
+  padding: 0.2em!important;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+}
+
+.navbar-toggler-icon {
+  padding: 0.9em;
+}
+
+
 @media screen and (min-width: 2270px) {
   .nav-link {
     font-size: 2rem !important;
