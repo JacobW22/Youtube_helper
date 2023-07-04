@@ -104,28 +104,19 @@
     box-shadow: none!important;
   }
 
-
   .toast {
     position: relative;
     scale: 1.1;
     user-select: none;
   }
 
-  .fa-solid, .btn, #main-title, .navbar-toggler-icon, .carousel-inner .carousel-item > img, a, .dropdown-item, .form-control {
+  .btn, .carousel-inner .carousel-item > img, .form-control {
     -webkit-transition: all 0.4s !important;
     -o-transition: all 0.4s !important;
     -moz-transition: all 0.4s !important;
     transition: all 0.4s !important;
   }
-
-  #main-title {
-    font-family: 'Quicksand', sans-serif;
-  }
-
-  #main-title:hover {
-    color: black;
-  }
-
+  
   ::selection {
     color: white;
     background: black;

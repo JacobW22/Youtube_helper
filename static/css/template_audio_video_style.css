@@ -38,10 +38,6 @@ body, html {
     opacity: 0.5!important;
   }
 
-  h2 {
-    font-family: Open Sans;
-  }
-
   .form-control {
     background-color:rgba(0, 0, 0, 0);
   }
@@ -55,44 +51,10 @@ body, html {
     height: 100%;
   }
 
-  button {
-    position: relative;
-  }
-
-  @media screen and (min-width: 2048px) {
-    .first-container, .second-container {
-      zoom: 175%;
-    }
-
-    .nav-link {
-      font-size: 2rem!important;
-    }
-    
-    #main-title {
-      font-size: 4rem!important;
-    }
-  }
-
   @media screen and (min-width: 1200px) {
     #main_form, #result_form {
         width: 50%;
     }  
-  }
-
-  @media screen and (min-width: 997px) and (max-width: 2048px){
-    .nav-link {
-      font-size: 1.25rem!important;
-    }
-
-    #main-title {
-      font-size: 2.5rem!important;
-    }
-  }
-
-  @media screen and (max-width: 997px) {
-    .nav-link {
-      font-size: 1.5rem!important;
-    }
   }
 
   .toast {
@@ -101,17 +63,15 @@ body, html {
     user-select: none;
   }
 
-  button, a, h2, img, audio {
-    position: relative;
-  }
-
   .login100-form-btn {
     width: 200px!important;
   }
 
   video {
     z-index: 1;
-    max-width: 640px;
+    max-width: 90%;
+    width: 30rem;
+    box-shadow: 0px 0px 25px 10px black;
   }
 
   img {
@@ -119,62 +79,20 @@ body, html {
     height: 100px;
   }
 
-  .nav-link:hover > .fa-solid {
-    color:#000000;
-  }
-
-  .navbar-brand, .fa-solid, .navbar-toggler-icon {
-    -webkit-transition: all 0.4s !important;
-    -o-transition: all 0.4s !important;
-    -moz-transition: all 0.4s !important;
-    transition: all 0.4s !important;
-  }
-
-  .navbar-brand:hover {
-    color: #000000;
-  }
-
-  #main-title {
-    font-family: 'Quicksand', sans-serif;
-  }
-
-  #main-title:hover {
-    color: #000000;
-  }
-
   ::selection {
     color: white;
     background: black;
   }
 
-  #navbar-toggler {
-      background: transparent !important;
-      border: none;
-      padding: 0!important;
-  }
-
-  .dropdown-menu {
-    background: transparent!important;
-    border: none!important;
-  }
-
-  .dropdown-item.text-light:focus, .dropdown-item.text-light:hover {
-    color: gray !important;
-  }
-
-
-  .dropdown-item.text-light:active {
-    color: #fff!important;
-  }
-
-  .dropdown-item.active, .dropdown-item:active {
-    color: #fff!important;
-    text-decoration: none;
-    background-color: #fff!important;
-  }
-
-
-  .dropdown-item {
+  .btn {
+    background: black !important;
+    color: white;
     border-radius: 15px!important;
+    outline: none!important;
+    border: none!important;
+    box-shadow: 0em 0em 0.1em 0.03em white!important;
   }
 
+  .btn:hover {
+    box-shadow: none!important;
+  }

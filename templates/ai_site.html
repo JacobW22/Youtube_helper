@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youtube helper</title>
+    
 
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     
-
-
+    
     <!--===============================================================================================-->
       <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
     <!--===============================================================================================-->
@@ -32,11 +32,13 @@
     <!--===============================================================================================-->
       <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <!--===============================================================================================-->
-      <link rel="stylesheet" href="{% static 'css/template_ai_site.css' %}">
+      <link rel="stylesheet" href="{% static 'css/navbar.css' %}">  
     <!--===============================================================================================-->
-      <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+      <link rel="stylesheet" href="{% static 'css/template_ai_site.css' %}">
     <!--===============================================================================================-->	
       <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+      <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->
       <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <!--===============================================================================================-->
@@ -46,51 +48,9 @@
     
 
 <!-- Navbar start -->
-<nav class="navbar navbar-expand-lg ">
-    <div class="container-fluid">
-        <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-        <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-      <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-              <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item text-light fs-6" href="#">Action</a>
-              <a class="dropdown-item text-light fs-6" href="{% url 'main_page' %}">Downloader</a>
-              
-              <div class="dropdown-divider"></div>
-                <a class="dropdown-item text-light fs-6" href="{% url 'ai_page' %}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Ai Video Recommendation</a>
-              </div>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
-          </li>
-
-          {% if logged == False %}
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
-          </li>
-
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
-          </li>
-          {% endif %}
-
-        </ul>
-      </div>
-    </div>
-</nav>
-<!-- Navbar end -->
+{% url 'ai_page' as the_url %}
+{% include "navbar.html" with sites_context=sites_context active_site_name="Ai thumbnail generator" active_site_url=the_url %}
+<!-- Navbar end --> 
 
 
 {% if not image_link %}
@@ -144,7 +104,7 @@
                   <span class="pointing-to-link text-light fs-1 mb-2 p-1 text-center " id="inputGroup-sizing-default"> <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i> </span>
                   <input type="text" name="description" placeholder="Programming tutorial, Cooking a pizza, Gameplay footage etc." class="form-control text-light mb-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
                   <span class="fs-6 text-light text-muted text-center mb-5">Describe your video up here</span>
-                  <button type="submit" class="btn btn-dark btn-lg rounded-pill send_request mt-lg-3 mb-3">Generate</button>
+                  <button type="submit" class="btn btn-dark btn-lg rounded-pill send_request animate">Generate</button>
                   
           </form>        
         </section>
@@ -181,7 +141,7 @@
       <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto img_container">
         <span class="text-light fs-1 fst-italic fw-bold text-center mb-5 truncate" id="inputGroup-sizing-default"> {{ image_title }} &nbsp; <small><i class="fa-solid fa-tag"></i></small></span>
         <img src="{{ image_link }}" class="img-fluid ai_generated_thumbnail" alt="Video_thumbnail"><!-- Main container end -->
-        <a type="button" class="btn btn-dark btn-lg rounded-pill download_file mt-4" href="{{ image_link }}" target="_blank" rel="noopener noreferrer" download="Thumbnail"> Download &nbsp;<i class="fa-solid fa-up-right-from-square"></i></a>
+        <a type="button" class="btn btn-dark btn-lg rounded-pill download_file mt-5 animate" href="{{ image_link }}" target="_blank" rel="noopener noreferrer" download="Thumbnail"> Download &nbsp;<i class="fa-solid fa-up-right-from-square"></i></a>
       </div>
   </div>
   <!-- Main container end -->

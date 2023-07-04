@@ -1,307 +1,160 @@
-  body, html {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    background: linear-gradient(black,red, white);
-    background-size: 800% 800%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    zoom: 110%;
-  }
-  
-  
-  * {
-    box-sizing: border-box;
-    font-synthesis: none!important;
-    text-rendering: optimizeLegibility!important;
-    font-smooth: auto!important;
-    -webkit-font-smoothing: antialiased!important;
-    -moz-osx-font-smoothing: grayscale!important;
-    -webkit-text-size-adjust: 100%!important;
-  }
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap");
 
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-    background-color: transparent;
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar {
-    scrollbar-color: black #910000;
-    height: 7px;
-    width: 7px;
-    background-color: transparent;
+body,
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(black, red, white);
+  background-size: 800% 800%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-    background-image: -webkit-linear-gradient(to top, black 0%, #910000 100%);
-    background-image: linear-gradient(to top, black 0%, #910000 100%);
-    opacity: 0.5!important;
-  }
+* {
+  box-sizing: border-box;
+  font-synthesis: none !important;
+  text-rendering: optimizeLegibility !important;
+  font-smooth: auto !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  -webkit-text-size-adjust: 100% !important;
+}
 
-  .full_site_container {
-    height: 100%!important;
-  }
-  
-  h2 {
-    font-family: Open Sans;
-  }
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  border-radius: 10px;
+}
 
-  .form-control {
-    background-color: transparent;
+::-webkit-scrollbar {
+  scrollbar-color: black #910000;
+  height: 7px;
+  width: 7px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-image: -webkit-linear-gradient(to top, black 0%, #910000 100%);
+  background-image: linear-gradient(to top, black 0%, #910000 100%);
+  opacity: 0.5 !important;
+}
+
+.full_site_container {
+  height: 100% !important;
+}
+
+.main-container {
+  zoom: 110%;
+}
+
+.form-control {
+  background-color: transparent;
+}
+
+.form-control:focus {
+  background-color: transparent;
+}
+
+button {
+  position: relative !important;
+}
+
+.toast {
+  position: relative;
+  scale: 1.1;
+  user-select: none;
+}
+
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+.form-label {
+  color: gray;
+}
+
+.main-container {
+  scale: 1.2;
+}
+
+.footer {
+  zoom: 110%;
+}
+
+.txt2 {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+::selection {
+  color: white;
+  background: black;
+}
+
+.fa-user {
+  scale: 1.4;
+}
+
+.username {
+  font-weight: bold;
+  scale: 1.1;
+  font-size: 110% !important;
+}
+
+.username::placeholder {
+  font-size: 110% !important;
+}
+
+.username:not(:placeholder-shown) {
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+}
+
+input::placeholder {
+  text-align: center;
+  font-size: 1rem;
+  color: rgb(145, 145, 145) !important;
+}
+
+.input100:not(:placeholder-shown) + .focus-input100 + .symbol-input100 {
+  color: rgb(47, 175, 52);
+}
+
+input {
+  text-align: center;
+  background: none !important;
+  box-shadow: inset 0em 0em 0.1em 0.1em white;
+  color: white !important;
+}
+
+input:focus {
+  text-align: left;
+} 
+
+@media screen and (min-width: 1200px) {
+  #main_form,
+  #result_form {
+    width: 50%;
   }
+}
 
-  .form-control:focus {
-    background-color: transparent;
-  }
-
-  button {
-    position: relative!important;
-
-  }
-
-  .toast {
-    position: relative;
-    scale: 1.1;
-    user-select: none;
-  }
-
-  .divider:after,
-  .divider:before {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: #eee;
-  }
-
-  .form-label {
-      color: gray;
-  }
-
+@media screen and (max-width: 450px) {
   .main-container {
-      scale: 1.2;
-  } 
-
-  .fa-solid, .navbar-toggler-icon, a, .dropdown-item, .btn-close {
-    -webkit-transition: all 0.4s !important;
-    -o-transition: all 0.4s !important;
-    -moz-transition: all 0.4s !important;
-    transition: all 0.4s !important;
+    padding: 15vw;
   }
 
-  .navbar {
-    margin-bottom: 4rem!important;
+  .insides {
+    width: 100%;
   }
 
-  .nav-link:hover > .fa-solid {
-    color:black!important;
+  form {
+    width: 100%;
   }
-  
-  .nav-link:hover {
-    font-size: 1.5em!important;
-  }
-  
-  .nav-link[aria-expanded="true"] {
-    font-size: 1.5em!important; 
-  }
-
-  .nav-link[aria-expanded="true"] > .fa-solid {
-    color: black!important;
-  }
-
-  #main-title {
-    font-family: 'Quicksand', sans-serif;
-  }
-
-  #main-title:hover {
-    color: #000000;
-  }
-
-  ::selection {
-    color: white;
-    background: black;
-  }
-  
-  .navbar-toggler {
-    background: transparent !important;
-    border: none;
-    padding: 0!important;
-  }
-  
-  .fa-user {
-    scale: 1.4;
-  }
-
-  .username {
-    font-weight: bold;
-    scale: 1.1;
-    font-size: 110%!important;
-  }
-
-  .username::placeholder {
-    font-size: 110%!important;
-  }
-
-  input::placeholder {
-    text-align: center;
-    font-size: 1rem;
-    color: rgb(145, 145, 145)!important;
-  }
-
-  input {
-    text-align: center;
-    background: none!important;
-    box-shadow: inset 0em 0em 0.1em 0.1em white;
-    color: white!important;
-  }
-
-  input:focus {
-    text-align: left;
-  }
-
-  .dropdown-menu {
-    background: transparent!important;
-    border: none!important;
-    backdrop-filter: blur(2rem);
-    border-radius: 15px!important;
-  }
-
-  .dropdown-item:focus, .dropdown-item:hover {
-    color: black !important;
-    font-size: 120%!important;
-    margin-left: 1.1em!important;
-
-  }
-
-  .dropdown-item:focus, .dropdown-item:hover > .fa-location-crosshairs {
-    color: black !important;
-  }
-
-  .dropdown-item.active, .dropdown-item:active {
-    color: #fff!important;
-    text-decoration: none;
-    background-color: #fff!important;
-  }
-
-  .dropdown-item {
-    border-radius: 15px!important;
-    color: #fff!important;
-  }
-
-  .fa-solid {
-    transition: filter 300ms!important;
-  }
-
-  .btn-close:focus {
-    box-shadow: none!important;
-  }
-
-  .btn-close:hover {
-    filter: invert(100);
-  }
-
-  
-  @media screen and (min-width: 2048px) {
-    .main-container {
-      zoom: 175%;
-    }
-
-    .nav-link {
-      font-size: 2rem!important;
-    }
-
-    #main-title {
-      font-size: 4rem!important;
-    }
-
-    .nav-link:hover {
-      font-size: 2.5em!important;
-    }
-    
-    .nav-link[aria-expanded="true"] {
-      font-size: 2.5em!important; 
-    }
-
-    .dropdown-item {
-      font-size: 150%!important;
-    }
-    .dropdown-item:focus, .dropdown-item:hover {
-      font-size: 175%!important;
-    }
-
-    .dropdown-menu {
-      margin-top: 3.2em!important;
-      width: 300%!important
-    }
-  }
-
-  @media screen and (min-width: 1200px) {
-    #main_form, #result_form {
-        width: 50%;
-    }  
-
-    .navbar {
-      zoom: 78.5%;
-    }
-  }
-
-  @media screen and (max-width: 1200px) {
-    .navbar {
-      margin-top: 0!important;
-    }
-  }
-
-  @media screen and (min-width: 997px) and (max-width: 2048px){
-    .nav-link {
-      font-size: 1.25rem!important;
-    }
-
-    #main-title {
-      font-size: 2.5rem!important;
-    }
-
-    .navbar {
-      margin-top: 2.3em;
-      height: 0;   
-    }
-
-    .nav-item {
-      max-height: 0;
-      margin-bottom: 3.1em;
-    }
-  
-    .dropdown-menu {
-      margin-top: 3.2em!important;
-      width: 300%!important
-    }
-  }
-
-  @media screen and (max-width: 997px) {
-    .nav-link {
-      font-size: 1.5rem!important;
-    }
-  }
-
-  @media screen and (max-width: 450px) { 
-    .main-container {
-      padding: 15vw;
-    }
-    
-    .insides {
-      width: 100%;
-    }
-
-    form {
-      width: 100%;
-    }
-  }
-
-
-
-
-
-
-
-
+}

@@ -343,10 +343,6 @@ button {
     zoom: 175%;
   }
 
-  .main-container {
-    height: calc(100vh - 111px);
-  }
-
   .form-control:not(.video_url_input) {
     width: 25vw !important;
     margin-top: 15px;
@@ -356,10 +352,6 @@ button {
 @media screen and (min-width: 1400px) and (max-width: 2270px) {
   .main-container {
     zoom: 105%;
-  }
-
-  .main-container {
-    height: calc(100vh - 97px);
   }
 
   .form-control:not(.video_url_input) {
@@ -376,12 +368,6 @@ button {
   }
 }
 
-@media screen and (min-width: 997px) and (max-width: 1400px) {
-  .main-container {
-    height: calc(100vh - 97px) !important;
-  }
-}
-
 @media screen and (max-width: 1400px) {
   .sort_menu {
     margin-top: 0 !important;
@@ -389,10 +375,6 @@ button {
 
   .comments_results {
     height: calc(100% - 25px - 30px) !important;
-  }
-
-  .main-container {
-    height: calc(100vh - 62px);
   }
 
   .form-select {

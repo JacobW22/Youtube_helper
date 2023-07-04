@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap');
+
 body,
 html {
   width: 100%;
@@ -72,13 +74,7 @@ html {
   user-select: none;
 }
 
-.nav-link:hover > .fa-solid {
-  color: #000000;
-}
-
-.navbar-brand,
 .fa-solid:not(.fa-up-right-from-square),
-.navbar-toggler-icon,
 .btn {
   -webkit-transition: all 0.4s !important;
   -o-transition: all 0.4s !important;
@@ -86,52 +82,9 @@ html {
   transition: all 0.4s !important;
 }
 
-.navbar-brand:hover {
-  color: #000000;
-}
-
-#main-title {
-  font-family: "Quicksand", sans-serif;
-}
-
-#main-title:hover {
-  color: #000000;
-}
-
 ::selection {
   color: white;
   background: black;
-}
-
-.navbar-toggler {
-  background: transparent !important;
-  border: none;
-  padding: 0!important;
-}
-
-.dropdown-menu {
-  background: transparent !important;
-  border: none !important;
-}
-
-.dropdown-item.text-light:focus,
-.dropdown-item.text-light:hover {
-  color: gray !important;
-}
-
-.dropdown-item.text-light:active {
-  color: #fff !important;
-}
-
-.dropdown-item.active,
-.dropdown-item:active {
-  color: #fff !important;
-  text-decoration: none;
-  background-color: #fff !important;
-}
-
-.dropdown-item {
-  border-radius: 15px !important;
 }
 
 .container-for-gears {
@@ -139,17 +92,17 @@ html {
 }
 
 .form-control {
-  background-color: transparent!important;
-  font-size: 1.5rem!important;
+  background-color: black!important;
+  border: 0.15em solid #fff!important;
   border-color: white!important;
   border-radius: 15px!important;
   box-shadow: 0px 0px 15px 1px black;
   text-align: center;
-  
+  font-size: 1.2rem !important;
+  overflow: hidden !important;  
 }
 
 .form-control:focus {
-  background-color:transparent!important;
   border-color: #f5696e!important;
   box-shadow: 0px 0px 15px 1px black;
   text-align: left;
@@ -160,18 +113,22 @@ html {
   border-color: #7cf569!important;
 }
 
+.form-control::placeholder, .pointing-to-link, .container-for-gears {
+  user-select: none;
+}
 
 .btn {
-  background: #000000 !important;
-  color: #fff !important;
-  font-family: Montserrat-Bold !important;
-  width: 10em;
+  background: black !important;
+  color: white;
+  border-radius: 15px!important;
+  outline: none!important;
+  border: none!important;
+  box-shadow: 0em 0em 0.1em 0.03em white!important;
   scale: 1.1;
 }
 
 .btn:hover {
-  background: #fff !important;
-  color: #000000 !important;
+  box-shadow: none!important;
 }
 
 .align-text-center {
@@ -205,21 +162,6 @@ html {
   position: relative;
   scale: 1.1;
   margin-bottom: 2.5em;
-}
-
-.btn-close {
-  opacity: 1;
-  filter: invert(92%) sepia(91%) saturate(26%) hue-rotate(201deg) brightness(108%) contrast(100%);
-}
-
-.btn-close:hover {
-  filter: invert(0%) sepia(5%) saturate(18%) hue-rotate(192deg) brightness(94%) contrast(106%);
-}
-
-.btn-close:focus {
-  outline: 0;
-  box-shadow: none!important;
-  filter: invert(0%) sepia(5%) saturate(18%) hue-rotate(192deg) brightness(94%) contrast(106%);
 }
 
 .text-muted {
@@ -349,38 +291,6 @@ html {
 }
 
 @media screen and (min-width: 2048px) {
-  .main-container{
-    zoom: 175%;
-  }
-
-  .nav-link {
-    font-size: 2rem !important;
-  }
-
-  #main-title {
-    font-size: 4rem !important;
-  }
-
-  .nav-link:hover {
-    font-size: 2.5em!important;
-  }
-  
-  .nav-link[aria-expanded="true"] {
-    font-size: 2.5em!important; 
-  }
-
-  .dropdown-item {
-    font-size: 150%!important;
-  }
-  .dropdown-item:focus, .dropdown-item:hover {
-    font-size: 175%!important;
-  }
-
-  .dropdown-menu {
-    margin-top: 3.2em!important;
-    width: 300%!important
-  }
-
   .main-container, .img_container {
     height: calc(100vh - 111px);
   }
@@ -388,43 +298,18 @@ html {
 }
 
 @media screen and (min-width: 997px) and (max-width: 2048px) {
-  .nav-link {
-    font-size: 1.25rem !important;
-  }
-
-  #main-title {
-    font-size: 2.5rem !important;
-  }
-
-  .navbar {
-    margin-top: 2.3em;
-    height: 0;   
-  }
-
-  .nav-item {
-    max-height: 0;
-    margin-bottom: 3.1em;
-  }
-
-  .dropdown-menu {
-    margin-top: 3.2em!important;
-    width: 300%!important
-  }
-  
-  .form-control {
-    width: 90%!important;
-  }
-
   .main-container, .img_container {
     height: calc(100vh - 90px);
   }
 }
 
-@media screen and (max-width: 997px) {
-  .nav-link {
-    font-size: 1.5rem !important;
+@media screen and (max-width: 1080px) {
+  .img_container {
+    transform: translateY(-5%);
   }
+}
 
+@media screen and (max-width: 997px) {
   .form-control::placeholder {
     font-size: 3.5vw!important;
   }
@@ -436,6 +321,10 @@ html {
   .ai_generated_thumbnail {
     width: 70vw;
     height: 70vh;
+  }
+
+  .download_file {
+    scale: 1.1!important;
   }
 }
 
