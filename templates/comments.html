@@ -262,20 +262,18 @@
 
 
 
-<!-- Toast container start -->
+<!-- Toasts container start -->	
 <div class="toast-container bottom-0 start-50 translate-middle-x ">
   {% for message in messages %}
-    <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
-      <div class="toast-body">
-        <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn-close fs-5 fs-sm-6 toast_dismiss" aria-label="Close"></button>
-      </div>
+  <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+    <div class="toast-body">
+        <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
     </div>
+    <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
+  </div>
   {% endfor %}
 </div>
-<!-- Toast container end -->
+<!-- Toasts container end -->	
 
 
 
@@ -288,7 +286,9 @@
       $('.modal').modal('hide');
     });
 
-    $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
+    $(".toast").css("opacity", "0");
+    $(".toast").toast("show");
+    $(".toast").addClass("custom-fade-in").css("opacity", "1");
 
     $(".card_body").attr("target", "_blank");
     $(".card_body").attr("rel", "noopener noreferrer");

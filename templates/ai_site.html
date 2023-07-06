@@ -141,7 +141,7 @@
       <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto img_container">
         <span class="text-light fs-1 fst-italic fw-bold text-center mb-5 truncate" id="inputGroup-sizing-default"> {{ image_title }} &nbsp; <small><i class="fa-solid fa-tag"></i></small></span>
         <img src="{{ image_link }}" class="img-fluid ai_generated_thumbnail" alt="Video_thumbnail"><!-- Main container end -->
-        <a type="button" class="btn btn-dark btn-lg rounded-pill download_file mt-5 animate" href="{{ image_link }}" target="_blank" rel="noopener noreferrer" download="Thumbnail"> Download &nbsp;<i class="fa-solid fa-up-right-from-square"></i></a>
+        <a type="button" class="btn btn-dark btn-lg rounded-pill download_file mt-5 mb-3 animate" href="{{ image_link }}" target="_blank" rel="noopener noreferrer" download="Thumbnail"> Download &nbsp;<i class="fa-solid fa-up-right-from-square"></i></a>
       </div>
   </div>
   <!-- Main container end -->
@@ -153,20 +153,18 @@
 <!-- Main container end -->
 
 
-<!-- Toast container start -->
+<!-- Toasts container start -->	
 <div class="toast-container bottom-0 start-50 translate-middle-x ">
   {% for message in messages %}
-    <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
-      <div class="toast-body">
-        <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn-close fs-5 fs-sm-6 toast_dismiss" aria-label="Close"></button>
-      </div>
+  <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+    <div class="toast-body">
+        <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
     </div>
+    <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
+  </div>
   {% endfor %}
 </div>
-<!-- Toast container end -->
+<!-- Toasts container end -->	
 
 
 
@@ -184,7 +182,9 @@
     $('.first-section').fadeIn(500).removeClass('d-none').addClass('d-flex');
     $('.second-section').fadeIn(500).removeClass('d-none').addClass('d-flex');
 
-    $(".toast").toast("show").slideUp(1).fadeIn( 2000 );  
+    $(".toast").css("opacity", "0");
+    $(".toast").toast("show");
+    $(".toast").addClass("custom-fade-in").css("opacity", "1");
     
     $('.send_request').hover(function() {
       $('.form-control').addClass('align-text-center');

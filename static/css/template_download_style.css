@@ -126,12 +126,6 @@ body, html {
     box-shadow: 0px 0px 25px 10px black;
   }
 
-  .toast {
-    position: relative;
-    scale: 1.1;
-    margin-bottom: 2.5em;
-  }
-
   .btn-close {
     opacity: 1;
     filter: invert(92%) sepia(91%) saturate(26%) hue-rotate(201deg) brightness(108%) contrast(100%);

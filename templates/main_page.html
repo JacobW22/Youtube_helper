@@ -133,9 +133,9 @@
 
 
 <!-- Toasts container start -->
-<div class="toast-container bottom-0 start-50 translate-middle-x mb-3 ">
+<div class="toast-container bottom-0 start-50 translate-middle-x">
   {% for message in messages %}
-  <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true"> 
+  <div class="toast fade align-items-center text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
     <div class="toast-body">
       <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
     </div>
@@ -158,7 +158,10 @@
       $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
     
 
-      $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
+
+      $(".toast").css("opacity", "0");
+      $(".toast").toast("show");
+      $(".toast").addClass("custom-fade-in").css("opacity", "1");
 
       // Add event listener for click event on the close button
       $('.toast .btn-close').on('click', function() {

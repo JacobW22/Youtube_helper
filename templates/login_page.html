@@ -132,13 +132,13 @@
 
 
 <!-- Toasts container start -->
-<div class="toast-container bottom-0 start-50 translate-middle-x mb-3">
+<div class="toast-container bottom-0 start-50 translate-middle-x">
   {% for message in messages %}
-    <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true"> 
-      <div class="toast-body">
-        <i class="fa-regular fa-hand-peace"></i>&nbsp  {{ message }}
-      </div>
+  <div class="toast fade align-items-center text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+    <div class="toast-body">
+      <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
     </div>
+  </div>
   {% endfor %}
 </div>
 <!-- Toasts container end -->
@@ -160,36 +160,10 @@
     $('.main-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
 
 
+    $(".toast").css("opacity", "0");
     $(".toast").toast("show");
+    $(".toast").addClass("custom-fade-in").css("opacity", "1");
 
-    var toasts = $('.toast');
-
-    // Hide toasts initially using CSS
-    toasts.css({
-      opacity: 0,
-      transform: 'translateY(0)',
-      display: 'none'
-    });
-
-    // Show each toast and apply slide-in animation in reverse order
-    $(toasts.get().reverse()).each(function(index) {
-      var toast = $(this);
-
-      // Delay and animate each toast
-      setTimeout(function() {
-        toast.css('display', 'block'); // Show the toast before animation
-        toast.animate({
-          opacity: 1,
-          transform: 'translateY(100vh)'
-        }, {
-          duration: 500,
-          start: function() {
-            toast.css('display', 'block');
-          }
-        });
-      }, index * 200 + 200); // Delay each toast by 200ms, with an additional 200ms delay for the first toast
-    });
-    
 
     // Add event listener for click event on the close button
     $('.toast .btn-close').on('click', function() {

@@ -145,14 +145,11 @@
 <div class="toast-container bottom-0 start-50 translate-middle-x mb-5 ">
   {% for field,errors in form.errors.items %}
       {% for error in errors %}
-        <div class="toast text-center text-white bg-dark border-0 pb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+        <div class="toast text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
             <div class="toast-body">
               {{ error }}
             </div>
-
-            <div>
-              <button type="button" class="btn-close me-2 m-auto "  aria-label="Close"></button>
-            </div>
+          <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
         </div>
       {% endfor %}
   {% endfor %}
@@ -174,36 +171,9 @@
       $('.main-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
     
 
+      $(".toast").css("opacity", "0");
       $(".toast").toast("show");
-
-      var toasts = $('.toast');
-
-      // Hide toasts initially using CSS
-      toasts.css({
-        opacity: 0,
-        transform: 'translateY(0)',
-        display: 'none'
-      });
-
-      // Show each toast and apply slide-in animation in reverse order
-      $(toasts.get().reverse()).each(function(index) {
-        var toast = $(this);
-
-        // Delay and animate each toast
-        setTimeout(function() {
-          toast.css('display', 'block'); // Show the toast before animation
-          toast.animate({
-            opacity: 1,
-            transform: 'translateY(100vh)'
-          }, {
-            duration: 500,
-            start: function() {
-              toast.css('display', 'block');
-            }
-          });
-        }, index * 200 + 200); // Delay each toast by 200ms, with an additional 200ms delay for the first toast
-      });
-      
+      $(".toast").addClass("custom-fade-in").css("opacity", "1");
 
       // Add event listener for click event on the close button
       $('.toast .btn-close').on('click', function() {

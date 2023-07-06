@@ -62,7 +62,7 @@
 
 
   <!-- Main container start -->
-  <div class="d-flex flex-column gap-5 my-auto main-container">
+  <div class="d-flex flex-column gap-5 my-auto justify-content-center main-container">
 
     <!-- First section start -->
     <section class="d-none first-container justify-content-center flex-column align-items-center px-2">
@@ -181,13 +181,11 @@
 <!-- Toasts container start -->	
 <div class="toast-container bottom-0 start-50 translate-middle-x ">
   {% for message in messages %}
-  <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+  <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
     <div class="toast-body">
-      <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
+        <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
     </div>
-    <div class="modal-footer justify-content-center">
-      <button type="button" class="btn-close fs-5 fs-sm-6 toast_dismiss" aria-label="Close"></button>
-    </div>
+    <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
   </div>
   {% endfor %}
 </div>
@@ -210,7 +208,9 @@
     $('.first-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
     $('.second-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
 
-    $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
+    $(".toast").css("opacity", "0");
+    $(".toast").toast("show");
+    $(".toast").addClass("custom-fade-in").css("opacity", "1");
   });
 
 
