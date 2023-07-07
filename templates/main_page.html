@@ -81,7 +81,7 @@
     <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
     <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
 
-    {% if logged == True %}
+    {% if logged == True and videos_informations %}
 
     <div id="DownloadHistorySlider" class="carousel slide " >
       <ol class="carousel-indicators">
@@ -120,10 +120,16 @@
   </section>
 
 
-  {% else %}
+  {% elif logged == False %}
   <section class="d-flex info_for_carousel">
     <span class="text-light fs-2 text-center text-muted"> Log in to see your download history </span>
   </section>
+
+  {% else %}
+  <section class="d-flex info_for_carousel">
+    <span class="text-light fs-2 text-center text-muted"> Download history is empty </span>
+  </section>
+
   {% endif %}
   <!-- Second section end -->
 
@@ -149,43 +155,6 @@
 
 
 <script type="text/javascript">
-  
-  $(document).ready(function(){
-
-      // Fade In page
-      $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
-      $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
-      $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
-    
-
-
-      $(".toast").css("opacity", "0");
-      $(".toast").toast("show");
-      $(".toast").addClass("custom-fade-in").css("opacity", "1");
-
-      // Add event listener for click event on the close button
-      $('.toast .btn-close').on('click', function() {
-        var toast = $(this).closest('.toast');
-        // Animate the toast element
-        toast.animate({
-          opacity: 0,
-          height: 0,
-          marginBottom: 0
-        }, 500, function() {
-          // Remove the toast element from the DOM
-          toast.remove();
-        });
-      });
-      
-
-      var carousel_slides = document.getElementsByClassName("carousel-item");
-      var carousel_indicators = document.getElementsByClassName("indicator");
-
-      carousel_slides[0].classList.add("active");
-      carousel_indicators[0].classList.add("active");
-
-  });
-
 
   // Changing hamburger icon when clicked
   var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");
@@ -212,6 +181,44 @@
   $('.dropdown').on('hide.bs.dropdown', function() {
     $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
   });
+
+  $(document).ready(function(){
+
+    // Fade In page
+    $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
+    $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
+    $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
+  
+
+    var carousel_slides = document.getElementsByClassName("carousel-item");
+    var carousel_indicators = document.getElementsByClassName("indicator");
+
+    carousel_slides[0].classList.add("active");
+    carousel_indicators[0].classList.add("active");
+
+
+    $(".toast").css("opacity", "0");
+    $(".toast").toast("show");
+    $(".toast").addClass("custom-fade-in").css("opacity", "1");
+    
+
+    setTimeout(function() {
+      hideToast();
+    }, 5000);
+
+    function hideToast() {
+      var toast = $('.toast');
+      // Animate the toast element
+      toast.animate({
+        opacity: 0,
+        height: 0,
+        marginBottom: 0
+      }, 500, function() {
+        // Remove the toast element from the DOM
+        toast.remove();
+      });
+    };
+});
 
 </script>
 </body>
