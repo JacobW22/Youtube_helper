@@ -7,10 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youtube helper</title>
-
-
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     
 
     <!--===============================================================================================-->
@@ -29,6 +25,8 @@
     <!--===============================================================================================-->
       <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <!--===============================================================================================-->
+      <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
+    <!--===============================================================================================-->  
       <link rel="stylesheet" href="{% static 'css/template_style.css' %}">  
     <!--===============================================================================================-->
       <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
@@ -42,82 +40,25 @@
 </head>
 <body>
     
+<!-- Navbar start -->
+{% url 'main_page' as the_url %}
+{% include "navbar.html" with sites_context=sites_context active_site_name="Video Downloader" active_site_url=the_url %}
+<!-- Navbar end -->    
 
 <!-- Site container start -->
-<div class="d-flex flex-column full_site_container">
+<div class="d-flex flex-column full_site_container px-4">
 
-
-  <!-- Navbar start -->
-  <nav class="navbar navbar-expand-lg mb-4">
-
-    <div class="container-fluid">
-
-        <!-- Nav title start-->
-        <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-        <!-- Nav title end -->
-
-        <!-- Collapse button start-->
-        <button class="navbar-toggler mt-1 ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Collapse button end -->
-
-
-        <!-- Nav items start -->
-        <div class="collapse navbar-collapse mb-4 mb-sm-2 mt-3" id="navbarSupportedContent" >
-          <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0"  style="min-height: auto;">
-
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-                  <i class="fa-solid fa-screwdriver-wrench"></i>&nbsp; Tools
-                </a>
-
-                <div class="dropdown-menu p-0" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item fs-6" href="#">Action</a>
-                  <a class="dropdown-item fs-6" href="#">Ai Video Recommendation</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item fs-6" href="#"><i class="fa-solid fa-location-crosshairs"></i>&nbsp; Downloader</a>
-                </div>
-              </li>
-
-            <li class="nav-item">
-              <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp; Home</a>
-            </li>
-
-            {% if logged == False %}
-            <li class="nav-item">
-              <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; Log in</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp; Sign up</a>
-            </li>
-
-            {% else %}
-            <li class="nav-item">
-              <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; Log out</a>
-            </li>
-            {% endif %}
-          
-          </ul>
-        </div>
-        <!-- Nav items end -->
-
-    </div>
-  </nav>
-  <!-- Navbar end -->
-
-      
   <!-- First section start -->
   <section class="d-flex my-top my-lg-auto align-items-center first-container">
     
-          <form method="post" class="container-fluid d-flex flex-column align-items-center mb-5" id="main_form" >
-              {% csrf_token %}
+    <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto gap-4 p-0" id="main_form" >
+        {% csrf_token %}
 
-                    <span class="text-light fs-2 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
-                    <span class="pointing-to-link p-3 text-light fs-2 text-center mb-2" id="inputGroup-sizing-default"> Paste your link here</span>
-                    <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
-                    <button type="submit" class="btn btn-dark btn-lg mt-4 animate">Confirm</button>
-          </form>
+          <span class="text-light fs-1 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
+          <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
+          <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+          <button type="submit" class="btn btn-dark btn-lg animate mt-2">Confirm</button>
+    </form>
 
   </section>
   <!-- First section end -->
@@ -136,7 +77,7 @@
     <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
     <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
 
-    {% if logged == True %}
+    {% if logged == True and videos_informations %}
 
     <div id="DownloadHistorySlider" class="carousel slide " >
       <ol class="carousel-indicators">
@@ -175,10 +116,16 @@
   </section>
 
 
-  {% else %}
+  {% elif logged == False %}
   <section class="d-flex info_for_carousel">
     <span class="text-light fs-2 text-center text-muted"> Log in to see your download history </span>
   </section>
+
+  {% else %}
+  <section class="d-flex info_for_carousel">
+    <span class="text-light fs-2 text-center text-muted"> Download history is empty </span>
+  </section>
+
   {% endif %}
   <!-- Second section end -->
 
@@ -188,9 +135,9 @@
 
 
 <!-- Toasts container start -->
-<div class="toast-container bottom-0 start-50 translate-middle-x mb-3 ">
+<div class="toast-container bottom-0 start-50 translate-middle-x">
   {% for message in messages %}
-  <div class="toast fade align-items-center text-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true"> 
+  <div class="toast fade align-items-center text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
     <div class="toast-body">
       <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
     </div>
@@ -204,40 +151,14 @@
 
 
 <script type="text/javascript">
+
+  var carousel_slides = document.getElementsByClassName("carousel-item");
+  var carousel_indicators = document.getElementsByClassName("indicator");
   
-  $(document).ready(function(){
-
-      // Fade In page
-      $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
-      $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
-      $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
-    
-
-      $(".toast").toast("show").slideUp(1).fadeIn( 2000 );
-
-      // Add event listener for click event on the close button
-      $('.toast .btn-close').on('click', function() {
-        var toast = $(this).closest('.toast');
-        // Animate the toast element
-        toast.animate({
-          opacity: 0,
-          height: 0,
-          marginBottom: 0
-        }, 500, function() {
-          // Remove the toast element from the DOM
-          toast.remove();
-        });
-      });
-      
-
-      var carousel_slides = document.getElementsByClassName("carousel-item");
-      var carousel_indicators = document.getElementsByClassName("indicator");
-
-      carousel_slides[0].classList.add("active");
-      carousel_indicators[0].classList.add("active");
-
-  });
-
+  if (carousel_slides[0] != undefined && carousel_indicators[0] != undefined) {
+  carousel_slides[0].classList.add("active");
+  carousel_indicators[0].classList.add("active"); 
+  }
 
   // Changing hamburger icon when clicked
   var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");
@@ -264,6 +185,38 @@
   $('.dropdown').on('hide.bs.dropdown', function() {
     $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
   });
+
+  $(document).ready(function(){
+
+    // Fade In page
+    $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
+    $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
+    $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
+  
+
+
+    $(".toast").css("opacity", "0");
+    $(".toast").toast("show");
+    $(".toast").addClass("custom-fade-in").css("opacity", "1");
+    
+
+    setTimeout(function() {
+      hideToast();
+    }, 5000);
+
+    function hideToast() {
+      var toast = $('.toast');
+      // Animate the toast element
+      toast.animate({
+        opacity: 0,
+        height: 0,
+        marginBottom: 0
+      }, 500, function() {
+        // Remove the toast element from the DOM
+        toast.remove();
+      });
+    };
+});
 
 </script>
 </body>
