@@ -41,6 +41,11 @@ google_api_key = os.environ.get("GOOGLE_API_KEY")
 
 youtube = build('youtube', 'v3', developerKey=google_api_key)
 
+sites_context = {
+  "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
+  "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai thumbnail generator",
+  "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT comments filtering"
+}
 
 @login_check
 def main_page(request, login_context):
@@ -100,6 +105,7 @@ def main_page(request, login_context):
         context.update({"videos_informations": Download_videos_informations})
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
 
     if request.method == "POST":
         link = request.POST.get("sended_link")
@@ -132,6 +138,7 @@ def login_page(request, login_context):
     }
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
 
     return render(request, "login_page.html", context)
 
@@ -155,7 +162,7 @@ def sign_up_page(request, login_context):
             # Create data storage for user in the database / avoid not-null by passing 'registered' string
 
             user_data_storage.objects.create(
-                user=User.objects.get(username=user), download_history=["registered"]
+                object_name=str(user)+" storage", user=User.objects.get(username=user), download_history=["registered"]
             )
             storage = user_data_storage.objects.get(
                 user=User.objects.get(username=user)
@@ -169,6 +176,7 @@ def sign_up_page(request, login_context):
     context = {"form": form}
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
 
     return render(request, "sign_up_page.html", context)
 
@@ -251,6 +259,8 @@ def download_page(request, login_context, parameter):
     }
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
+
     return render(request, "download_page.html", context)
 
 
@@ -264,6 +274,8 @@ def download_video(request, login_context, parameter):
     }
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
+
 
     return render(request, "video_download.html", context)
 
@@ -278,6 +290,8 @@ def download_audio(request, login_context, parameter):
     }
 
     context.update(login_context)
+    context.update({'sites_context': sites_context})
+
 
     return render(request, "audio_download.html", context)
 
@@ -304,15 +318,14 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
         except openai.error.RateLimitError:
             msg.success("Ai model is currently overloaded, please wait a second")
             return redirect(ai_page)
-
-
-        print(link)
     
 
         return redirect(ai_page, parameter = fixed_link, parameter_title = description)
 
     context = {}
     context.update(login_context)
+    context.update({'sites_context': sites_context})
+
 
     if parameter != "":
         context.update({
@@ -322,9 +335,14 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
 
     return render(request, "ai_site.html", context)
 
-pageTokens = [None]
 
-async def get_video_comments(video_id, order, maxResults, previousPageID, pageID):
+
+pageTokens = [None]
+previous_request_previousPageID = [0]
+previous_request_pageID = [0]
+video_info = {}
+
+async def get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser):
 
     try:
         # Retrieve the comments for the specified video
@@ -334,16 +352,18 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
             textFormat='html',
             order=order,
             maxResults=maxResults,
-            pageToken = pageTokens[-1]
+            pageToken = pageTokens[-1],
+            quotaUser = quotaUser
         )
         
 
         # Process the comments
         processed_comments = []
 
+
         match (int(pageID) - int(previousPageID)):
 
-            case 1:
+            case 1:            
                 response = await asyncio.to_thread(request.execute)
 
                 if 'nextPageToken' in response:
@@ -361,7 +381,8 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
                     textFormat='html',
                     order=order,
                     maxResults=maxResults,
-                    pageToken = pageTokens[-1]
+                    pageToken = pageTokens[-1],
+                    quotaUser = quotaUser
                 )
 
         response = await asyncio.to_thread(request.execute)
@@ -369,28 +390,68 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
         if 'nextPageToken' not in response:
             processed_comments.append('last_page')
 
+        if searchInput != "":
 
-        if 'items' in response:
-            for comment in response['items']:
-                # Extract the comment snippet
-                snippet = comment['snippet']['topLevelComment']['snippet']
-                author = snippet['authorDisplayName']
-                text = snippet['textDisplay']
-                likes = snippet['likeCount']
-                profile_image_url = snippet['authorProfileImageUrl']
-                publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
+            if 'items' in response:
+                filtered_comments = [comment for comment in response['items'] if re.search(re.escape(searchInput), comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"], re.IGNORECASE)]
+
+                for comment in filtered_comments:
+                    snippet = comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"]
+                    highlighted_comment = re.sub(f'({re.escape(searchInput)})', r'<mark>\1</mark>', snippet, flags=re.IGNORECASE)
+                    comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"] = highlighted_comment
+                
+                for comment in filtered_comments:
+                    # Extract the comment snippet
+                    snippet = comment['snippet']['topLevelComment']['snippet']
 
 
-                # Add the processed comment to the list
-                processed_comments.append({
-                    'author': author,
-                    'text': text,
-                    'likes': likes,
-                    'profile_image_url': profile_image_url,
-                    'publish_date': publish_date
-                })
+                    author = snippet['authorDisplayName']
+                    channel_url = snippet['authorChannelUrl']
+                    text = snippet['textDisplay']
+                    likes = f"{snippet['likeCount']:,}"
+                    profile_image_url = snippet['authorProfileImageUrl']
+                    publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
 
-            
+                    # Add the processed comment to the list
+                    processed_comments.append({
+                        'author': author,
+                        'channel_url' : channel_url,
+                        'text': text,
+                        'likes': likes,
+                        'profile_image_url': profile_image_url,
+                        'publish_date': publish_date
+                    })
+        else:
+            if 'items' in response:
+                for comment in response['items']:
+                    # Extract the comment snippet
+                    snippet = comment['snippet']['topLevelComment']['snippet']
+                    author = snippet['authorDisplayName']
+                    channel_url = snippet['authorChannelUrl']
+                    text = snippet['textDisplay']
+                    likes = f"{snippet['likeCount']:,}"
+                    profile_image_url = snippet['authorProfileImageUrl']
+                    publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
+
+                    # Add the processed comment to the list
+                    processed_comments.append({
+                        'author': author,
+                        'channel_url' : channel_url,
+                        'text': text,
+                        'likes': likes,
+                        'profile_image_url': profile_image_url,
+                        'publish_date': publish_date
+                    })
+
+
+        if order == 'time':
+            date_format = "%Y-%m-%d %H:%M:%S"
+            date1 = dt.strptime(processed_comments[0].get('publish_date'), date_format)
+            date2 = dt.strptime(processed_comments[1].get('publish_date'), date_format)
+
+            if date1 < date2:
+                    processed_comments[0]['pinned'] = True
+
         return processed_comments
 
     except HttpError as e:
@@ -399,61 +460,205 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
 
 
 
-async def get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID):
+async def get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser, isFirstTime):
 
     if not video_id:
-        return JsonResponse({'error': 'No video_id parameter provided'}, status=400)
+        return {'error': 'No video_id parameter provided'}, 400
 
     try:
-        comments = await get_video_comments(video_id, order, maxResults, previousPageID, pageID)
-        return {'comments': comments}
+        match isFirstTime:
+            case True:
+                comments_and_VidInfo = await asyncio.gather(get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser), get_video_informations(video_id))
+
+                comments_and_VidInfo = {
+                    'comments': comments_and_VidInfo[0],
+                    'video_info': comments_and_VidInfo[1]
+                }
+
+                return comments_and_VidInfo
+            
+            case False:
+                
+                comments = await get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser)
+                
+                comments_and_VidInfo = {
+                    'comments': comments,
+                    'video_info': video_info
+                }
+
+                return  comments_and_VidInfo
+
 
     except HttpError as e:
         error_message = f'An HTTP error {e.resp.status} occurred: {e.content}'
-        return JsonResponse({'error': error_message}, status=500)
+        return {'error': error_message}, 500
 
 
-@login_check
-def comments(request, login_context):
+
+async def get_video_informations(video_id):
+    video_url = "https://www.youtube.com/watch?v=" + video_id
+    yt = YouTube(video_url)
+
+    try:
+        title = yt.title
+        thumbnail = yt.thumbnail_url
+        views = f"{yt.views:,}"  # Format numbers 100000 = 100,000 etc.
+        length = str(datetime.timedelta(seconds=yt.length))
+        publish_date = yt.publish_date
+    except:
+        title = "Could not find or video was deleted by Youtube"
+        thumbnail = "couldn't find"
+        views = "couldn't find"
+        length = "couldn't find"
+
+        publish_date = "couldn't find"
+
+    video_informations = {
+        "title": title,
+        "thumbnail": thumbnail,
+        "views": views,
+        "publish_date": publish_date,
+        "length": length
+    }
+
+    video_info.update(video_informations)
+
+    return video_informations
+
+def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime):
     context = {}
 
-    if request.GET.get("order") != None:
-        video_id = "uod9IJ4-47s"    
-        order = request.GET.get("order")
-        maxResults = request.GET.get("maxResults")
-        previousPageID = request.GET.get("previousPageID")
-        pageID = request.GET.get("pageID")
-
+    if video_id != None:
+        
         context = {
             'order': order,
             'maxResults': maxResults,
-            'pageID': int(pageID)
+            'pageID': int(pageID),
+            'video_id' : video_id,
+            'searchInput': searchInput
         }
 
+
+        # Reset previous saved pageTokens
         if previousPageID == '1' and pageID == '1':
             pageTokens.clear()
             pageTokens.append(None)
 
-        
+        if login_context.get("logged") == True: 
+            quotaUser = login_context.get("username")
+        else: 
+            quotaUser = None
+
+
+        # E.g. previousPage = 1 and Page = 2, so if refreshed next api request won't be sent
+
+        match str(previous_request_pageID[-1]) == str(pageID):
+            case True:
+                stopRequest = True
+            case False:
+                previous_request_pageID.pop(0)
+                previous_request_pageID.append(pageID)
+
+                stopRequest = False
+
+
+
+        match str(previous_request_previousPageID[-1]) == str(previousPageID):
+            case True:
+                stopRequest2 = True
+            case False:
+                previous_request_previousPageID.pop(0)
+                previous_request_previousPageID.append(previousPageID)
+
+                stopRequest2 = False
+
+
+        if stopRequest == True and stopRequest2 == True:
+            previousPageID = pageID
+
         # Create a new event loop
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        comments = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID))
+        comments_and_VidInfo = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser, isFirstTime))
+        
 
-
-        context.update(comments)
-        context.update({'count' : len(comments['comments'])})
+        context.update(comments_and_VidInfo)
+        context.update({'count' : len(comments_and_VidInfo['comments'])})
         context.update(login_context)
+        context.update({'sites_context': sites_context})
 
-
-        if 'last_page' in comments['comments']:
+        if 'last_page' in comments_and_VidInfo['comments']:
             context.update({'last_page': True})
-            comments['comments'].remove('last_page')
+            comments_and_VidInfo['comments'].remove('last_page')
 
-        return render(request, "comments.html", context)
-    
+        return context
+
     else:
 
         context.update(login_context)
+        context.update({'sites_context': sites_context})
 
-        return render(request, "comments.html", context)
+        return context
+            
+
+@login_check
+def comments(request, login_context):
+    if request.method == "POST":
+        match request.POST.get("video_url"):
+        
+            case None:
+
+                try:
+                    order = request.POST.get("order")
+                    maxResults = request.POST.get("maxResults")
+                    previousPageID = request.POST.get("previousPageID")
+                    pageID = request.POST.get("pageID")
+                    video_id = request.POST.get("video_id")
+                    searchInput = request.POST.get("searchInput")
+
+
+                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = False)
+                    return render(request, "comments.html", context)
+                
+                except Exception as err:
+                    print(err)
+                    pageTokens.clear()
+                    pageTokens.append(None)
+                    msg.info(request, "Something went wrong, please try again")
+                    return redirect(comments)
+    
+            case _:
+
+                try:
+                    video_url = request.POST.get("video_url")   
+                    video_id = video_url.split("=", 1)[1]
+
+                    
+                    order = 'relevance'
+                    maxResults = 25
+                    pageID = 1
+                    previousPageID = 1
+                    searchInput = ""
+
+                    if video_info:
+                        video_info.clear()
+
+                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = True)
+                    return render(request, "comments.html", context)
+                
+                except Exception as err:
+                    print(err)
+                    pageTokens.clear()
+                    pageTokens.append(None)
+                    msg.info(request, "Url is incorrect")
+                    return redirect(comments)
+                
+    # On first load
+    context = {}
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, "comments.html", context)
+
+
+        

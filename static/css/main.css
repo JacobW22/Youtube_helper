@@ -1,89 +1,91 @@
-
-
-
-
 /*//////////////////////////////////////////////////////////////////
 [ FONT ]*/
 
 @font-face {
   font-family: Poppins-Regular;
-  src: url('../fonts/poppins/Poppins-Regular.ttf'); 
+  src: url("../fonts/poppins/Poppins-Regular.ttf");
 }
 
 @font-face {
   font-family: Poppins-Bold;
-  src: url('../fonts/poppins/Poppins-Bold.ttf'); 
+  src: url("../fonts/poppins/Poppins-Bold.ttf");
 }
 
 @font-face {
   font-family: Poppins-Medium;
-  src: url('../fonts/poppins/Poppins-Medium.ttf'); 
+  src: url("../fonts/poppins/Poppins-Medium.ttf");
 }
 
 @font-face {
   font-family: Montserrat-Bold;
-  src: url('../fonts/montserrat/Montserrat-Bold.ttf'); 
+  src: url("../fonts/montserrat/Montserrat-Bold.ttf");
 }
 
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
 
 * {
-	margin: 0px; 
-	padding: 0px; 
-	box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
 }
 
-body, html {
-	height: 100%;
-	font-family: Poppins-Regular, sans-serif;
+body,
+html {
+  height: 100%;
+  font-family: Poppins-Regular, sans-serif;
 }
 
 /*---------------------------------------------*/
 a {
-	font-family: Poppins-Regular;
-	font-size: 14px;
-	line-height: 1.7;
-	color: #f8f9fa;
-	margin: 0px;
-	transition: all 0.4s;
-	-webkit-transition: all 0.4s;
+  font-family: Poppins-Regular;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #f8f9fa;
+  margin: 0px;
+  transition: all 0.4s;
+  -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
 }
 
 a:focus {
-	outline: none !important;
+  outline: none !important;
 }
 
 a:hover {
-	text-decoration: none;
+  text-decoration: none;
   color: #404040;
 }
 
 /*---------------------------------------------*/
-h1,h2,h3,h4,h5,h6 {
-	margin: 0px;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0px;
 }
 
 p {
-	font-family: Poppins-Regular;
-	font-size: 14px;
-	line-height: 1.7;
-	color: #f8f9fa;
-	margin: 0px;
+  font-family: Poppins-Regular;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #f8f9fa;
+  margin: 0px;
 }
 
-ul, li {
-	margin: 0px;
-	list-style-type: none;
+ul,
+li {
+  margin: 0px;
+  list-style-type: none;
 }
-
 
 /*---------------------------------------------*/
 input {
-	outline: none;
-	border: none;
+  outline: none;
+  border: none;
 }
 
 textarea {
@@ -91,45 +93,77 @@ textarea {
   border: none;
 }
 
-textarea:focus, input:focus {
+textarea:focus,
+input:focus {
   border-color: transparent !important;
 }
 
-input:focus::-webkit-input-placeholder { color:transparent; }
-input:focus:-moz-placeholder { color:transparent; }
-input:focus::-moz-placeholder { color:transparent; }
-input:focus:-ms-input-placeholder { color:transparent; }
+input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+input:focus:-moz-placeholder {
+  color: transparent;
+}
+input:focus::-moz-placeholder {
+  color: transparent;
+}
+input:focus:-ms-input-placeholder {
+  color: transparent;
+}
 
-textarea:focus::-webkit-input-placeholder { color:transparent; }
-textarea:focus:-moz-placeholder { color:transparent; }
-textarea:focus::-moz-placeholder { color:transparent; }
-textarea:focus:-ms-input-placeholder { color:transparent; }
+textarea:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+textarea:focus:-moz-placeholder {
+  color: transparent;
+}
+textarea:focus::-moz-placeholder {
+  color: transparent;
+}
+textarea:focus:-ms-input-placeholder {
+  color: transparent;
+}
 
-input::-webkit-input-placeholder { color: #999999; }
-input:-moz-placeholder { color: #999999; }
-input::-moz-placeholder { color: #999999; }
-input:-ms-input-placeholder { color: #999999; }
+input::-webkit-input-placeholder {
+  color: #999999;
+}
+input:-moz-placeholder {
+  color: #999999;
+}
+input::-moz-placeholder {
+  color: #999999;
+}
+input:-ms-input-placeholder {
+  color: #999999;
+}
 
-textarea::-webkit-input-placeholder { color: #999999; }
-textarea:-moz-placeholder { color: #999999; }
-textarea::-moz-placeholder { color: #999999; }
-textarea:-ms-input-placeholder { color: #999999; }
+textarea::-webkit-input-placeholder {
+  color: #999999;
+}
+textarea:-moz-placeholder {
+  color: #999999;
+}
+textarea::-moz-placeholder {
+  color: #999999;
+}
+textarea:-ms-input-placeholder {
+  color: #999999;
+}
 
 /*---------------------------------------------*/
 button {
-	outline: none !important;
-	border: none;
-	background: transparent;
+  outline: none !important;
+  border: none;
+  background: transparent;
 }
 
 button:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 iframe {
-	border: none !important;
+  border: none !important;
 }
-
 
 /*//////////////////////////////////////////////////////////////////
 [ Utility ]*/
@@ -147,7 +181,6 @@ iframe {
   color: #f8f9fa;
 }
 
-
 /*//////////////////////////////////////////////////////////////////
 [ login ]*/
 
@@ -157,7 +190,7 @@ iframe {
 }
 
 .container-login100 {
-  width: 100%;  
+  width: 100%;
   min-height: 100vh;
   display: -webkit-box;
   display: -webkit-flex;
@@ -201,7 +234,6 @@ iframe {
   max-width: 100%;
 }
 
-
 /*------------------------------------------------------------------
 [  ]*/
 .login100-form {
@@ -219,7 +251,6 @@ iframe {
   display: block;
   padding-bottom: 54px;
 }
-
 
 /*---------------------------------------------*/
 .wrap-input100 {
@@ -242,7 +273,6 @@ iframe {
   border-radius: 25px;
   padding: 0 30px 0 68px;
 }
-
 
 /*------------------------------------------------------------------
 [ Focus ]*/
@@ -328,8 +358,7 @@ iframe {
   line-height: 1.5;
   color: #fff;
   text-transform: uppercase;
-  box-shadow: 0em 0em 0.1em 0.03em white!important;
-
+  box-shadow: 0em 0em 0.1em 0.03em white !important;
 
   border-radius: 20px;
   background: #000000;
@@ -349,8 +378,7 @@ iframe {
 }
 
 .login100-form-btn:hover {
-  box-shadow: none!important;
-
+  box-shadow: none !important;
 }
 
 .fa-greater-than {
@@ -365,8 +393,12 @@ iframe {
 }
 
 @keyframes enter {
-  from {margin-right: 0px;}
-  to {margin-right: 5px;}
+  from {
+    margin-right: 0px;
+  }
+  to {
+    margin-right: 5px;
+  }
 }
 
 .animate {
@@ -382,50 +414,47 @@ iframe {
 }
 
 @keyframes change_color {
-  100%,0%{
-    color: rgb(255,0,0);
+  100%,
+  0% {
+    color: rgb(255, 0, 0);
   }
-  8%{
-    color: rgb(255,127,0);
+  8% {
+    color: rgb(255, 127, 0);
   }
-  16%{
+  16% {
     color: rgb(206, 206, 0);
   }
-  25%{
+  25% {
     color: rgb(93, 184, 3);
   }
-  33%{
+  33% {
     color: rgb(0, 177, 0);
   }
-  41%{
+  41% {
     color: rgb(0, 139, 69);
   }
-  50%{
-    color: rgb(0,255,255);
+  50% {
+    color: rgb(0, 255, 255);
   }
-  58%{
-    color: rgb(0,127,255);
+  58% {
+    color: rgb(0, 127, 255);
   }
-  66%{
-    color: rgb(0,0,255);
+  66% {
+    color: rgb(0, 0, 255);
   }
-  75%{
-    color: rgb(127,0,255);
+  75% {
+    color: rgb(127, 0, 255);
   }
-  83%{
-    color: rgb(255,0,255);
+  83% {
+    color: rgb(255, 0, 255);
   }
-  91%{
-    color: rgb(255,0,127);
+  91% {
+    color: rgb(255, 0, 127);
   }
 }
 
-
-
 /*------------------------------------------------------------------
 [ Responsive ]*/
-
-
 
 @media (max-width: 992px) {
   .wrap-login100 {
@@ -460,6 +489,3 @@ iframe {
     padding: 100px 15px 33px 15px;
   }
 }
-
-
-

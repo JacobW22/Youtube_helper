@@ -8,10 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youtube helper</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/template_log_reg_style.css' %}">
+     <!--===============================================================================================-->
+        <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+     <!--===============================================================================================-->
+        <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
+     <!--===============================================================================================-->
+        <link rel="stylesheet" href="{% static 'css/template_log_reg_style.css' %}">
+     <!--===============================================================================================-->
 
 
     <!--===============================================================================================-->
@@ -55,125 +58,82 @@
 
 
 <!-- Site container start -->
-<div class="d-flex flex-column full_site_container" style="height: calc(100% - 40px);">
+<div class="d-flex flex-column full_site_container">
 
 
-  <!-- Navbar start -->
-  <nav class="navbar navbar-expand-lg ">
-    <div class="container-fluid">
-        <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-        <button class="navbar-toggler ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-      <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-              <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item text-light fs-6" href="#">Action</a>
-              <a class="dropdown-item text-light fs-6" href="#">Ai Video Recommendation</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item text-light fs-6" href="#"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Downloader</a>
-            </div>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
-          </li>
-
-          {% if logged == False %}
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
-          </li>
-
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
-          </li>
-          {% endif %}
-
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- Navbar end -->
+<!-- Navbar start -->
+{% url 'sign_up_page' as the_url %}
+{% include "navbar.html" with sites_context=sites_context active_site_name="Sign up" active_site_url=the_url %}
+<!-- Navbar end -->  
 
 
   <!-- Main container start -->
-  <section class="d-none my-auto align-items-center justify-content-center main-container">
+  <section class="d-none my-auto pt-5 pb-0 px-5 align-items-center justify-content-center main-container">
       <div class="insides">
-          <form method="POST">
-            {% csrf_token %}
-            <div class="limiter">
-              <form class="login100-form validate-form">
-                <span class="login100-form-title">
-                  <span class="text-light fs-2 me-2 text-center"> <i class="fa-solid fa-user-plus" style="color: #ffffff;"></i> </span>
-                    Sign up 
-                </span>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="limiter">
+            <form class="login100-form validate-form">
+              <span class="login100-form-title">
+                <span class="text-light fs-2 me-2 text-center"> <i class="fa-solid fa-user-plus" style="color: #ffffff;"></i> </span>
+                  Sign up 
+              </span>
 
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-                    {{ form.username }}
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                    </span>
-                </div>
+              <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                  {{ form.username }}
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                      <i class="fa fa-user" aria-hidden="true"></i>
+                  </span>
+              </div>
 
-                <div class="wrap-input100 validate-input mt-4" data-validate = "Valid email is required: ex@abc.xyz">
-                    {{ form.email }}
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                    </span>
-                </div>
+              <div class="wrap-input100 validate-input mt-4" data-validate = "Valid email is required: ex@abc.xyz">
+                  {{ form.email }}
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>
+                  </span>
+              </div>
 
-                <div class="wrap-input100 validate-input" data-validate = "Password is required">
-                    {{ form.password1 }}
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-                        <i class="fa fa-lock" aria-hidden="true"></i>
-                    </span>
-                </div>
+              <div class="wrap-input100 validate-input" data-validate = "Password is required">
+                  {{ form.password1 }}
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                      <i class="fa fa-lock" aria-hidden="true"></i>
+                  </span>
+              </div>
 
-                <div class="wrap-input100 validate-input" data-validate = "Password is required">
-                    {{ form.password2 }}
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-                        <i class="fa fa-lock" aria-hidden="true"></i>
-                    </span>
-                </div>
+              <div class="wrap-input100 validate-input" data-validate = "Password is required">
+                  {{ form.password2 }}
+                  <span class="focus-input100"></span>
+                  <span class="symbol-input100">
+                      <i class="fa fa-lock" aria-hidden="true"></i>
+                  </span>
+              </div>
 
-                
-                <div class="container-login100-form-btn">
-                    <button class="login100-form-btn animate" type="submit">
-                      <i class="fa-solid fa-greater-than"></i>
-                      Sign up
-                    </button>
-                </div>
-              </form>
-            </div>
+              
+              <div class="container-login100-form-btn">
+                  <button class="login100-form-btn animate" type="submit">
+                    <i class="fa-solid fa-greater-than"></i>
+                    Sign up
+                  </button>
+              </div>
+            </form>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>   
+      </div>
+  </section>
+  <!-- Main container end -->
 
 
-    <div class="text-center">
+  <div class="d-block mt-5 mb-3 footer">
+    <div class="text-center mt-3 mb-3">
       <a class="txt2" href="{% url 'login_page' %}">
           Already have an account? Log in 
           <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
       </a>
+    </div>
   </div>
-
-
-  </section>
-  <!-- Main container end -->
 
 
 </div>
@@ -185,14 +145,11 @@
 <div class="toast-container bottom-0 start-50 translate-middle-x mb-5 ">
   {% for field,errors in form.errors.items %}
       {% for error in errors %}
-        <div class="toast text-center text-white bg-dark border-0 pb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+        <div class="toast text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
             <div class="toast-body">
               {{ error }}
             </div>
-
-            <div>
-              <button type="button" class="btn-close me-2 m-auto "  aria-label="Close"></button>
-            </div>
+          <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
         </div>
       {% endfor %}
   {% endfor %}
@@ -214,36 +171,9 @@
       $('.main-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
     
 
+      $(".toast").css("opacity", "0");
       $(".toast").toast("show");
-
-      var toasts = $('.toast');
-
-      // Hide toasts initially using CSS
-      toasts.css({
-        opacity: 0,
-        transform: 'translateY(0)',
-        display: 'none'
-      });
-
-      // Show each toast and apply slide-in animation in reverse order
-      $(toasts.get().reverse()).each(function(index) {
-        var toast = $(this);
-
-        // Delay and animate each toast
-        setTimeout(function() {
-          toast.css('display', 'block'); // Show the toast before animation
-          toast.animate({
-            opacity: 1,
-            transform: 'translateY(100vh)'
-          }, {
-            duration: 500,
-            start: function() {
-              toast.css('display', 'block');
-            }
-          });
-        }, index * 200 + 200); // Delay each toast by 200ms, with an additional 200ms delay for the first toast
-      });
-      
+      $(".toast").addClass("custom-fade-in").css("opacity", "1");
 
       // Add event listener for click event on the close button
       $('.toast .btn-close').on('click', function() {

@@ -7,9 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youtube helper</title>
-
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     
     <!--===============================================================================================-->	
       <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
@@ -23,6 +20,8 @@
 
     <!--===============================================================================================-->	
         <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
     <!--===============================================================================================-->	
         <link rel="stylesheet" href="{% static 'css/template_audio_video_style.css' %}">
     <!--===============================================================================================-->	
@@ -45,69 +44,32 @@
 </head>
 <body>
     
-
-<!-- Navbar start -->
-<nav class="navbar navbar-expand-lg ">
-    <div class="container-fluid">
-        <a class="navbar-brand text-light ms-sm-2 me-0" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
-        <button class="navbar-toggler mt-1 ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-      <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto me-2 gap-3 mb-sm-0">
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-              <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item text-light fs-6" href="#">Action</a>
-              <a class="dropdown-item text-light fs-6" href="#">Ai Video Recommendation</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item text-light fs-6" href="#"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp Downloader</a>
-            </div>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link active text-light" aria-current="page" href="{% url 'main_page' %}"><i class="fa-solid fa-house"></i>&nbsp Home</a>
-          </li>
-
-          {% if logged == False %}
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'login_page' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</a>
-          </li>
-
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</a>
-          </li>
-          {% endif %}
-
-        </ul>
-      </div>
-    </div>
-</nav>
-<!-- Navbar end -->
+<!-- Main container start -->
+<div class="container-fluid d-flex flex-column main-container">
 
 
-<!-- Main section start -->
-<section class="d-flex flex-column align-items-center gap-3 justify-content-center p-2 main-container" style="height: calc(80% - 72.39px); max-width: 100%;">
-        <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
-        <h2 class="card-title text-center text-light">{{ title }}</h2>
-
-        <audio class="rounded" controls>
-            <source src="{% static 'audio.mp3' %}" type="audio/mp3">
-            Your browser does not support HTML video.
-        </audio>
-        
-        <a type="button" class="btn btn-dark downloading btn-lg login100-form-btn" name="sd_quality" href="{% static 'audio.mp3' %}" download="audio.mp3"><i class="fa-solid fa-file-arrow-down"></i>&nbsp Download file</a>
-</section>
-<!-- Main section end -->
+  <!-- Navbar start -->
+  {% url 'main_page' as the_url %}
+  {% include "navbar.html" with sites_context=sites_context active_site_name="Video Downloader" active_site_url=the_url %}
+  <!-- Navbar end -->  
 
 
+  <!-- Main section start -->
+  <section class="d-flex flex-column align-items-center gap-3 my-auto p-2">
+          <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
+          <h2 class="card-title text-center text-light">{{ title }}</h2>
+
+          <audio class="rounded" controls>
+              <source src="{% static 'audio.mp3' %}" type="audio/mp3">
+              Your browser does not support HTML video.
+          </audio>
+          
+          <a type="button" class="btn btn-dark downloading btn-lg animate mt-3 mb-3" name="sd_quality" href="{% static 'audio.mp3' %}" download="audio.mp3"><i class="fa-solid fa-file-arrow-down"></i>&nbsp Download file</a>
+  </section>
+  <!-- Main section end -->
+
+</div>
+<!-- Main container end -->
 
 
 <script type="text/javascript">
