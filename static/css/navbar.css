@@ -84,7 +84,10 @@ a,
 .account_menu .dropdown-item:focus,
 .account_menu .dropdown-item:hover {
   color: black!important;
-  font-size: 120%;
+  transform: scale(1.1)  perspective(1px)  translateZ(0)!important;
+  backface-visibility: hidden!important;
+  -webkit-font-smoothing: subpixel-antialiased!important;
+
 
 }
 

@@ -136,7 +136,13 @@
   {% for message in messages %}
   <div class="toast fade align-items-center text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
     <div class="toast-body">
-      <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
+
+      {% if message|stringformat:"s" == "Username or Password is incorrect" %}
+        {{ message }}
+      {% else %}
+        <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
+      {% endif %}
+
     </div>
   </div>
   {% endfor %}

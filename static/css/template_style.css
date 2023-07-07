@@ -9,6 +9,7 @@
       overflow-y: auto;
       overflow-x: hidden;
       scroll-snap-type: y mandatory!important;
+      scroll-behavior: smooth!important;
     }
   
   * {

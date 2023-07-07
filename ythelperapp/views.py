@@ -162,7 +162,7 @@ def sign_up_page(request, login_context):
             # Create data storage for user in the database / avoid not-null by passing 'registered' string
 
             user_data_storage.objects.create(
-                user=User.objects.get(username=user), download_history=["registered"]
+                object_name=str(user)+" storage", user=User.objects.get(username=user), download_history=["registered"]
             )
             storage = user_data_storage.objects.get(
                 user=User.objects.get(username=user)
