@@ -1,184 +1,104 @@
-body, html {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    background: linear-gradient(black,red, white);
-    background-size: 800% 800%;
-    overflow: auto;
-    overflow-x: hidden;
-  }
-  
-  * {
-    box-sizing: border-box;
-    font-synthesis: none!important;
-    text-rendering: optimizeLegibility!important;
-    font-smooth: auto!important;
-    -webkit-font-smoothing: antialiased!important;
-    -moz-osx-font-smoothing: grayscale!important;
-    -webkit-text-size-adjust: 100%!important;
-  }
+.form-control {
+  background-color: rgba(0, 0, 0, 0);
+}
 
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-    background-color: transparent;
-    border-radius: 10px;
+.form-control:focus {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.login100-form-btn {
+  width: 250px !important;
+}
+
+.card {
+  background-color: Transparent !important;
+}
+
+.card-body {
+  scale: 1.1;
+}
+
+.btn {
+  background: #000000 !important;
+  color: #fff !important;
+  font-family: Montserrat-Bold !important;
+}
+
+.btn:hover {
+  background: #fff !important;
+  color: #000000 !important;
+}
+
+.description {
+  font-size: 0.9rem !important;
+  width: 225px !important;
+  border-radius: 25px !important;
+}
+
+#floating {
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes floating {
+  0% {
+    transform: translate(0, 0px);
   }
-
-  ::-webkit-scrollbar {
-      scrollbar-color: black #910000;
-      height: 7px;
-      width: 7px;
-      background-color: transparent;
+  50% {
+    transform: translate(0, 15px);
   }
-
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-    background-image: -webkit-linear-gradient(to top, black 0%, #910000 100%);
-    background-image: linear-gradient(to top, black 0%, #910000 100%);
-    opacity: 0.5!important;
+  100% {
+    transform: translate(0, -0px);
   }
+}
 
-  .form-control {
-    background-color:rgba(0, 0, 0, 0);
-  }
+.modal-content {
+  background: #000000 !important;
+  color: rgb(185, 185, 185);
+  border-radius: 15px !important;
+}
 
-  .form-control:focus {
-    background-color:rgba(0, 0, 0, 0);
-  }
+img {
+  box-shadow: 0px 0px 25px 10px black;
+}
 
-  .container {
-    width: 100%;
-    height: 100%;
-  }
+.error_occured {
+  scale: 4;
+}
 
-  button {
-    position: relative;
-  }
+.link_to_video {
+  color: #78d4fc;
+  cursor: pointer;
+  text-decoration: underline;
+}
 
-  .toast {
-    position: relative;
-    scale: 1.1;
-    user-select: none;
-  }
+.link_to_video:hover {
+  color: #fff;
+}
 
-  button, a, p {
-    position: relative;
-  }
+.full_site_container {
+  height: 100% !important;
+}
 
-  .login100-form-btn {
-    width: 250px!important;
-  }
-
-  .card { background-color: Transparent!important; }
-
-  .card-body { scale: 1.1; }
-
-  .btn {
-    background: #000000 !important;
-    color: #fff !important;
-    font-family: Montserrat-Bold !important;
-  }
-
-  .btn:hover {
-    background: #fff !important;
-    color: #000000 !important;
-  }
-
-  .description { 
-    font-size: 0.9rem !important;
-    width: 225px !important;
-    border-radius: 25px !important;
-  }
-
-  #floating { 
-      animation-name: floating;
-      animation-duration: 3s;
-      animation-iteration-count: infinite;
-      animation-timing-function: ease-in-out;
-  }
-  
-  @keyframes floating {
-      0% { transform: translate(0,  0px); }
-      50%  { transform: translate(0, 15px); }
-      100%   { transform: translate(0, -0px); }   
+@media screen and (min-width: 1200px) {
+  .cut_width {
+    width: 50% !important;
   }
 
-  .btn {
-    -webkit-transition: all 0.4s !important;
-    -o-transition: all 0.4s !important;
-    -moz-transition: all 0.4s !important;
-    transition: all 0.4s !important;
+  .cut_more_width {
+    width: 35% !important;
   }
+}
 
-  ::selection {
-    color: white;
-    background: black;
+@media screen and (max-width: 997px) {
+  .cut_more_width {
+    width: 55% !important;
   }
-
-  .modal-content {
-    background: #000000!important;
-    color: rgb(185, 185, 185);
-    border-radius: 15px!important
-  }
-
-  img {
-    box-shadow: 0px 0px 25px 10px black;
-  }
-
-  .btn-close {
-    opacity: 1;
-    filter: invert(92%) sepia(91%) saturate(26%) hue-rotate(201deg) brightness(108%) contrast(100%);
-  }
-
-  .btn-close:hover {
-    filter: invert(0%) sepia(5%) saturate(18%) hue-rotate(192deg) brightness(94%) contrast(106%);
-  }
-
-  .btn-close:focus {
-    outline: 0;
-    box-shadow: none!important;
-    filter: invert(0%) sepia(5%) saturate(18%) hue-rotate(192deg) brightness(94%) contrast(106%);
-  }
-
-  .error_occured {
-    scale: 4;
-  }
-
-  .link_to_video {
-    color: #78d4fc;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
-  .link_to_video:hover {
-    color: #fff;
-  }
-
-  .full_site_container {
-    height: 100%!important;
-  }
-
-  @media screen and (min-width: 1200px) {
-    .cut_width {
-        width: 50%!important;
-    }
-
-    .cut_more_width {
-      width: 35%!important;
-    }
-  }
-
-  @media screen and (max-width: 997px) {
-    .cut_more_width {
-      width: 55%!important;
-    }
-  }
-
-
-
-
-
-
-
-
+}

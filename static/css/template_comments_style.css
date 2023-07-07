@@ -1,47 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap");
-
-body,
-html {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  background: linear-gradient(black, red, white);
-  background-size: 800% 800%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-* {
-  box-sizing: border-box;
-  font-synthesis: none !important;
-  text-rendering: optimizeLegibility !important;
-  font-smooth: auto !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  -webkit-text-size-adjust: 100% !important;
-}
-
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: transparent;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar {
-  scrollbar-color: #ff9a9e #f5f5f5;
-  height: 7px;
-  width: 7px;
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-image: -webkit-linear-gradient(to top, black 0%, #910000 100%);
-  background-image: linear-gradient(to top, black 0%, #910000 100%);
-  opacity: 0.5 !important;
-}
-
 .form-select {
   background-color: transparent !important;
   border: 0.15em solid #fff;
@@ -70,11 +26,6 @@ html {
   box-shadow: 0px 0px 15px 1px black;
   text-align: center;
   margin-top: 10px;
-}
-
-.form-control::selection {
-  color: black;
-  background: white;
 }
 
 .form-control:focus {
@@ -110,16 +61,6 @@ html {
   transform: scale(1.1);
 }
 
-button {
-  position: relative !important;
-}
-
-.toast {
-  position: relative;
-  scale: 1.1;
-  user-select: none;
-}
-
 .main-navbar {
   z-index: 100;
 }
@@ -127,11 +68,6 @@ button {
 #navbarDropdown2:hover,
 #navbarDropdown2[aria-expanded="true"] {
   transform-origin: center;
-}
-
-::selection {
-  color: white;
-  background: black;
 }
 
 .black {
@@ -147,15 +83,15 @@ button {
 }
 
 .selection-menu .d-flex .dropdown-item:hover {
-  color: black!important;
+  color: black !important;
   transform: scale(1.2);
-  background-color: transparent!important;
+  background-color: transparent !important;
   box-shadow: inset 1em 2em white;
 }
 
 .selection-menu .d-flex .dselect-items {
-  max-height: none!important;
-  overflow: visible!important;
+  max-height: none !important;
+  overflow: visible !important;
 }
 
 .dropdown-item .active {
@@ -177,14 +113,6 @@ button {
   scale: 1.1;
 }
 
-.btn-close:focus {
-  box-shadow: none !important;
-}
-
-.btn-close:hover {
-  filter: invert(100);
-}
-
 .main-container {
   min-height: 26em !important;
 }
@@ -199,7 +127,7 @@ button {
 }
 
 .comments_insides {
-  background-color: rgba(255, 0, 0, 0.05);
+  background-color: transparent;
   border-radius: 25px;
   height: 80% !important;
 }
@@ -281,7 +209,7 @@ button {
   transition: transform 0.3s ease-in-out;
 }
 
-#background {
+.background {
   border-radius: 25px;
   background-color: transparent !important;
   border-color: transparent !important;
@@ -290,15 +218,26 @@ button {
 
 .comment_background {
   border-radius: 15px !important;
-  background-color: #D0D0D0!important;
+  background-color: #121212 !important;
+  box-shadow: 0px 0px 25px 1px black;
+
 }
 
 .comment_text {
-  color: #000 !important;
+  word-break: break-all!important;
+}
+
+.comment_text, .vid_info {
+  color: darkgray !important;
+}
+
+.vid_info {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
 }
 
 .link_in_comments {
-  color: blue !important;
+  color:  lightskyblue  !important;
   text-decoration: underline !important;
 }
 
@@ -336,6 +275,10 @@ button {
   color: black !important;
   transform: scale(1.2);
   transform-origin: bottom;
+}
+
+.vid_thumbnail {
+  box-shadow: 0px 0px 25px 10px black;
 }
 
 @media screen and (min-width: 2270px) {
@@ -401,5 +344,25 @@ button {
 
   .sort_menu .dropdown-item {
     margin-top: 1em !important;
+  }
+  
+}
+
+@media screen and (max-width: 992px) {
+  .badge {
+    margin-right: -4em;
+    transform: translate(-100%, -60%) !important;
+  }
+
+  .comments_card_container {
+    flex: 0 0 65%;
+  }
+
+  .main-container {
+    height: calc(160vh - 62px);
+  }
+
+  .footer, .page-link {
+    transform: scale(1.15);
   }
 }

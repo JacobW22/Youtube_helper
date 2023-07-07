@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youtube helper</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
     
     <!--===============================================================================================-->
       <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
@@ -33,7 +32,7 @@
     <!--===============================================================================================-->
       <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
     <!--===============================================================================================-->
-      <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+      <link rel="stylesheet" href="{% static 'css/overall.css' %}">
     <!--===============================================================================================-->
       <link rel="stylesheet" href="{% static 'css/template_comments_style.css' %}">
     <!--===============================================================================================-->   
@@ -124,12 +123,33 @@
       </div>
 
         <!-- Comments results start-->
-        <div class=" d-flex flex-grow-0 justify-content-center w-100 m-0 comments_results mb-1">
-          <div class="col-12 col-md-10 p-0 my-auto card_container">
+        <div class="d-flex flex-grow-0 w-100 m-0 gap-3 flex-column flex-md-row comments_results mb-1">
 
-            <div class="card" id="background">
+          <div class="col-md-6 p-0 my-auto card_container vid_info_card_container">
+            <div class="card background">
+              <div class="card-body d-flex">
+                <div class="col-md-10 mx-auto my-auto d-flex flex-column align-items-center justify-content-center">
 
-              <div class="card-body">
+                  {% if video_info.thumbnail == "couldn't find" %}
+                    <i class="fa-solid fa-triangle-exclamation error_occured mb-2 vid_thumbnail" style="color: #ffffff;"></i>
+                  {% else %}
+                    <img src="{{ video_info.thumbnail }}" class="img-fluid rounded vid_thumbnail" alt="Video_thumbnail">
+                  {% endif %}
+
+                  <h5 class="text-center fs-3 vid_info mt-2 mt-sm-5">{{ video_info.title }}</h5>
+
+                  <p class="text-center vid_info fs-6 mt-1 mt-sm-3"><i class="fa-solid fa-eye"></i></i> {{ video_info.views }}  views</p>
+                  <p class="text-center vid_info fs-6"><i class="fa-regular fa-clock"></i> {{ video_info.length }} &nbsp;&nbsp;<i class="fa-regular fa-calendar-days"></i>&nbsp; {{ video_info.publish_date }}</p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class=" col-md-6 p-0 my-auto card_container comments_card_container">
+            <div class="card background">
+
+              <div class="card-body pe-0">
 
                 {% for comment in comments %}
                 
@@ -190,6 +210,7 @@
               </div>
             </div>
           </div>
+
         </div>
         <!-- Comments results end-->
         
@@ -198,43 +219,44 @@
       <!-- Comments container end-->
 
 
-      <span class="mx-auto text-light mt-3 mb-2">Comments: &nbsp;{{ count }}</span>
-
       <!-- Pagination footer start-->
-        <footer class="d-flex flex-grow-0 page_navigation mx-auto mb-4">
-          <ul class="pagination justify-content-center" >
+      <footer class="d-flex justify-content-center footer flex-column my-auto mx-auto">
+        <span class="mx-auto text-light mt-3 mb-2">Comments: &nbsp;{{ count }}</span>
 
-            {% if last_page and pageID == 1 %}
+          <footer class="d-flex flex-grow-0 page_navigation mx-auto mb-4">
+            <ul class="pagination justify-content-center" >
 
-            <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+              {% if last_page and pageID == 1 %}
 
-            {% elif last_page %}
+              <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
 
-            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">...{{ pageID|add:-1 }}</a></li>
-            <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+              {% elif last_page %}
+
+              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">...{{ pageID|add:-1 }}</a></li>
+              <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+              
+              {% elif pageID > 1 %}
+
+
+              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">... {{ pageID|add:-1 }}</a></li>
+              <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }} ...</a></li>
+
+      
+              {% else %}
+
+              <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}...</a></li>
             
-            {% elif pageID > 1 %}
+              {% endif %}
 
-
-            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">... {{ pageID|add:-1 }}</a></li>
-            <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }} ...</a></li>
-
-    
-            {% else %}
-
-            <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}...</a></li>
-          
-            {% endif %}
-
-          </ul>
+            </ul>
         </footer>
-      <!-- Pagination footer end-->
+        <!-- Pagination footer end-->
 
 
-      <a class="btn input_submit animate change_url_btn mb-3 mx-auto" href="{% url 'comments' %}">Change URL</a>
-
+        <a class="btn input_submit animate change_url_btn mb-3 mx-auto" href="{% url 'comments' %}">Change URL</a>
+      </footer>
 
     </section>
     <!-- Comments section end -->
@@ -256,7 +278,7 @@
 {% endif %}
 
 
-</section>
+</div>
 <!-- Main container end -->
 
 

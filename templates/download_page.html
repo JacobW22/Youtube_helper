@@ -9,10 +9,6 @@
     <title>Youtube helper</title>
 
 
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-
-
     <!--===============================================================================================-->	
       <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
     <!--===============================================================================================-->	
@@ -29,7 +25,7 @@
     <!--===============================================================================================-->
         <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <!--===============================================================================================-->
-        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">  
+        <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
     <!--===============================================================================================-->
         <link rel="stylesheet" href="{% static 'css/template_download_style.css' %}">
     <!--===============================================================================================-->
@@ -77,6 +73,7 @@
                     <i class="fa-solid fa-triangle-exclamation error_occured mb-2" style="color: #ffffff;"></i>
                   {% else %}
                     <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
+                  
                   {% endif %}
 
                 </div>

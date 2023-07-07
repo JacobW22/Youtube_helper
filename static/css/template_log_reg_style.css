@@ -1,47 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap");
-
-body,
-html {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  background: linear-gradient(black, red, white);
-  background-size: 800% 800%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-* {
-  box-sizing: border-box;
-  font-synthesis: none !important;
-  text-rendering: optimizeLegibility !important;
-  font-smooth: auto !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  -webkit-text-size-adjust: 100% !important;
-}
-
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: transparent;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar {
-  scrollbar-color: black #910000;
-  height: 7px;
-  width: 7px;
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-image: -webkit-linear-gradient(to top, black 0%, #910000 100%);
-  background-image: linear-gradient(to top, black 0%, #910000 100%);
-  opacity: 0.5 !important;
-}
-
 .full_site_container {
   height: 100% !important;
 }
@@ -87,11 +43,6 @@ button {
   text-underline-offset: 0.3em;
 }
 
-::selection {
-  color: white;
-  background: black;
-}
-
 .fa-user {
   scale: 1.4;
 }
@@ -130,7 +81,7 @@ input {
 
 input:focus {
   text-align: left;
-} 
+}
 
 @media screen and (min-width: 1200px) {
   #main_form,

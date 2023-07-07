@@ -340,6 +340,7 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
 pageTokens = [None]
 previous_request_previousPageID = [0]
 previous_request_pageID = [0]
+video_info = {}
 
 async def get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser):
 
@@ -459,22 +460,72 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
 
 
 
-async def get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser):
+async def get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser, isFirstTime):
 
     if not video_id:
-        return JsonResponse({'error': 'No video_id parameter provided'}, status=400)
+        return {'error': 'No video_id parameter provided'}, 400
 
     try:
-        comments = await get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser)
-        return {'comments': comments}
+        match isFirstTime:
+            case True:
+                comments_and_VidInfo = await asyncio.gather(get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser), get_video_informations(video_id))
+
+                comments_and_VidInfo = {
+                    'comments': comments_and_VidInfo[0],
+                    'video_info': comments_and_VidInfo[1]
+                }
+
+                return comments_and_VidInfo
+            
+            case False:
+                
+                comments = await get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser)
+                
+                comments_and_VidInfo = {
+                    'comments': comments,
+                    'video_info': video_info
+                }
+
+                return  comments_and_VidInfo
+
 
     except HttpError as e:
         error_message = f'An HTTP error {e.resp.status} occurred: {e.content}'
-        return JsonResponse({'error': error_message}, status=500)
+        return {'error': error_message}, 500
 
 
 
-def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context):
+async def get_video_informations(video_id):
+    video_url = "https://www.youtube.com/watch?v=" + video_id
+    yt = YouTube(video_url)
+
+    try:
+        title = yt.title
+        thumbnail = yt.thumbnail_url
+        views = f"{yt.views:,}"  # Format numbers 100000 = 100,000 etc.
+        length = str(datetime.timedelta(seconds=yt.length))
+        publish_date = yt.publish_date
+    except:
+        title = "Could not find or video was deleted by Youtube"
+        thumbnail = "couldn't find"
+        views = "couldn't find"
+        length = "couldn't find"
+
+        publish_date = "couldn't find"
+
+    video_informations = {
+        "title": title,
+        "thumbnail": thumbnail,
+        "views": views,
+        "publish_date": publish_date,
+        "length": length
+    }
+
+    video_info.update(video_informations)
+
+    return video_informations
+
+def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime):
     context = {}
 
     if video_id != None:
@@ -524,23 +575,21 @@ def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInp
 
         if stopRequest == True and stopRequest2 == True:
             previousPageID = pageID
-        
+
         # Create a new event loop
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        comments = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser))
+        comments_and_VidInfo = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser, isFirstTime))
+        
 
-
-        context.update(comments)
-        context.update({'count' : len(comments['comments'])})
+        context.update(comments_and_VidInfo)
+        context.update({'count' : len(comments_and_VidInfo['comments'])})
         context.update(login_context)
         context.update({'sites_context': sites_context})
 
-
-
-        if 'last_page' in comments['comments']:
+        if 'last_page' in comments_and_VidInfo['comments']:
             context.update({'last_page': True})
-            comments['comments'].remove('last_page')
+            comments_and_VidInfo['comments'].remove('last_page')
 
         return context
 
@@ -568,7 +617,7 @@ def comments(request, login_context):
                     searchInput = request.POST.get("searchInput")
 
 
-                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context)
+                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = False)
                     return render(request, "comments.html", context)
                 
                 except Exception as err:
@@ -591,7 +640,10 @@ def comments(request, login_context):
                     previousPageID = 1
                     searchInput = ""
 
-                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context)
+                    if video_info:
+                        video_info.clear()
+
+                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = True)
                     return render(request, "comments.html", context)
                 
                 except Exception as err:

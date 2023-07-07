@@ -1,98 +1,48 @@
-body, html {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    background: linear-gradient(black,red, white);
-    background-size: 800% 800%;
-    overflow: auto;
-  }
-  
-  * {
-    box-sizing: border-box;
-    font-synthesis: none!important;
-    text-rendering: optimizeLegibility!important;
-    font-smooth: auto!important;
-    -webkit-font-smoothing: antialiased!important;
-    -moz-osx-font-smoothing: grayscale!important;
-    -webkit-text-size-adjust: 100%!important;
-  }
+.form-control {
+  background-color: rgba(0, 0, 0, 0);
+}
 
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-    background-color: transparent;
-    border-radius: 10px;
-  }
+.form-control:focus {
+  background-color: rgba(0, 0, 0, 0);
+}
 
-  ::-webkit-scrollbar {
-      scrollbar-color: black #910000;
-      height: 7px;
-      width: 7px;
-      background-color: transparent;
-  }
+.container {
+  width: 100%;
+  height: 100%;
+}
 
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-    background-image: -webkit-linear-gradient(to top, black 0%, #910000 100%);
-    background-image: linear-gradient(to top, black 0%, #910000 100%);
-    opacity: 0.5!important;
-  }
+.login100-form-btn {
+  width: 200px !important;
+}
 
-  .form-control {
-    background-color:rgba(0, 0, 0, 0);
-  }
+video {
+  z-index: 1;
+  max-width: 90%;
+  width: 30rem;
+  box-shadow: 0px 0px 25px 10px black;
+}
 
-  .form-control:focus {
-    background-color:rgba(0, 0, 0, 0);
-  }
+img {
+  width: 200px;
+  height: 100px;
+}
 
-  .container {
-    width: 100%;
-    height: 100%;
-  }
+.btn {
+  background: black !important;
+  color: white;
+  border-radius: 15px !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: 0em 0em 0.1em 0.03em white !important;
+}
 
-  @media screen and (min-width: 1200px) {
-    #main_form, #result_form {
-        width: 50%;
-    }  
-  }
+.btn:hover {
+  box-shadow: none !important;
+}
 
-  .toast {
-    position: relative;
-    scale: 1.1;
-    user-select: none;
+@media screen and (min-width: 1200px) {
+  #main_form,
+  #result_form {
+    width: 50%;
   }
-
-  .login100-form-btn {
-    width: 200px!important;
-  }
-
-  video {
-    z-index: 1;
-    max-width: 90%;
-    width: 30rem;
-    box-shadow: 0px 0px 25px 10px black;
-  }
-
-  img {
-    width: 200px;
-    height: 100px;
-  }
-
-  ::selection {
-    color: white;
-    background: black;
-  }
-
-  .btn {
-    background: black !important;
-    color: white;
-    border-radius: 15px!important;
-    outline: none!important;
-    border: none!important;
-    box-shadow: 0em 0em 0.1em 0.03em white!important;
-  }
-
-  .btn:hover {
-    box-shadow: none!important;
-  }
+}
