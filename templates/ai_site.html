@@ -108,8 +108,8 @@
 
 
         <!-- Modal for request start -->
-        <div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade downloading_modal" id="downloading_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="downloading_modalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered my-0">
             <div class="modal-content">
               <div class="modal-body">
                 <div class="d-flex align-items-center justify-content-center modal_text">
@@ -171,7 +171,7 @@
     
     $(window).on("pageshow", function() {
       $('.modal').modal('hide');
-      $("#staticBackdrop").modal('hide');
+      $("#downloading_modal").modal('hide');
     });
 
     // Fade In page
@@ -217,12 +217,12 @@
   });
 
 
-  $(".modal2").on('shown.bs.modal', function() {
+  $(".downloading_modal").on('shown.bs.modal', function() {
     $('.modal-backdrop').css('opacity', '0.6');
   });
 
 	$(".send_request").click(function(){
-		$("#staticBackdrop").modal('show');
+		$("#downloading_modal").modal('show');
 	});
 
 

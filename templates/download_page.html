@@ -18,8 +18,6 @@
     <!--===============================================================================================-->	
 
 
-
-
     <!--===============================================================================================-->	
         <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>  
     <!--===============================================================================================-->
@@ -160,13 +158,13 @@
 
 <!-- Modal when downloading start -->
 <div class="modal fade downloading_modal" id="downloading_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="downloading_ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered my-0">
     <div class="modal-content">
       <div class="modal-body rounded">
         <div class="d-flex align-items-center justify-content-center text-light">
           <div class="spinner-border" role="status" aria-hidden="true"></div>
-            &nbsp;
-            <strong>  Downloading file for you...</strong>
+            &nbsp;&nbsp;
+            <strong> Downloading file for you...</strong>
           </div>
       </div>
     </div>
@@ -208,6 +206,7 @@
     $(".toast").css("opacity", "0");
     $(".toast").toast("show");
     $(".toast").addClass("custom-fade-in").css("opacity", "1");
+
   });
 
 

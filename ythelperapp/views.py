@@ -306,7 +306,7 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
     
         try:
             response_data = openai.Image.create(
-                prompt=description,
+                prompt=description + " user profile img",
                 n=1,
                 size="1024x1024"
             )

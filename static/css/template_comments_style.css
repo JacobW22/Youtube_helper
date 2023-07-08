@@ -350,7 +350,7 @@
 
 @media screen and (max-width: 992px) {
   .badge {
-    margin-right: -4em;
+    margin-right: -2em;
     transform: translate(-100%, -60%) !important;
   }
 

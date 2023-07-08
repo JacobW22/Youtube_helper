@@ -1,3 +1,11 @@
+.modal::-webkit-scrollbar {
+  display: none !important;
+}
+
+.downloading_modal {
+  user-select: none;
+}
+
 .form-control {
   background-color: rgba(0, 0, 0, 0);
 }
@@ -63,6 +71,7 @@
   background: #000000 !important;
   color: rgb(185, 185, 185);
   border-radius: 15px !important;
+  border: 0.15em solid white!important;
 }
 
 img {
