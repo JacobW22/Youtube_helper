@@ -295,20 +295,6 @@ h2 {
     font-size: 1.25rem !important;
   }
 
-  .main-navbar {
-    margin-top: 2.3em;
-    height: 0;
-  }
-
-  .nav-item {
-    max-height: 0;
-    margin-bottom: 3.1em;
-  }
-
-  .dropdown-menu:not(.sort_menu) {
-    margin-top: 3.2em !important;
-  }
-
   .sort_menu {
     backdrop-filter: blur(10px);
     backface-visibility: hidden;

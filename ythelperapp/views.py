@@ -71,33 +71,33 @@ def main_page(request, login_context):
         # Limit to 10 slides / random 10 elements from history
         Download_history = Download_history[:10]  
 
-        for item in Download_history:
+        for vid_info in Download_history:
             it_is_in_dict = False
 
             # First item in download history (always add)
             if Download_videos_informations == []:
                 Download_videos_informations.append(
                     {
-                        "title": item[1],
-                        "thumbnail": item[2],
-                        "publish_date": item[3],
-                        "link": item[0],
+                        "title": vid_info[0],
+                        "thumbnail": vid_info[3],
+                        "publish_date": vid_info[2],
+                        "link": vid_info[1],
                     }
                 )
             else:  
                 # If it's not the first item, check if already exists
                 for dictionary in Download_videos_informations:
-                    if item[0] in dictionary.values():
+                    if vid_info[1] in dictionary.values():
                         it_is_in_dict = True
 
                 
                 if it_is_in_dict == False:
                     Download_videos_informations.append(
                         {
-                            "title": item[1],
-                            "thumbnail": item[2],
-                            "publish_date": item[3],
-                            "link": item[0],
+                            "title": vid_info[0],
+                            "thumbnail": vid_info[3],
+                            "publish_date": vid_info[2],
+                            "link": vid_info[1],
                         }
                     )
 
@@ -162,12 +162,16 @@ def sign_up_page(request, login_context):
             # Create data storage for user in the database / avoid not-null by passing 'registered' string
 
             user_data_storage.objects.create(
-                object_name=str(user)+" storage", user=User.objects.get(username=user), download_history=["registered"]
+                object_name=str(user)+" storage", user=User.objects.get(username=user), download_history=["registered"], prompts_history=["registered"], filtered_comments_history=["registered"]
             )
+
             storage = user_data_storage.objects.get(
                 user=User.objects.get(username=user)
             )
+
             storage.download_history.remove("registered")
+            storage.prompts_history.remove("registered")
+            storage.filtered_comments_history.remove("registered")
             storage.save()
 
             msg.success(request, user + " Welcome on board")
@@ -206,7 +210,7 @@ def download_page(request, login_context, parameter):
 
     name = parameter.split("-")
 
-    # Store link in user database
+    # Store data in user history
     if "username" in login_context:
         username = login_context["username"]
         storage = user_data_storage.objects.get(
@@ -214,7 +218,7 @@ def download_page(request, login_context, parameter):
         )
 
         time = dt.now()
-        info = [parameter, title, thumbnail, time.strftime("%d/%m/%Y %H:%M")]
+        info = [title, parameter, time.strftime("%d/%m/%Y %H:%M"), thumbnail]
         storage.download_history.append(info)
         storage.save()
 
@@ -303,7 +307,7 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
 
         description = request.POST.get("description")
 
-    
+
         try:
             response_data = openai.Image.create(
                 prompt=description + " user profile img",
@@ -319,6 +323,19 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
             msg.success("Ai model is currently overloaded, please wait a second")
             return redirect(ai_page)
     
+
+
+        # Store data in user history
+        if "username" in login_context:
+            username = login_context["username"]
+            storage = user_data_storage.objects.get(
+                user=User.objects.get(username=username)
+            )
+
+            time = dt.now()
+            info = [description, fixed_link.replace('%25', '%'), time.strftime("%d/%m/%Y %H:%M")]
+            storage.prompts_history.append(info)
+            storage.save()
 
         return redirect(ai_page, parameter = fixed_link, parameter_title = description)
 
@@ -468,11 +485,12 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
     try:
         match isFirstTime:
             case True:
+                
                 comments_and_VidInfo = await asyncio.gather(get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser), get_video_informations(video_id))
 
                 comments_and_VidInfo = {
                     'comments': comments_and_VidInfo[0],
-                    'video_info': comments_and_VidInfo[1]
+                    'video_info': comments_and_VidInfo[1],
                 }
 
                 return comments_and_VidInfo
@@ -492,7 +510,7 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
     except HttpError as e:
         error_message = f'An HTTP error {e.resp.status} occurred: {e.content}'
         return {'error': error_message}, 500
-
+    
 
 
 async def get_video_informations(video_id):
@@ -524,6 +542,29 @@ async def get_video_informations(video_id):
     video_info.update(video_informations)
 
     return video_informations
+
+
+def store_comments_data(video_id, username):
+    video_url = "https://www.youtube.com/watch?v=" + video_id
+    yt = YouTube(video_url)
+
+    # Store data in user history
+    storage = user_data_storage.objects.get(
+        user=User.objects.get(username=username)
+    )
+
+    time = dt.now()
+
+    try:
+        info = [yt.title, video_url, time.strftime("%d/%m/%Y %H:%M")]
+    except Exception:
+        info = ["could't find", video_url, time.strftime("%d/%m/%Y %H:%M")]
+    
+    storage.filtered_comments_history.append(info)
+    storage.save()
+
+    return 
+
 
 def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime):
     context = {}
@@ -643,6 +684,9 @@ def comments(request, login_context):
                     if video_info:
                         video_info.clear()
 
+                    # Store in history
+                    store_comments_data(video_id, login_context["username"])
+
                     context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = True)
                     return render(request, "comments.html", context)
                 
@@ -661,4 +705,54 @@ def comments(request, login_context):
     return render(request, "comments.html", context)
 
 
-        
+@login_check
+def manage_account_General(request, login_context):
+
+    context = {}
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, "manage_account_General.html", context)
+
+
+
+@login_check
+def manage_account_Overview(request, login_context):
+    username = login_context["username"]
+
+    storage = user_data_storage.objects.get(
+            user=User.objects.get(username=username)
+        )
+    
+    for video in storage.download_history[-6:]:
+        del video[3]
+
+
+
+
+    context = {
+        'vid_downloads_quantity' : len(storage.download_history),
+        'prompts_quantity': len(storage.prompts_history),
+        'filtered_comments_quantity': len(storage.filtered_comments_history),
+
+        'download_history': storage.download_history[-6:],
+        'prompts_history': storage.prompts_history[-6:],
+        'filtered_comments_history': storage.filtered_comments_history[-6:]
+    }
+
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, "manage_account_Overview.html", context)
+
+
+
+@login_check
+def manage_account_Private(request, login_context):
+
+    context = {}
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, "manage_account_Private.html", context)
+

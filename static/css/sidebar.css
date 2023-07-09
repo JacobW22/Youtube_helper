@@ -1,0 +1,29 @@
+.sidebar a {
+    font-size: 1.2rem !important;
+}
+
+.sidebar a:hover > span {
+    transform: translateX(0.5em) !important;
+    color: #f8f9fa;
+}
+
+.sidebar a span {
+    display: inline-block;
+
+
+    -webkit-transition: all 0.4s !important;
+    -o-transition: all 0.4s !important;
+    -moz-transition: all 0.4s !important;
+    transition: all 0.4s !important;
+}
+
+.sidebar a {
+    text-align: center;
+}
+
+@media screen and (min-width: 1486px) {
+    .sidebar a {
+        text-align: left; 
+    }
+}
+
