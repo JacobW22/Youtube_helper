@@ -1,20 +1,39 @@
-<section class="d-flex col-md-2 justify-content-center sidebar_section my-5 my-md-0">
+<section class="d-flex col-lg-2 justify-content-center sidebar_section my-5 my-lg-0">
 
-    <aside class="d-flex flex-column justify-content-center gap-3 sidebar">
+    <aside class="d-flex flex-column justify-content-center gap-3 gap-lg-5 sidebar">
 
-        <a href="#">
-            <i class="fa-solid fa-address-card"></i>&nbsp;
-            <span>General</span>
+        
+        {% if active == "General" %}
+            <a href="{% url 'manage_account_General' %}" class="active">
+        {% else %}
+            <a href="{% url 'manage_account_General' %}">
+        {% endif %}
+            <div>
+                <i class="fa-solid fa-address-card"></i>
+                <span>General</span>
+            </div>
+        </a>
+
+        {% if active == "Overview" %}
+            <a href="{% url 'manage_account_Overview' %}" class="active">
+        {% else %}
+            <a href="{% url 'manage_account_Overview' %}">
+        {% endif %}
+            <div>
+                <i class="fa-solid fa-timeline"></i>
+                <span>Overview & history</span>
+            </div>
         </a>
         
-        <a href="#">
-            <i class="fa-solid fa-timeline"></i>&nbsp;
-            <span>Overview & history</span>
-        </a>
-        
-        <a href="#">
-            <i class="fa-solid fa-lock"></i>&nbsp;
-            <span>Private</span>
+        {% if active == "Private" %}
+            <a href="{% url 'manage_account_Private' %}" class="active">
+        {% else %}
+            <a href="{% url 'manage_account_Private' %}">
+        {% endif %}
+            <div>
+                <i class="fa-solid fa-lock"></i>
+                <span>Private</span>
+            </div>
         </a>
 
     </aside>

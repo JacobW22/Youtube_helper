@@ -233,6 +233,10 @@ h2 {
   text-align: center;
 }
 
+.align-text-center {
+  text-align: center !important;
+}
+
 @keyframes fade-in-animation {
   0% {
     opacity: 0;
@@ -282,7 +286,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 111px);
+    height: calc(100vh - 125px);
   }
 }
 
@@ -308,7 +312,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 97px);
+    height: calc(100vh - 90px);
   }
 }
 
@@ -318,7 +322,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 97px) !important;
+    height: calc(100vh - 90px) !important;
   }
 }
 
@@ -351,7 +355,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 62px);
+    height: calc(100vh - 75px);
   }
 }
 

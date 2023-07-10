@@ -308,6 +308,12 @@
       $('.modal').modal('hide');
     });
 
+    $('.input_submit').hover(function() {
+      $('.form-control').addClass('align-text-center');
+    }, function() {
+      $('.form-control').removeClass('align-text-center');
+    });
+
     $(".toast").css("opacity", "0");
     $(".toast").toast("show");
     $(".toast").addClass("custom-fade-in").css("opacity", "1");

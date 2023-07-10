@@ -21,6 +21,7 @@
 }
 
 .table_title {
+    text-align: center;
     font-size: 2rem;
 }
 
@@ -38,7 +39,7 @@
 }
 
 .vid_downloads:hover {
-    transform: scale(1.2);
+    transform: scale(1.18);
     user-select: none;
 }
 
