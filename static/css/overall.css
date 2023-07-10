@@ -110,7 +110,7 @@ a,
   border-radius: 15px !important;
 }
 
-.dropdown-menu:not(.sort_menu) {
+.dropdown-menu:not(.sort_menu, .streams_data) {
   backdrop-filter: blur(10px);
   backface-visibility: hidden;
   perspective: 1000;
@@ -277,11 +277,11 @@ h2 {
     font-size: 175% !important;
   }
 
-  .dropdown-menu:not(.sort_menu) {
+  .dropdown-menu:not(.sort_menu, .streams_data) {
     margin-top: 3.2em !important;
   }
 
-  .dropdown-menu:not(.sort_menu, .selection-menu) {
+  .dropdown-menu:not(.sort_menu, .selection-menu, .streams_data) {
     width: 300% !important;
   }
 
@@ -331,19 +331,21 @@ h2 {
     margin-left: auto !important;
   }
 
-  .dropdown-menu:not(.sort_menu, .selection-menu, .account_menu) {
+  .dropdown-menu:not(.sort_menu, .selection-menu, .account_menu, .streams_data) {
     width: 300% !important;
   }
 
   .dropdown-item:not(
       .selection-menu .d-flex .dropdown-item,
       .sort_menu .dropdown-item,
-      .account_menu .dropdown-item
+      .account_menu .dropdown-item,
+      .streams_data .dropdown-item
     ):focus,
   .dropdown-item:not(
       .selection-menu .d-flex .dropdown-item,
       .sort_menu .dropdown-item,
-      .account_menu .dropdown-item
+      .account_menu .dropdown-item,
+      .streams_data .dropdown-item
     ):hover {
     margin-left: 1.1em !important;
   }

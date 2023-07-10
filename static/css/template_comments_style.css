@@ -113,10 +113,6 @@
   scale: 1.1;
 }
 
-.main-container {
-  min-height: 26em !important;
-}
-
 .comments_container {
   max-height: 100% !important;
   height: 100% !important;
@@ -356,10 +352,6 @@
 
   .comments_card_container {
     flex: 0 0 65%;
-  }
-
-  .main-container {
-    height: calc(160vh - 62px);
   }
 
   .footer, .page-link {

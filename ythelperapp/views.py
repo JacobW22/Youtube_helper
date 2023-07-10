@@ -185,6 +185,7 @@ def sign_up_page(request, login_context):
     return render(request, "sign_up_page.html", context)
 
 
+
 # Backoff for sending request again ( sometimes titles can't be found by pytube )
 @login_check
 @backoff.on_exception(
@@ -193,6 +194,7 @@ def sign_up_page(request, login_context):
 def download_page(request, login_context, parameter):
     yt = YouTube(parameter, on_progress_callback=on_progress)
 
+    
     try:
         title = yt.title
         thumbnail = yt.thumbnail_url
@@ -208,7 +210,6 @@ def download_page(request, login_context, parameter):
         publish_date = "couldn't find"
         description = "couldn't find"
 
-    name = parameter.split("-")
 
     # Store data in user history
     if "username" in login_context:
@@ -222,35 +223,21 @@ def download_page(request, login_context, parameter):
         storage.download_history.append(info)
         storage.save()
 
-    # For downloading sd quality video files
-    if "sd_quality" in name:
-        sd_quality_stream = yt.streams.get_by_resolution("360p")
+        
+    streams_data = {}
 
-        if sd_quality_stream == None:
-            sd_quality_stream = yt.streams.get_highest_resolution()
+    # Get all available streams for the video
+    resolutions = ['360p', '720p', '1080p']
+    filtered_streams = yt.streams.filter(resolution=resolutions, progressive=True, only_video=False)
+    filtered_audio = yt.streams.get_audio_only()
 
-        sd_quality_stream.download(output_path="static/", filename="video.mp4")
 
-        return redirect(download_video, parameter=name[0])
-
-    # For downloading highest quality video files
-    if "hd_quality" in name:
-        hd_quality_stream = yt.streams.get_by_resolution("1080p")
-
-        if hd_quality_stream == None:
-            hd_quality_stream = yt.streams.get_highest_resolution()
-
-        hd_quality_stream.download(output_path="static/", filename="video.mp4")
-
-        return redirect(download_video, parameter=name[0])
-
-    # For downloading audio files
-    if "mp3" in name:
-        mp3_stream = yt.streams.get_audio_only("mp4")
-
-        mp3_stream.download(output_path="static/", filename="audio.mp3")
-
-        return redirect(download_audio, parameter=name[0])
+    # Extract download links from the streams
+    for stream in filtered_streams:
+        if stream.mime_type == 'video/mp4':
+            file_extension = stream.mime_type.split('/')[-1]
+            streams_data[stream.url] = [stream.resolution, file_extension.upper()]
+    
 
     context = {
         "link": parameter,
@@ -260,11 +247,13 @@ def download_page(request, login_context, parameter):
         "description": description,
         "publish_date": publish_date,
         "length": length,
+        "streams_data": streams_data,
+        "mp3_download_url": filtered_audio.url
     }
 
     context.update(login_context)
     context.update({'sites_context': sites_context})
-
+    
     return render(request, "download_page.html", context)
 
 

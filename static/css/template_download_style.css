@@ -32,14 +32,21 @@
 }
 
 .btn {
-  background: #000000 !important;
-  color: #fff !important;
-  font-family: Montserrat-Bold !important;
+  background: black !important;
+  color: white;
+  border-radius: 15px !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: 0em 0em 0.1em 0.03em white !important;
 }
 
 .btn:hover {
-  background: #fff !important;
-  color: #000000 !important;
+  box-shadow: none !important;
+}
+
+.dropdown .show {
+  color: white!important;
+  box-shadow: none !important;
 }
 
 .description {
@@ -96,18 +103,23 @@ img {
   height: 100% !important;
 }
 
-@media screen and (min-width: 1200px) {
-  .cut_width {
-    width: 50% !important;
-  }
-
-  .cut_more_width {
-    width: 35% !important;
-  }
+.streams_data {
+  width: 30rem !important;
+  border-radius: 25px !important;
+  text-align: center;
+  font-size: 1.2rem !important;
 }
 
-@media screen and (max-width: 997px) {
-  .cut_more_width {
-    width: 55% !important;
+.streams_menu {
+  background-color: black !important;
+}
+
+.streams_menu a {
+  font-size: 1.2rem !important;
+}
+
+@media screen and (max-width: 768px) {
+  .streams_data {
+    width: 15rem !important;
   }
 }

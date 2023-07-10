@@ -12,41 +12,32 @@
     <!--===============================================================================================-->	
       <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
     <!--===============================================================================================-->	
+      <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+    <!--===============================================================================================-->	
       <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
     <!--===============================================================================================-->	
       <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
     <!--===============================================================================================-->	
 
 
-    <!--===============================================================================================-->	
-        <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>  
     <!--===============================================================================================-->
-        <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+      <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <!--===============================================================================================-->
-        <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
+      <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
     <!--===============================================================================================-->
-        <link rel="stylesheet" href="{% static 'css/template_download_style.css' %}">
+      <link rel="stylesheet" href="{% static 'css/template_download_style.css' %}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
-    <!--===============================================================================================-->	
-        <link rel="stylesheet" type="text/css" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <!--===============================================================================================-->
 
 
 </head>
 <body>
     
-<!-- Site container start -->
-<div class="d-flex flex-column full_site_container">
 
 
 <!-- Navbar start -->
@@ -56,10 +47,10 @@
 
 
   <!-- Main container start -->
-  <div class="d-flex flex-column gap-5 my-auto justify-content-center main-container">
+  <div class="d-flex flex-column my-auto main-container">
 
     <!-- First section start -->
-    <section class="d-none first-container justify-content-center flex-column align-items-center px-2">
+    <section class="d-none first-container justify-content-center flex-column align-items-center my-auto px-2">
 
 
         <!-- Card start -->
@@ -76,7 +67,7 @@
 
                 </div>
                 <div class="col-md-8 col-lg-6">
-                  <div class="card-body ">
+                  <div class="d-flex flex-column card-body gap-3">
                     <h5 class="card-title text-center fs-4">{{ title }}</h5>
                     <p class="card-text text-center mb-2"><a href="{{ link }}" class="link_to_video" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square" style="color: #78d4fc;"></i>&nbsp; {{ link }}</a></p>
                     <p class="card-text d-flex align-items-center justify-content-center">
@@ -101,27 +92,39 @@
 
     <!-- Download section start -->
     {% if thumbnail != "couldn't find" %}
-      <section class="d-none flex-column second-container pb-4">
+      <section class="d-none flex-column second-container pb-4 gap-4 mb-auto">
           <div class="container-fluid gap-2 d-flex mt-2 mt-sm-4 justify-content-center">
             <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
           </div>
 
 
-          <!-- Result box start -->
-          <form class="container-fluid gap-2 d-flex mt-5 justify-content-center cut_width"  method="post">
-              {% csrf_token %}
-              <a type="submit" class="btn btn-dark downloading login100-form-btn" name="sd_quality" href="{% url 'download_page' parameter=link parameter_name='-sd_quality' %}" data-bs-toggle="modal"  data-bs-target="#downloading_Modal">SD quality</a>
-              <a type="submit" class="btn btn-dark downloading login100-form-btn" name="hd_quality" href="{% url 'download_page' parameter=link parameter_name='-hd_quality' %}" data-bs-toggle="modal"  data-bs-target="#downloading_Modal">HD quality</a>
-          </form>
-          <!-- Result box end -->
+          <!-- Download menu start -->
+          <div class="container-fluid gap-5 mt-4 d-flex flex-column justify-content-center align-items-center">
+            
+            <div class="dropdown streams_data mx-auto">
+              <a class="btn btn-dark py-3 streams_data dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                Video formats
+              </a>
+            
+              <ul class="dropdown-menu streams_data streams_menu" aria-labelledby="dropdownMenuLink">
 
-          <!-- Result box2 start -->
-          <form class="container-fluid gap-2 d-flex mt-4 justify-content-center cut_more_width" method="post">
-            {% csrf_token %}
-            <a type="submit" class="btn btn-dark downloading login100-form-btn" name="mp3" href="{% url 'download_page' parameter=link parameter_name='-mp3' %}" data-bs-toggle="modal"  data-bs-target="#downloading_Modal">MP3 only</a>
-          </form>
+                {% for download_link,info in streams_data.items %}
+                  <li>
+                    <a class="dropdown-item" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
+                        <span>{{ info.0 }}</span>
+                        <span class="text-muted float-right">{{ info.1 }}</span>
+                    </a>
+                  </li>
+                {% endfor %}
 
-          <!-- Result box2 end -->
+              </ul>
+            </div>
+            <a class="btn btn-dark btn-lg downloading" href="{{ mp3_download_url }}" target="_blank" rel="noopener noreferrer" download>MP3 only</a>
+          
+          </div>
+          <!-- Download menu end -->
+
+
       </section>
     {% endif %}
     <!-- Download section end -->
@@ -130,8 +133,7 @@
   <!-- Main container end -->
 
 
-</div>
-<!-- Site container end -->
+
 
 
 
@@ -155,22 +157,6 @@
 </div>
 <!-- Modal with description end -->
 
-
-<!-- Modal when downloading start -->
-<div class="modal fade downloading_modal" id="downloading_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="downloading_ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered my-0">
-    <div class="modal-content">
-      <div class="modal-body rounded">
-        <div class="d-flex align-items-center justify-content-center text-light">
-          <div class="spinner-border" role="status" aria-hidden="true"></div>
-            &nbsp;&nbsp;
-            <strong> Downloading file for you...</strong>
-          </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal when downloading end -->
 
 
 <!-- Toasts container start -->	
@@ -197,7 +183,6 @@
     $(window).on("pageshow", function() {
       $('.modal').modal('hide');
     });
-    
 
     // Fade In page
     $('.first-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
@@ -206,15 +191,7 @@
     $(".toast").css("opacity", "0");
     $(".toast").toast("show");
     $(".toast").addClass("custom-fade-in").css("opacity", "1");
-
   });
-
-
-  // Create backdrop when downloading modal is showed
-  $(".downloading_modal").on('shown.bs.modal', function() {
-    $('.modal-backdrop').css('opacity', '0.6');
-  });
-
 
 
   // Add event listener for click event on the close button
