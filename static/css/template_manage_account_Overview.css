@@ -89,4 +89,8 @@ td a {
     .table_container::-webkit-scrollbar {
         display: none;
     }
+
+    .analyse_second_section {
+        font-size: 3rem;
+    }
 }

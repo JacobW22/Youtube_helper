@@ -72,7 +72,7 @@
           </div>
 
           <div class="container-fluid text-center analyse analyse_second_section">
-            <span> {{ vid_downloads_quantity }} </span>       
+            <span class="count"> {{ vid_downloads_quantity }} </span>       
           </div>
 
         </div>
@@ -83,7 +83,7 @@
           </div>
 
           <div class="container-fluid text-center analyse analyse_second_section">
-            <span> {{ prompts_quantity }} </span>       
+            <span class="count"> {{ prompts_quantity }} </span>       
           </div>
         </div>
         
@@ -93,7 +93,7 @@
           </div>
 
           <div class="container-fluid text-center analyse analyse_second_section">
-            <span> {{ filtered_comments_quantity }} </span>       
+            <span class="count"> {{ filtered_comments_quantity }} </span>       
           </div>
         </div>
 
@@ -252,7 +252,22 @@
     $('td:nth-child(2)').find("a").prepend("<i class='fa-solid fa-arrow-up-right-from-square'>&nbsp;</i>")
 
 
+    // Counting animations 
+
+    $('.count').each(function () {
+        $(this).prop('Counter',-1).animate({
+            Counter: $(this).text()
+        }, {
+            duration: 1000,
+            easing: 'swing',
+            step: function (now) {
+                $(this).text(Math.ceil(now));
+            }
+        });
+    });
+
   });
+
 
 
   // Add event listener for click event on the close button

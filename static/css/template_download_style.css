@@ -44,7 +44,7 @@
   box-shadow: none !important;
 }
 
-.dropdown .show {
+.dropdown-toggle.show {
   color: white!important;
   box-shadow: none !important;
 }
@@ -117,6 +117,7 @@ img {
 .streams_menu a {
   font-size: 1.2rem !important;
 }
+
 
 @media screen and (max-width: 768px) {
   .streams_data {

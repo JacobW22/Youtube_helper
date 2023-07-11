@@ -58,48 +58,37 @@ def main_page(request, login_context):
             user=User.objects.get(username=username)
         )
 
+
         # Use download history for slides on the main page
         # Get random items from history
         # Eliminate repetitions
-
         Download_videos_informations = []
+        
+        Download_history = storage.download_history
 
-        Download_history = random.sample(
-            storage.download_history, len(storage.download_history)
-        )
 
-        # Limit to 10 slides / random 10 elements from history
-        Download_history = Download_history[:10]  
+        unique_videos = []
+        unique_titles = set()
 
-        for vid_info in Download_history:
-            it_is_in_dict = False
+        for movie in Download_history:
+            title = movie[0]
 
-            # First item in download history (always add)
-            if Download_videos_informations == []:
-                Download_videos_informations.append(
-                    {
-                        "title": vid_info[0],
-                        "thumbnail": vid_info[3],
-                        "publish_date": vid_info[2],
-                        "link": vid_info[1],
-                    }
-                )
-            else:  
-                # If it's not the first item, check if already exists
-                for dictionary in Download_videos_informations:
-                    if vid_info[1] in dictionary.values():
-                        it_is_in_dict = True
+            if title not in unique_titles:
+                unique_videos.append(movie)
+                unique_titles.add(title)
+                if len(unique_videos) == 10:
+                    break
+        
+        for vid_info in unique_videos:
+            Download_videos_informations.append(
+                {
+                    "title": vid_info[0],
+                    "thumbnail": vid_info[3],
+                    "publish_date": vid_info[2],
+                    "link": vid_info[1],
+                }
+            )
 
-                
-                if it_is_in_dict == False:
-                    Download_videos_informations.append(
-                        {
-                            "title": vid_info[0],
-                            "thumbnail": vid_info[3],
-                            "publish_date": vid_info[2],
-                            "link": vid_info[1],
-                        }
-                    )
 
         context.update({"number_of_links": range(0, len(Download_videos_informations))})
         context.update({"videos_informations": Download_videos_informations})
@@ -109,6 +98,20 @@ def main_page(request, login_context):
 
     if request.method == "POST":
         link = request.POST.get("sended_link")
+        yt = YouTube(link)
+
+        # Store data in user history
+        if "username" in login_context:
+            username = login_context["username"]
+            storage = user_data_storage.objects.get(
+                user=User.objects.get(username=username)
+            )
+
+            time = dt.now()
+            info = [title, link, time.strftime("%d/%m/%Y %H:%M"), yt.thumbnail_url]
+            storage.download_history.append(info)
+            storage.save()
+
         return redirect("download_page", parameter=link)
 
     return render(request, "main_page.html", context)
@@ -192,7 +195,7 @@ def sign_up_page(request, login_context):
     backoff.expo, (pytube.exceptions.PytubeError, ValueError), max_time=0.3
 )
 def download_page(request, login_context, parameter):
-    yt = YouTube(parameter, on_progress_callback=on_progress)
+    yt = YouTube(parameter)
 
     
     try:
@@ -211,33 +214,47 @@ def download_page(request, login_context, parameter):
         description = "couldn't find"
 
 
-    # Store data in user history
-    if "username" in login_context:
-        username = login_context["username"]
-        storage = user_data_storage.objects.get(
-            user=User.objects.get(username=username)
-        )
-
-        time = dt.now()
-        info = [title, parameter, time.strftime("%d/%m/%Y %H:%M"), thumbnail]
-        storage.download_history.append(info)
-        storage.save()
-
-        
     streams_data = {}
+    streams_data_no_audio = {}
+    seen_resolution = set()
+
 
     # Get all available streams for the video
-    resolutions = ['360p', '720p', '1080p']
-    filtered_streams = yt.streams.filter(resolution=resolutions, progressive=True, only_video=False)
+    resolutions = ['360p', '720p', '1080p','1440p','2160p']
+    filtered_streams = yt.streams.filter(resolution=resolutions, only_video=False)
+
+    # Sort streams by resolution in ascending order
+    filtered_streams = sorted(filtered_streams, key=lambda stream: int(stream.resolution[:-1]), reverse=True)
+
+
     filtered_audio = yt.streams.get_audio_only()
 
 
     # Extract download links from the streams
     for stream in filtered_streams:
-        if stream.mime_type == 'video/mp4':
-            file_extension = stream.mime_type.split('/')[-1]
-            streams_data[stream.url] = [stream.resolution, file_extension.upper()]
-    
+        file_extension = stream.mime_type.split('/')[-1]
+
+        if stream.resolution not in seen_resolution:
+            seen_resolution.add(stream.resolution)
+
+            match stream.mime_type:
+                
+                case 'video/mp4':
+
+                    match stream.is_progressive:
+                        case True:
+                            streams_data[stream.url] = [stream.resolution, file_extension.upper()]
+            
+
+                case 'video/webm':
+
+                    match stream.is_progressive:
+                        case True:
+                            streams_data[stream.url] = [stream.resolution, file_extension.upper()]
+                        case False:
+                            streams_data_no_audio[stream.url] = [stream.resolution, file_extension.upper()]
+        
+
 
     context = {
         "link": parameter,
@@ -248,6 +265,7 @@ def download_page(request, login_context, parameter):
         "publish_date": publish_date,
         "length": length,
         "streams_data": streams_data,
+        "streams_data_no_audio": streams_data_no_audio,
         "mp3_download_url": filtered_audio.url
     }
 

@@ -12,6 +12,10 @@
     color: #f8f9fa;
 }
 
+.sidebar a:hover {
+    border-color: #910000 !important;
+}
+
 .sidebar a span {
     display: inline-block;
 
@@ -39,6 +43,8 @@
     padding-right: 1em;
     border-radius: 25px;
 }
+
+
 
 @media screen and (min-width: 1486px) {
     .sidebar a {

@@ -101,12 +101,26 @@
           <!-- Download menu start -->
           <div class="container-fluid gap-5 mt-4 d-flex flex-column justify-content-center align-items-center">
             
-            <div class="dropdown streams_data mx-auto">
+            <div class="dropup-center dropup streams_data mx-auto">
               <a class="btn btn-dark py-3 streams_data dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                 Video formats
               </a>
             
               <ul class="dropdown-menu streams_data streams_menu" aria-labelledby="dropdownMenuLink">
+
+                {% for download_link,info in streams_data_no_audio.items %}
+                  <li>
+                    <a class="dropdown-item" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
+                        <span>{{ info.0 }}</span>
+                        <span class="text-muted float-right">
+                          <i class="fa-solid fa-volume-xmark" style="color: #ff0000;"></i>
+                          &nbsp;
+                          {{ info.1 }}
+                        </span>
+                    </a>
+                  </li>
+                {% endfor %}
+
 
                 {% for download_link,info in streams_data.items %}
                   <li>
@@ -233,6 +247,17 @@
   // Add slideUp animation to Bootstrap dropdown when collapsing.
   $('.dropdown').on('hide.bs.dropdown', function() {
     $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
+  });
+  
+  // Add slideDown animation to Bootstrap dropup when expanding.
+  $('.dropup').on('show.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideToggle(300);
+  });
+
+
+  // Add slideUp animation to Bootstrap dropup when collapsing.
+  $('.dropup').on('hide.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').hide();
   });
 
 </script>
