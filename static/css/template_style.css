@@ -37,7 +37,7 @@ body {
 }
 
 #main_form {
-  transform: scale(1.1) translateY(-25%);
+  transform: scale(1.1) translateY(-20%);
 }
 
 section:not(.first-container),
@@ -73,8 +73,16 @@ button {
   -o-transition: all 0.4s !important;
   -moz-transition: all 0.4s !important;
   transition: all 0.4s !important;
-}
 
+  backface-visibility: hidden;
+  perspective: 1000;
+  transform: translate3d(0, 0, 0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-transform: translateZ(0);
+}
 
 .pointing-to-link,
 .slider_info {
@@ -89,7 +97,7 @@ button {
   -webkit-filter: brightness(20%);
 }
 
-.carousel-inner .carousel-item > img:hover {
+.carousel:hover > .carousel-inner .carousel-item img {
   filter: brightness(60%);
   -webkit-filter: brightness(60%);
 }
@@ -155,7 +163,7 @@ hr {
   }
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1400px) {
   .first-container,
   .second-container {
     zoom: 105%;

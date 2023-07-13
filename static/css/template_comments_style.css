@@ -45,6 +45,10 @@
   width: 35rem !important;
 }
 
+.pointing-to-link {
+  font-family: "Quicksand", sans-serif;
+}
+
 .input_submit {
   border-radius: 15px !important;
   outline: none !important;
@@ -289,7 +293,7 @@
 }
 
 @media screen and (min-width: 1400px) and (max-width: 2270px) {
-  .main-container {
+  #main_form {
     zoom: 105%;
   }
 

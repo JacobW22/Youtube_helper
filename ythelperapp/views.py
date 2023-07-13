@@ -22,6 +22,7 @@ import requests
 import asyncio
 import json
 import time
+import isodate
 
 
 from pytube import YouTube
@@ -108,7 +109,7 @@ def main_page(request, login_context):
             )
 
             time = dt.now()
-            info = [title, link, time.strftime("%d/%m/%Y %H:%M"), yt.thumbnail_url]
+            info = [yt.title, link, time.strftime("%d/%m/%Y %H:%M"), yt.thumbnail_url]
             storage.download_history.append(info)
             storage.save()
 
@@ -196,22 +197,44 @@ def sign_up_page(request, login_context):
 )
 def download_page(request, login_context, parameter):
     yt = YouTube(parameter)
-
+    video_id = parameter.split("=", 1)[1]
     
     try:
-        title = yt.title
-        thumbnail = yt.thumbnail_url
-        length = str(datetime.timedelta(seconds=yt.length))
-        views = f"{yt.views:,}"  # Format numbers 100000 = 100,000 etc.
-        publish_date = yt.publish_date
-        description = yt.description
-    except:
+        # Call the API to retrieve the video details
+        response = youtube.videos().list(
+            part='snippet,statistics,contentDetails',
+            id=video_id
+        ).execute()
+
+        # Extract the snippet and statistics from the response
+        video = response['items'][0]
+        snippet = video['snippet']
+        statistics = video['statistics']
+        content_details = video['contentDetails']
+
+        title = snippet['title']
+        description = snippet['description']
+        publish_date = dt.strptime(snippet['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y")
+
+
+        views =  "{:,}".format(int(statistics['viewCount'])).replace(',', ' ')
+        likes =  "{:,}".format(int(statistics['likeCount'])).replace(',', ' ')
+        comment_count = "{:,}".format(int(statistics['commentCount'])).replace(',', ' ')
+       
+
+
+        length = isodate.parse_duration(content_details['duration'])
+
+
+    except Exception as e:
+        print(e)
         title = "Could not find or video was deleted by Youtube"
-        thumbnail = "couldn't find"
         length = "couldn't find"
         views = "couldn't find"
         publish_date = "couldn't find"
         description = "couldn't find"
+        likes = "couldn't find"
+        comment_count = "couldn't find"
 
 
     streams_data = {}
@@ -260,7 +283,9 @@ def download_page(request, login_context, parameter):
         "link": parameter,
         "title": title,
         "views": views,
-        "thumbnail": thumbnail,
+        "likes": likes,
+        "comment_count": comment_count,
+        "video_id": video_id,
         "description": description,
         "publish_date": publish_date,
         "length": length,
@@ -520,17 +545,40 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
     
 
 
-async def get_video_informations(video_id):
-    video_url = "https://www.youtube.com/watch?v=" + video_id
-    yt = YouTube(video_url)
+async def get_video_informations(video_id):    
+    youtube2 = build('youtube', 'v3', developerKey=google_api_key)
 
     try:
-        title = yt.title
-        thumbnail = yt.thumbnail_url
-        views = f"{yt.views:,}"  # Format numbers 100000 = 100,000 etc.
-        length = str(datetime.timedelta(seconds=yt.length))
-        publish_date = yt.publish_date
-    except:
+        # Call the API to retrieve the video details
+        request = youtube2.videos().list(
+            part='snippet,statistics,contentDetails',
+            id=video_id
+        )
+
+        response = await asyncio.to_thread(request.execute)
+
+        # Extract the snippet and statistics from the response
+        video = response['items'][0]
+        snippet = video['snippet']
+        statistics = video['statistics']
+        content_details = video['contentDetails']
+
+        title = snippet['title']
+        publish_date = dt.strptime(snippet['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y")
+
+
+        views = statistics['viewCount']
+        views =  "{:,}".format(int(statistics['viewCount'])).replace(',', ' ')
+        
+        likes = statistics['likeCount']
+
+        comment_count = statistics['commentCount']
+        thumbnail = snippet['thumbnails']['maxres']['url']
+
+        length = isodate.parse_duration(content_details['duration'])
+
+    except Exception as e:
+        print(e)
         title = "Could not find or video was deleted by Youtube"
         thumbnail = "couldn't find"
         views = "couldn't find"
@@ -552,9 +600,22 @@ async def get_video_informations(video_id):
 
 
 def store_comments_data(video_id, username):
-    video_url = "https://www.youtube.com/watch?v=" + video_id
-    yt = YouTube(video_url)
+    youtube3 = build('youtube', 'v3', developerKey=google_api_key)
 
+    video_url = "https://www.youtube.com/watch?v=" + video_id
+
+    # Call the API to retrieve the video details
+    response = youtube3.videos().list(
+        part='snippet',
+        id=video_id
+    ).execute()
+
+
+
+    video = response['items'][0]
+    snippet = video['snippet']
+
+    
     # Store data in user history
     storage = user_data_storage.objects.get(
         user=User.objects.get(username=username)
@@ -563,7 +624,7 @@ def store_comments_data(video_id, username):
     time = dt.now()
 
     try:
-        info = [yt.title, video_url, time.strftime("%d/%m/%Y %H:%M")]
+        info = [snippet['title'], video_url, time.strftime("%d/%m/%Y %H:%M")]
     except Exception:
         info = ["could't find", video_url, time.strftime("%d/%m/%Y %H:%M")]
     

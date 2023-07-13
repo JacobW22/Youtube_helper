@@ -56,7 +56,7 @@
 
           <span class="text-light fs-1 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
           <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
-          <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+          <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" id="input_link" class="form-control text-light" required>
           <button type="submit" class="btn btn-dark btn-lg animate mt-2 send_request">Confirm</button>
     </form>
 
@@ -97,7 +97,7 @@
                 <span class="caption_text d-block text-truncate"> {{ video.title }} </span>
 
                 <p class="mt-2 date_in_caption"><small><i class="fa-regular fa-calendar-days"></i>&nbsp {{ video.publish_date }}</small></p>
-                <a type="submit" class="btn btn-dark my-2" name="sd_quality" href="#"> Download </a>
+                <a type="submit" class="btn btn-dark my-2" onclick="submitFormWithValue('{{ video.link }}')"> Download </a>
               </div>
           </div>
 
@@ -225,6 +225,17 @@
       });
     };
 });
+
+function submitFormWithValue(link) {
+
+  var form = document.getElementById('main_form');
+
+  var input_link = document.getElementById('input_link');
+
+  input_link.value = link;
+
+  form.submit();
+}
 
 </script>
 </body>

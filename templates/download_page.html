@@ -56,14 +56,15 @@
         <!-- Card start -->
           <div class="card mb-3 border-0 text-light align-items-center justify-content-center" style="max-width: 100%;">
               <div class="row g-0 align-items-center justify-content-center">
-                <div class="col-7 col-lg-4 mb-4 mb-lg-0 d-flex align-items-center justify-content-center">
+                <div class="col-7 col-lg-4 mb-4 mb-lg-0 d-flex flex-column align-items-center justify-content-center">
 
-                  {% if thumbnail == "couldn't find" %}
+                  {% if video_id == "couldn't find" %}
                     <i class="fa-solid fa-triangle-exclamation error_occured mb-2" style="color: #ffffff;"></i>
                   {% else %}
-                    <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
-                  
-                  {% endif %}
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item rounded" alt="Video" src="//www.youtube.com/embed/{{ video_id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                    {% endif %}
 
                 </div>
                 <div class="col-md-8 col-lg-6">
@@ -77,8 +78,12 @@
                             Show description
                           </button>
                     </p>
-                    <p class="card-text text-center fs-6 mt-1 mt-sm-0"><i class="fa-solid fa-eye"></i></i> {{ views }}  views</p>
-                    <p class="card-text text-center fs-6"><i class="fa-regular fa-clock"></i> {{ length }} &nbsp;&nbsp;<i class="fa-regular fa-calendar-days"></i>&nbsp; {{ publish_date }}</p>
+                    <p class="card-text text-center fs-5 mt-1 mt-md-0 views"><i class="fa-solid fa-eye me-1"></i></i> {{ views }}  views</p>
+                    <p class="card-text text-center fs-6 ">
+                      <i class="fa-solid fa-thumbs-up"></i> &nbsp; {{ likes }} &nbsp;&nbsp;
+                      <i class="fa-regular fa-comments"></i> &nbsp; {{ comment_count }}
+                    </p>
+                    <p class="card-text text-center fs-6"><i class="fa-regular fa-clock"></i>&nbsp; {{ length }} &nbsp;&nbsp;<i class="fa-regular fa-calendar-days"></i>&nbsp; {{ publish_date }}</p>
                   </div>
                 </div>
               </div>
