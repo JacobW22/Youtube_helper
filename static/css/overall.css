@@ -51,8 +51,8 @@ h2 {
 }
 
 ::selection {
-  color: white;
-  background: black;
+  color: black;
+  background: darkgray;
 }
 
 #main-title,
@@ -70,6 +70,10 @@ a,
 
 .main-navbar {
   z-index: 100;
+}
+
+.navbar {
+  user-select: none !important;
 }
 
 .nav-link:hover > span .fa-solid,
@@ -286,7 +290,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 125px);
+    height: calc(100% - 125px);
   }
 }
 
@@ -312,7 +316,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 90px);
+    height: calc(100% - 90px);
   }
 }
 
@@ -322,7 +326,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 90px) !important;
+    height: calc(100% - 90px) !important;
   }
 }
 
@@ -357,7 +361,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 75px);
+    height: calc(100% - 75px);
   }
 }
 

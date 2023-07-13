@@ -1,35 +1,26 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
-from django.utils.http import urlencode
-from django.dispatch import Signal, receiver
-from django.http import JsonResponse, HttpResponse
-from django.urls import reverse
+
 
 from .forms import CreateUserForm
 from .decorators import login_check, not_authenticated_only
 from .models import user_data_storage, User
 
 
-import datetime
-import random
 import os
 import re
 import openai
 import backoff
 import pytube
-import requests
 import asyncio
-import json
-import time
 import isodate
 
 
 from pytube import YouTube
-from pytube.cli import on_progress
 from datetime import datetime as dt
 from dotenv import load_dotenv, find_dotenv
-from urllib.parse import quote, unquote
+from urllib.parse import quote
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from dateutil.parser import isoparse
@@ -196,108 +187,17 @@ def sign_up_page(request, login_context):
     backoff.expo, (pytube.exceptions.PytubeError, ValueError), max_time=0.3
 )
 def download_page(request, login_context, parameter):
-    yt = YouTube(parameter)
-    video_id = parameter.split("=", 1)[1]
     
-    try:
-        # Call the API to retrieve the video details
-        response = youtube.videos().list(
-            part='snippet,statistics,contentDetails',
-            id=video_id
-        ).execute()
+    context = {}
 
-        # Extract the snippet and statistics from the response
-        video = response['items'][0]
-        snippet = video['snippet']
-        statistics = video['statistics']
-        content_details = video['contentDetails']
-
-        title = snippet['title']
-        description = snippet['description']
-        publish_date = dt.strptime(snippet['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y")
-
-
-        views =  "{:,}".format(int(statistics['viewCount'])).replace(',', ' ')
-        likes =  "{:,}".format(int(statistics['likeCount'])).replace(',', ' ')
-        comment_count = "{:,}".format(int(statistics['commentCount'])).replace(',', ' ')
-       
-
-
-        length = isodate.parse_duration(content_details['duration'])
-
-
-    except Exception as e:
-        print(e)
-        title = "Could not find or video was deleted by Youtube"
-        length = "couldn't find"
-        views = "couldn't find"
-        publish_date = "couldn't find"
-        description = "couldn't find"
-        likes = "couldn't find"
-        comment_count = "couldn't find"
-
-
-    streams_data = {}
-    streams_data_no_audio = {}
-    seen_resolution = set()
-
-
-    # Get all available streams for the video
-    resolutions = ['360p', '720p', '1080p','1440p','2160p']
-    filtered_streams = yt.streams.filter(resolution=resolutions, only_video=False)
-
-    # Sort streams by resolution in ascending order
-    filtered_streams = sorted(filtered_streams, key=lambda stream: int(stream.resolution[:-1]), reverse=True)
-
-
-    filtered_audio = yt.streams.get_audio_only()
-
-
-    # Extract download links from the streams
-    for stream in filtered_streams:
-        file_extension = stream.mime_type.split('/')[-1]
-
-        if stream.resolution not in seen_resolution:
-            seen_resolution.add(stream.resolution)
-
-            match stream.mime_type:
-                
-                case 'video/mp4':
-
-                    match stream.is_progressive:
-                        case True:
-                            streams_data[stream.url] = [stream.resolution, file_extension.upper()]
-            
-
-                case 'video/webm':
-
-                    match stream.is_progressive:
-                        case True:
-                            streams_data[stream.url] = [stream.resolution, file_extension.upper()]
-                        case False:
-                            streams_data_no_audio[stream.url] = [stream.resolution, file_extension.upper()]
-        
-
-
-    context = {
-        "link": parameter,
-        "title": title,
-        "views": views,
-        "likes": likes,
-        "comment_count": comment_count,
-        "video_id": video_id,
-        "description": description,
-        "publish_date": publish_date,
-        "length": length,
-        "streams_data": streams_data,
-        "streams_data_no_audio": streams_data_no_audio,
-        "mp3_download_url": filtered_audio.url
-    }
+    context = run_async(parameter)
 
     context.update(login_context)
     context.update({'sites_context': sites_context})
+
     
     return render(request, "download_page.html", context)
+
 
 
 @login_check
@@ -389,7 +289,245 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
 pageTokens = [None]
 previous_request_previousPageID = [0]
 previous_request_pageID = [0]
-video_info = {}
+video_metadata_temp = {}
+
+
+@login_check
+def comments(request, login_context):
+    if request.method == "POST":
+        match request.POST.get("video_url"):
+        
+            case None:
+
+                try:
+                    order = request.POST.get("order")
+                    maxResults = request.POST.get("maxResults")
+                    previousPageID = request.POST.get("previousPageID")
+                    pageID = request.POST.get("pageID")
+                    video_id = request.POST.get("video_id")
+                    searchInput = request.POST.get("searchInput")
+
+
+                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = False)
+                    return render(request, "comments.html", context)
+                
+                except Exception as err:
+                    print(err)
+                    pageTokens.clear()
+                    pageTokens.append(None)
+                    msg.info(request, "Something went wrong, please try again")
+                    return redirect(comments)
+    
+            case _:
+
+                try:
+                    video_url = request.POST.get("video_url")   
+                    video_id = video_url.split("=", 1)[1]
+
+                    
+                    order = 'relevance'
+                    maxResults = 25
+                    pageID = 1
+                    previousPageID = 1
+                    searchInput = ""
+
+                    if video_metadata_temp:
+                        video_metadata_temp.clear()
+
+                    # Store in history
+                    store_comments_data(video_id, login_context["username"])
+
+                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = True)
+                    return render(request, "comments.html", context)
+                
+                except Exception as err:
+                    print(err)
+                    pageTokens.clear()
+                    pageTokens.append(None)
+                    msg.info(request, "Url is incorrect")
+                    return redirect(comments)
+                
+    # On first load
+    context = {}
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, "comments.html", context)
+
+
+@login_check
+def manage_account_General(request, login_context):
+
+    context = {}
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, "manage_account_General.html", context)
+
+
+
+@login_check
+def manage_account_Overview(request, login_context):
+    username = login_context["username"]
+
+    storage = user_data_storage.objects.get(
+            user=User.objects.get(username=username)
+        )
+    
+    for video in storage.download_history[-6:]:
+        del video[3]
+
+
+
+
+    context = {
+        'vid_downloads_quantity' : len(storage.download_history),
+        'prompts_quantity': len(storage.prompts_history),
+        'filtered_comments_quantity': len(storage.filtered_comments_history),
+
+        'download_history': storage.download_history[-6:],
+        'prompts_history': storage.prompts_history[-6:],
+        'filtered_comments_history': storage.filtered_comments_history[-6:]
+    }
+
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, "manage_account_Overview.html", context)
+
+
+
+@login_check
+def manage_account_Private(request, login_context):
+
+    context = {}
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, "manage_account_Private.html", context)
+
+
+
+
+
+def run_async(url):
+
+    #Create a new event loop 
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    context = loop.run_until_complete(gather_functions(url))
+
+    return context
+
+
+async def gather_functions(url):
+    Shared_result = await asyncio.gather(get_streams_data(url), get_video_metadata(url))
+    
+    context = {}
+    context.update(Shared_result[0])
+    context.update(Shared_result[1])
+
+    return context
+
+
+async def get_streams_data(url):
+     
+    streams_data = {}
+    streams_data_no_audio = {}
+    seen_resolution = set()
+
+    # Create a PyTube YouTube object
+    yt = await asyncio.get_event_loop().run_in_executor(None, lambda: YouTube(url))
+
+    # Get all available streams for the video
+    resolutions = ['144p', '240p', '360p', '480p', '720p', '1080p', '1440p', '2160p', '4320p']
+    filtered_streams = await asyncio.get_event_loop().run_in_executor(None, lambda: yt.streams.filter(resolution=resolutions, only_video=False))
+    
+    # Sort streams by resolution in descending order
+    filtered_streams = sorted(filtered_streams, key=lambda stream: int(stream.resolution[:-1]), reverse=True)
+
+    audio = await asyncio.get_event_loop().run_in_executor(None, lambda: yt.streams.get_audio_only())
+
+    # Extract download links from the streams
+    for stream in filtered_streams:
+        file_extension = stream.mime_type.split('/')[-1]
+
+        if stream.resolution not in seen_resolution:
+            seen_resolution.add(stream.resolution)
+
+            match stream.is_progressive:
+                case True:
+                    print(stream)
+                    streams_data[stream.url] = [stream.resolution, file_extension.upper()]
+                case False:
+                    streams_data_no_audio[stream.url] = [stream.resolution, file_extension.upper()]
+
+
+    streams_data = {
+        "streams_data": streams_data,
+        "streams_data_no_audio": streams_data_no_audio,
+        "audio_download_url": audio.url
+    }
+
+    return streams_data
+
+
+async def get_video_metadata(url):
+    youtube2 = build('youtube', 'v3', developerKey=google_api_key)
+
+    video_id = url.split("=", 1)[1]
+
+    try:
+        # Call the API to retrieve the video details
+        request = youtube2.videos().list(
+            part='snippet,statistics,contentDetails',
+            id=video_id
+        )
+
+        response = await asyncio.to_thread(request.execute)
+
+        # Extract the snippet and statistics from the response
+        video = response['items'][0]
+        snippet = video['snippet']
+        statistics = video['statistics']
+        content_details = video['contentDetails']
+
+        title = snippet['title']
+        description = snippet['description']
+        publish_date = dt.strptime(snippet['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y")
+
+        views =  "{:,}".format(int(statistics['viewCount'])).replace(',', ' ')
+        likes =  "{:,}".format(int(statistics['likeCount'])).replace(',', ' ')
+        comment_count = "{:,}".format(int(statistics['commentCount'])).replace(',', ' ')
+
+        length = isodate.parse_duration(content_details['duration'])
+
+    except HttpError as e:
+        print(f"An HTTP error occurred: {e}")
+        title = "Could not find or video was deleted by YouTube"
+        length = "couldn't find"
+        views = "couldn't find"
+        publish_date = "couldn't find"
+        description = "couldn't find"
+        likes = "couldn't find"
+        comment_count = "couldn't find"
+
+    video_metadata = {
+        "link": url,
+        "title": title,
+        "views": views,
+        "likes": likes,
+        "comment_count": comment_count,
+        "video_id": video_id,
+        "description": description,
+        "publish_date": publish_date,
+        "length": length,
+    }
+
+    return video_metadata
+
+
+
 
 async def get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser):
 
@@ -517,12 +655,15 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
     try:
         match isFirstTime:
             case True:
+                video_url = "https://www.youtube.com/watch?v=" + video_id
                 
-                comments_and_VidInfo = await asyncio.gather(get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser), get_video_informations(video_id))
+                comments_and_VidInfo = await asyncio.gather(get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser), get_video_metadata(video_url))
+                
+                video_metadata_temp.update(comments_and_VidInfo[1])
 
                 comments_and_VidInfo = {
                     'comments': comments_and_VidInfo[0],
-                    'video_info': comments_and_VidInfo[1],
+                    'video_metadata': comments_and_VidInfo[1],
                 }
 
                 return comments_and_VidInfo
@@ -533,7 +674,7 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
                 
                 comments_and_VidInfo = {
                     'comments': comments,
-                    'video_info': video_info
+                    'video_metadata': video_metadata_temp
                 }
 
                 return  comments_and_VidInfo
@@ -542,61 +683,6 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
     except HttpError as e:
         error_message = f'An HTTP error {e.resp.status} occurred: {e.content}'
         return {'error': error_message}, 500
-    
-
-
-async def get_video_informations(video_id):    
-    youtube2 = build('youtube', 'v3', developerKey=google_api_key)
-
-    try:
-        # Call the API to retrieve the video details
-        request = youtube2.videos().list(
-            part='snippet,statistics,contentDetails',
-            id=video_id
-        )
-
-        response = await asyncio.to_thread(request.execute)
-
-        # Extract the snippet and statistics from the response
-        video = response['items'][0]
-        snippet = video['snippet']
-        statistics = video['statistics']
-        content_details = video['contentDetails']
-
-        title = snippet['title']
-        publish_date = dt.strptime(snippet['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y")
-
-
-        views = statistics['viewCount']
-        views =  "{:,}".format(int(statistics['viewCount'])).replace(',', ' ')
-        
-        likes = statistics['likeCount']
-
-        comment_count = statistics['commentCount']
-        thumbnail = snippet['thumbnails']['maxres']['url']
-
-        length = isodate.parse_duration(content_details['duration'])
-
-    except Exception as e:
-        print(e)
-        title = "Could not find or video was deleted by Youtube"
-        thumbnail = "couldn't find"
-        views = "couldn't find"
-        length = "couldn't find"
-
-        publish_date = "couldn't find"
-
-    video_informations = {
-        "title": title,
-        "thumbnail": thumbnail,
-        "views": views,
-        "publish_date": publish_date,
-        "length": length
-    }
-
-    video_info.update(video_informations)
-
-    return video_informations
 
 
 def store_comments_data(video_id, username):
@@ -709,118 +795,3 @@ def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInp
 
         return context
             
-
-@login_check
-def comments(request, login_context):
-    if request.method == "POST":
-        match request.POST.get("video_url"):
-        
-            case None:
-
-                try:
-                    order = request.POST.get("order")
-                    maxResults = request.POST.get("maxResults")
-                    previousPageID = request.POST.get("previousPageID")
-                    pageID = request.POST.get("pageID")
-                    video_id = request.POST.get("video_id")
-                    searchInput = request.POST.get("searchInput")
-
-
-                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = False)
-                    return render(request, "comments.html", context)
-                
-                except Exception as err:
-                    print(err)
-                    pageTokens.clear()
-                    pageTokens.append(None)
-                    msg.info(request, "Something went wrong, please try again")
-                    return redirect(comments)
-    
-            case _:
-
-                try:
-                    video_url = request.POST.get("video_url")   
-                    video_id = video_url.split("=", 1)[1]
-
-                    
-                    order = 'relevance'
-                    maxResults = 25
-                    pageID = 1
-                    previousPageID = 1
-                    searchInput = ""
-
-                    if video_info:
-                        video_info.clear()
-
-                    # Store in history
-                    store_comments_data(video_id, login_context["username"])
-
-                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = True)
-                    return render(request, "comments.html", context)
-                
-                except Exception as err:
-                    print(err)
-                    pageTokens.clear()
-                    pageTokens.append(None)
-                    msg.info(request, "Url is incorrect")
-                    return redirect(comments)
-                
-    # On first load
-    context = {}
-    context.update(login_context)
-    context.update({'sites_context': sites_context})
-
-    return render(request, "comments.html", context)
-
-
-@login_check
-def manage_account_General(request, login_context):
-
-    context = {}
-    context.update(login_context)
-    context.update({'sites_context': sites_context})
-
-    return render(request, "manage_account_General.html", context)
-
-
-
-@login_check
-def manage_account_Overview(request, login_context):
-    username = login_context["username"]
-
-    storage = user_data_storage.objects.get(
-            user=User.objects.get(username=username)
-        )
-    
-    for video in storage.download_history[-6:]:
-        del video[3]
-
-
-
-
-    context = {
-        'vid_downloads_quantity' : len(storage.download_history),
-        'prompts_quantity': len(storage.prompts_history),
-        'filtered_comments_quantity': len(storage.filtered_comments_history),
-
-        'download_history': storage.download_history[-6:],
-        'prompts_history': storage.prompts_history[-6:],
-        'filtered_comments_history': storage.filtered_comments_history[-6:]
-    }
-
-    context.update(login_context)
-    context.update({'sites_context': sites_context})
-
-    return render(request, "manage_account_Overview.html", context)
-
-
-
-@login_check
-def manage_account_Private(request, login_context):
-
-    context = {}
-    context.update(login_context)
-    context.update({'sites_context': sites_context})
-
-    return render(request, "manage_account_Private.html", context)
-

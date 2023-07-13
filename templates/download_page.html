@@ -63,8 +63,8 @@
                   {% else %}
                   <div class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item rounded" alt="Video" src="//www.youtube.com/embed/{{ video_id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                </div>
-                    {% endif %}
+                  </div>
+                  {% endif %}
 
                 </div>
                 <div class="col-md-8 col-lg-6">
@@ -126,7 +126,9 @@
                   </li>
                 {% endfor %}
 
-
+                  <li>
+                    <hr>
+                  </li>
                 {% for download_link,info in streams_data.items %}
                   <li>
                     <a class="dropdown-item" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
@@ -138,7 +140,7 @@
 
               </ul>
             </div>
-            <a class="btn btn-dark btn-lg downloading" href="{{ mp3_download_url }}" target="_blank" rel="noopener noreferrer" download>MP3 only</a>
+            <a class="btn btn-dark btn-lg downloading" href="{{ audio_download_url }}" target="_blank" rel="noopener noreferrer" download>Audio only</a>
           
           </div>
           <!-- Download menu end -->
