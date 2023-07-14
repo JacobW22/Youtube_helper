@@ -3,7 +3,7 @@ from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
 
 
-from .forms import CreateUserForm
+from .forms import CreateUserForm, UpdateUserForm
 from .decorators import login_check, not_authenticated_only
 from .models import user_data_storage, User
 
@@ -172,6 +172,7 @@ def sign_up_page(request, login_context):
             msg.success(request, user + " Welcome on board")
             return redirect(login_page)
 
+
     context = {"form": form}
 
     context.update(login_context)
@@ -197,39 +198,6 @@ def download_page(request, login_context, parameter):
 
     
     return render(request, "download_page.html", context)
-
-
-
-@login_check
-def download_video(request, login_context, parameter):
-    yt = YouTube(parameter)
-
-    context = {
-        "title": yt.title,
-        "thumbnail": yt.thumbnail_url,
-    }
-
-    context.update(login_context)
-    context.update({'sites_context': sites_context})
-
-
-    return render(request, "video_download.html", context)
-
-
-@login_check
-def download_audio(request, login_context, parameter):
-    yt = YouTube(parameter)
-
-    context = {
-        "title": yt.title,
-        "thumbnail": yt.thumbnail_url,
-    }
-
-    context.update(login_context)
-    context.update({'sites_context': sites_context})
-
-
-    return render(request, "audio_download.html", context)
 
 
 @login_check
@@ -357,8 +325,27 @@ def comments(request, login_context):
 
 @login_check
 def manage_account_General(request, login_context):
+    form = UpdateUserForm(
+        initial = {
+            "username": request.user.username,
+            "email": request.user.email
+    })
 
-    context = {}
+    if request.method == "POST":
+        form = UpdateUserForm(request.POST, instance=request.user)
+       
+        if form.is_valid():
+            form.save()
+            msg.success(request, "Account has been updated")
+            return redirect(manage_account_General)
+        else:
+
+            msg.info(request, "Something went wrong")
+
+            return redirect(manage_account_General)
+
+
+    context = {'form': form}
     context.update(login_context)
     context.update({'sites_context': sites_context})
 

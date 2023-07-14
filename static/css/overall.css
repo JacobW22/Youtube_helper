@@ -371,6 +371,12 @@ h2 {
   }
 }
 
+@media screen and (min-width: 992px) {
+  .account_menu {
+    width: 15em !important;
+  }
+}
+
 @media screen and (max-width: 992px) {
   .navbar-nav {
     max-width: 90% !important;

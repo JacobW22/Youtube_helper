@@ -1,4 +1,6 @@
 {% load static %}
+{% load widget_tweaks %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,6 +35,8 @@
       <link rel="stylesheet" href="{% static 'css/overall.css' %}">
     <!--===============================================================================================-->
       <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <!--===============================================================================================-->
+      <link rel="stylesheet" href="{% static 'css/template_manage_account_General.css' %}">
     <!--===============================================================================================-->   
       <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->	
@@ -54,12 +58,38 @@
   
 <!-- Main container start -->
 <div class="d-flex main-container flex-column flex-lg-row">
-
   <!-- Sidebar start -->
   {% include "manage_account_sidebar.html" with active="General" %}
   <!-- Sidebar end -->
 
-   <section class="col-md-10 bg-light">
+   <section class="col-lg-10 main_section py-4">
+
+    <div class="d-flex flex-column flex-lg-row justify-content-center top_section px-5">
+      <div class="d-flex justify-content-center fs-1 text-center account_info">
+        <span class="d-flex align-items-center gap-3">
+        <i class="fa-solid fa-user"></i>
+        {{ username }}
+        </span>
+      </div>
+    </div>
+
+    <div class=" text-center changes_section p-5 mt-5 gap-5">
+      <span class="text-center mx-auto fs-1 title">Change account details</span>
+
+      <form method="POST" class="d-flex flex-column justify-content-center align-items-center gap-2 mt-5 username_form">
+        {% csrf_token %}
+
+        <span class="text-center fs-3">Username</span>
+        {{ form.username|attr:"maxlength:20"|attr:"placeholder:Username"|add_class:"form-control" }}
+        
+        <span class="text-center fs-3 mt-5">E-mail address</span>
+        {{ form.email|attr:"placeholder:E-mail"|add_class:"form-control" }}
+
+        <button type="submit" class="btn btn-lg mt-5 send_request">Save</button>
+      </form>
+    
+    </div>
+
    </section>
 
 </div>
@@ -104,13 +134,8 @@
 
     // Add slideUp animation to Bootstrap dropdown when collapsing.
     $('.dropdown').on('hide.bs.dropdown', function() {
-      $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
+      $(this).find('.dropdown-menu').hide();
     });
-
-    $('.form-select').on('focus', function() {
-      $(this).css('border-color', '#7cf569');
-    }); 
-   
   });
 
 
@@ -126,6 +151,13 @@
       // Remove the toast element from the DOM
       toast.remove();
     });
+  });
+
+
+  $('.send_request').hover(function() {
+    $('.form-control').addClass('align-text-center');
+  }, function() {
+    $('.form-control').removeClass('align-text-center');
   });
 
 

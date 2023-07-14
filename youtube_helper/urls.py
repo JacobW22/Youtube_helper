@@ -30,8 +30,6 @@ urlpatterns = [
     path('login/', main_views.login_page, name='login_page'),
     path('sign_up/', main_views.sign_up_page, name='sign_up_page'),
     path('log_out/', main_views.logoutUser, name='logout'),
-    path('download/video/<path:parameter>', main_views.download_video, name="download_video"),
-    path('download/audio/<path:parameter>', main_views.download_audio, name="download_audio"),
     path('download/<path:parameter>', main_views.download_page, name='download_page'),
     path('download/<path:parameter><str:parameter_name>', main_views.download_page, name='download_page'),
 
