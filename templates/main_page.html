@@ -45,11 +45,13 @@
 {% include "navbar.html" with sites_context=sites_context active_site_name="Video Downloader" active_site_url=the_url %}
 <!-- Navbar end -->    
 
-<!-- Site container start -->
-<div class="d-flex flex-column full_site_container px-4">
+
+<!-- Main container start-->
+<div class="main-container">
+
 
   <!-- First section start -->
-  <section class="d-flex my-top my-lg-auto align-items-center first-container">
+  <section class="d-block my-top my-lg-auto align-items-center first-container">
     
     <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto gap-4 p-0" id="main_form" >
         {% csrf_token %}
@@ -64,16 +66,10 @@
   <!-- First section end -->
 
 
-  <!-- Horizontal line start -->
-  <div class="d-flex my-auto justify-content-center horizontal-line">
-    <hr class="hr">
-  </div>
-  <!-- Horizontal line end -->
-
 
   <!-- Second section start -->
-  <section class="d-flex my-auto flex-column container-fluid carousel_slider align-items-center justify-content-center second-container" style="height: 100%">
-  
+  <section class="d-flex my-auto flex-column container-fluid carousel_slider align-items-center justify-content-center second-container">
+
     <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
     <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
 
@@ -131,7 +127,8 @@
 
 
 </div>
-<!-- Site container end -->
+<!-- Main container end -->
+
 
 
 <!-- Toasts container start -->

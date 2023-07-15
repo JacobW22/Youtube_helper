@@ -444,7 +444,6 @@ async def get_streams_data(url):
 
             match stream.is_progressive:
                 case True:
-                    print(stream)
                     streams_data[stream.url] = [stream.resolution, file_extension.upper()]
                 case False:
                     streams_data_no_audio[stream.url] = [stream.resolution, file_extension.upper()]

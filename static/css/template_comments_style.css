@@ -236,6 +236,12 @@
   color: darkgray !important;
 }
 
+mark {
+  background-color: transparent !important;
+  color:  #5db74f !important;
+  padding: 0 !important;
+}
+
 .vid_info {
   font-family: 'Open Sans', sans-serif;
   font-weight: bold;
@@ -286,6 +292,11 @@
   transform: scale(1.2);
   transform-origin: bottom;
 }
+
+.tooltip-inner {
+  font-size: 1rem;
+}
+
 
 .error_occured,
 .embed-responsive {
