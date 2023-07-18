@@ -33,9 +33,9 @@ google_api_key = os.environ.get("GOOGLE_API_KEY")
 youtube = build('youtube', 'v3', developerKey=google_api_key)
 
 sites_context = {
-  "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
-  "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai thumbnail generator",
-  "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT comments filtering"
+    "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
+    "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT comments filtering",
+    "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai avatar generator"
 }
     
 
