@@ -43,8 +43,13 @@ button {
   text-underline-offset: 0.3em;
 }
 
-.fa-user {
-  scale: 1.4;
+.fa-user,
+.fa-at {
+  zoom: 1.8;
+}
+
+.fa-at {
+  transform: translateX(-30%);
 }
 
 .username {

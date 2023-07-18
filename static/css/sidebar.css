@@ -5,6 +5,13 @@
 
 .sidebar a {
     font-size: 1.2rem !important;
+    text-align: center;
+
+    border-bottom: 0.25em solid transparent;
+    border-radius: 25px;
+    padding-bottom: 0.3em;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .sidebar a:hover > div span {
@@ -13,7 +20,7 @@
 }
 
 .sidebar a:hover {
-    border-color: #910000 !important;
+    border-bottom: 0.25em solid darkgrey;
 }
 
 .sidebar a span {
@@ -25,10 +32,6 @@
     transition: all 0.4s !important;
 }
 
-.sidebar a {
-    text-align: center;
-}
-
 .sidebar a div {
     display: flex;
     flex-direction: column;
@@ -37,11 +40,7 @@
 }
 
 .sidebar .active {
-    padding-bottom: 0.3em;
-    border-bottom: 0.25em solid darkgrey;
-    padding-left: 1em;
-    padding-right: 1em;
-    border-radius: 25px;
+    border-color: #910000;
 }
 
 
@@ -49,6 +48,13 @@
 @media screen and (min-width: 1486px) {
     .sidebar a {
         text-align: left; 
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .sidebar_section {
+        min-height: 230px !important;
+        max-height: 230px !important;
     }
 }
 

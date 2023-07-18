@@ -9,12 +9,29 @@ class CreateUserForm(UserCreationForm):
         fields = ('username','email','password1', 'password2')
 
 
+class LoginUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+
+        fields = ('email','password')
+
+    
+    def clean_email(self):
+        email = self.cleaned_data['email'].lower()
+
+        try: 
+            account = User.objects.get(email__exact=email)
+            return email
         
+        except User.DoesNotExist: 
+            raise forms.ValidationError(f'Email {email} is invalid')
+        
+        
+       
 class UpdateUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username','email')
-
 
 
     def clean_email(self):
@@ -22,8 +39,10 @@ class UpdateUserForm(forms.ModelForm):
 
         try: 
             account = User.objects.exclude(pk=self.instance.pk).get(email=email)
+
         except User.DoesNotExist:
             return email
+        
         raise forms.ValidationError(f'Email {email} is already in use')
     
 
@@ -32,8 +51,10 @@ class UpdateUserForm(forms.ModelForm):
 
         try: 
             account = User.objects.exclude(pk=self.instance.pk).get(username=username)
+
         except User.DoesNotExist:
             return username
+        
         raise forms.ValidationError(f'Username {username} is already in use')
     
 

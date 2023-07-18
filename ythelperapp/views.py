@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
 
-
-from .forms import CreateUserForm, UpdateUserForm
+from .forms import CreateUserForm, LoginUserForm, UpdateUserForm
 from .decorators import login_check, not_authenticated_only
 from .models import user_data_storage, User
 
@@ -38,6 +37,7 @@ sites_context = {
   "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai thumbnail generator",
   "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT comments filtering"
 }
+    
 
 @login_check
 def main_page(request, login_context):
@@ -112,25 +112,28 @@ def main_page(request, login_context):
 @login_check
 @not_authenticated_only
 def login_page(request, login_context):
-    form = CreateUserForm()
+    form = LoginUserForm()
 
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password1")
+        form = LoginUserForm(request.POST)
+        
+        if form.is_valid():
 
-        user = authenticate(request, username=username, password=password)
+            email = request.POST.get("email").lower()
+            password = request.POST.get("password")
 
-        if user:
-            login(request, user)
-            msg.success(request, "Welcome " + username)
-            return redirect(main_page)
-        else:
-            msg.info(request, "Username or Password is incorrect")
-            return redirect(login_page)
+            user = authenticate(email=email, password=password)
 
-    context = {
-        "form": form,
-    }
+            if user:
+                login(request, user)
+                msg.success(request, "Welcome " + request.user.username)
+                return redirect(main_page)
+            
+            else:
+                msg.info(request, "Password is incorrect")
+                return(redirect(login_page))
+
+    context = {"form": form}
 
     context.update(login_context)
     context.update({'sites_context': sites_context})
@@ -338,11 +341,6 @@ def manage_account_General(request, login_context):
             form.save()
             msg.success(request, "Account has been updated")
             return redirect(manage_account_General)
-        else:
-
-            msg.info(request, "Something went wrong")
-
-            return redirect(manage_account_General)
 
 
     context = {'form': form}
@@ -363,8 +361,6 @@ def manage_account_Overview(request, login_context):
     
     for video in storage.download_history[-6:]:
         del video[3]
-
-
 
 
     context = {

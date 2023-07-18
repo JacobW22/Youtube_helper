@@ -64,17 +64,7 @@
 }
 
 .btn {
-  background: black !important;
-  color: white;
-  border-radius: 15px !important;
-  outline: none !important;
-  border: none !important;
-  box-shadow: 0em 0em 0.1em 0.03em white !important;
   scale: 1.1;
-}
-
-.btn:hover {
-  box-shadow: none !important;
 }
 
 .ai-title {

@@ -20,12 +20,10 @@
                         {% url value as the_url %}
                             {% if the_url != active_site_url %}
                                 <a class="dropdown-item fs-6 mt-lg-0 mt-3" href={{ the_url }}>{{ key|safe }}</a>
+                            {% else %}
+                                <a class="dropdown-item fs-6 mt-lg-0 mt-3" href="{{ ther_url }}">{{ key|safe }} <span class="text-muted ms-2">Now</span></a>
                             {% endif %}
-                    {% endfor %}
-
-                    <div class="dropdown-divider mt-lg-0 mt-3"></div>
-                    <a class="dropdown-item fs-6 mt-lg-0 mt-3" href="{{ active_site_url }}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp {{ active_site_name }} <span class="text-muted ms-2">Now</span></a>
-                
+                    {% endfor %}                
                 </div>
             </li>
 

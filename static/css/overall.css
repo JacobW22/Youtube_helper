@@ -50,6 +50,19 @@ h2 {
   user-select: none;
 }
 
+.btn {
+  background: black !important;
+  color: white;
+  border-radius: 15px !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: 0em 0em 0.15em 0.03em white !important;
+}
+
+.btn:hover {
+  box-shadow: none !important;
+}
+
 ::selection {
   color: black;
   background: darkgray;
@@ -98,8 +111,8 @@ a,
   font-size: 1.5rem !important;
 }
 
-.nav-link:hover,
-.nav-link[aria-expanded="true"] {
+.nav-link:not(.highlight_link):hover,
+.nav-link:not(.highlight_link)[aria-expanded="true"] {
   text-decoration: underline !important;
   text-underline-offset: 0.5em;
 }

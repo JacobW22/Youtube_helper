@@ -66,10 +66,11 @@
 
     <div class="d-flex flex-column flex-lg-row justify-content-center top_section px-5">
       <div class="d-flex justify-content-center fs-1 text-center account_info">
-        <span class="d-flex align-items-center gap-3">
+        <span class="d-flex align-items-center gap-3" id="typewriter">
+
         <i class="fa-solid fa-user"></i>
-        {{ username }}
-        </span>
+
+      </span>
       </div>
     </div>
 
@@ -109,6 +110,19 @@
   </div>
   {% endfor %}
 </div>
+
+<div class="toast-container bottom-0 start-50 translate-middle-x mb-5 ">
+  {% for field,errors in form.errors.items %}
+      {% for error in errors %}
+        <div class="toast text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+            <div class="toast-body">
+              {{ error }}
+            </div>
+          <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+  {% endfor %}
+</div>
 <!-- Toasts container end -->	
 
 
@@ -136,8 +150,23 @@
     $('.dropdown').on('hide.bs.dropdown', function() {
       $(this).find('.dropdown-menu').hide();
     });
-  });
 
+    var i = 0;
+    var speed = 50; /* The speed/duration of the effect in milliseconds */
+  
+    function typeWriter() {
+      // Get the text from the source element using jQuery
+      var txt = '{{ username }}';
+  
+      if (i < txt.length) {
+        $("#typewriter").append(txt.charAt(i));
+        i++;
+        setTimeout(typeWriter, speed);
+      }
+    }
+
+    typeWriter();
+  });
 
   // Add event listener for click event on the close button
   $('.toast .btn-close').on('click', function() {

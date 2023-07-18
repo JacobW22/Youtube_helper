@@ -43,20 +43,28 @@
 <!-- Navbar start -->
 {% url 'main_page' as the_url %}
 {% include "navbar.html" with sites_context=sites_context active_site_name="Video Downloader" active_site_url=the_url %}
-<!-- Navbar end -->    
+<!-- Navbar end -->   
 
 
-  <!-- Main container start -->
-  <div class="d-flex flex-column my-auto main-container">
+<!-- Main container start -->
+<div class="d-flex flex-column my-auto main-container">
+
+      <!-- Go back section start-->
+      <div class="mx-auto">
+        <button class="text-light highlight_link go_back fs-5 mb-4" onclick="history.back()">
+          <i class="fa-solid fa-arrow-left"></i>&nbsp; Go back
+        </button>
+      </div>
+    <!-- Go back section end-->
 
     <!-- First section start -->
-    <section class="d-none first-container justify-content-center flex-column align-items-center my-auto px-2">
+    <section class="d-none first-container justify-content-center flex-column align-items-center my-auto py-3 px-2">
 
 
         <!-- Card start -->
           <div class="card mb-3 border-0 text-light align-items-center justify-content-center" style="max-width: 100%;">
               <div class="row g-0 align-items-center justify-content-center">
-                <div class="col-7 col-lg-4 mb-4 mb-lg-0 d-flex flex-column align-items-center justify-content-center">
+                <div class="col-7 col-lg-4 d-flex flex-column align-items-center justify-content-center">
 
                   {% if video_id == "couldn't find" %}
                     <i class="fa-solid fa-triangle-exclamation error_occured mb-2" style="color: #ffffff;"></i>
@@ -129,6 +137,7 @@
                   <li>
                     <hr>
                   </li>
+                  
                 {% for download_link,info in streams_data.items %}
                   <li>
                     <a class="dropdown-item" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
