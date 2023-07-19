@@ -5,7 +5,7 @@
         <span class="navbar-toggler-icon"></span>
         </button>
       <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
-        <ul class="navbar-nav me-lg-2 gap-4 gap-lg-3 mb-sm-0">
+        <ul class="navbar-nav me-lg-2 gap-4 gap-lg-3 mb-sm-0 align-items-center">
 
 
             <li class="nav-item dropdown">
@@ -20,12 +20,10 @@
                         {% url value as the_url %}
                             {% if the_url != active_site_url %}
                                 <a class="dropdown-item fs-6 mt-lg-0 mt-3" href={{ the_url }}>{{ key|safe }}</a>
+                            {% else %}
+                                <a class="dropdown-item fs-6 mt-lg-0 mt-3" href="{{ ther_url }}">{{ key|safe }} <span class="text-muted ms-2">Now</span></a>
                             {% endif %}
-                    {% endfor %}
-
-                    <div class="dropdown-divider mt-lg-0 mt-3"></div>
-                    <a class="dropdown-item fs-6 mt-lg-0 mt-3" href="{{ active_site_url }}"><i class="fa-solid fa-location-crosshairs" style="color: #ffffff;"></i>&nbsp {{ active_site_name }} <span class="text-muted ms-2">Now</span></a>
-                
+                    {% endfor %}                
                 </div>
             </li>
 
@@ -40,22 +38,22 @@
             <a class="nav-link text-light" href="{% url 'login_page' %}"><span><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="{% url 'sign_up_page' %}"><span><i class="fa-solid fa-user-plus"></i>&nbsp Sign up</span></a>
+            <a class="nav-link text-light highlight_link" href="{% url 'sign_up_page' %}"><span><i class="fa-solid fa-user-plus"></i>&nbsp Get started</span></a>
           </li>
 
           {% else %}
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle text-light highlight_link" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
               <span>  
               <i class="fa fa-user" aria-hidden="true"></i>&nbsp {{ username }}
               </span>
             </a>
 
-            <div class="dropdown-menu account_menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item mt-lg-0 mt-3 mb-2" href="#"> Manage account </a>
+            <div class="dropdown-menu dropdown-menu-end account_menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item mt-lg-0 mt-3 mb-2" href="{% url 'manage_account_Overview' %}"> Manage account </a>
                 <div class="dropdown-divider mt-lg-0 mt-3"></div>
-                <a class="dropdown-item  text-light" href="{% url 'logout' %}"><span><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</span></a>
+                <a class="dropdown-item text-light" href="{% url 'logout' %}"><span><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log out</span></a>
             </div>
           </li>
 

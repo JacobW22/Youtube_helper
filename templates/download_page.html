@@ -12,73 +12,71 @@
     <!--===============================================================================================-->	
       <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
     <!--===============================================================================================-->	
+      <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+    <!--===============================================================================================-->	
       <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
     <!--===============================================================================================-->	
       <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
     <!--===============================================================================================-->	
 
 
-
-
-    <!--===============================================================================================-->	
-        <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>  
     <!--===============================================================================================-->
-        <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+      <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <!--===============================================================================================-->
-        <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
+      <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
     <!--===============================================================================================-->
-        <link rel="stylesheet" href="{% static 'css/template_download_style.css' %}">
+      <link rel="stylesheet" href="{% static 'css/template_download_style.css' %}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
-    <!--===============================================================================================-->	
-        <link rel="stylesheet" type="text/css" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <!--===============================================================================================-->
 
 
 </head>
 <body>
     
-<!-- Site container start -->
-<div class="d-flex flex-column full_site_container">
 
 
 <!-- Navbar start -->
 {% url 'main_page' as the_url %}
 {% include "navbar.html" with sites_context=sites_context active_site_name="Video Downloader" active_site_url=the_url %}
-<!-- Navbar end -->    
+<!-- Navbar end -->   
 
 
-  <!-- Main container start -->
-  <div class="d-flex flex-column gap-5 my-auto justify-content-center main-container">
+<!-- Main container start -->
+<div class="d-flex flex-column my-auto main-container">
+
+    <!-- Go back section start-->
+      <div class="mx-auto">
+        <button class="text-light highlight_link go_back fs-5 mb-4" onclick="history.back()">
+          <i class="fa-solid fa-arrow-left"></i>&nbsp; Go back
+        </button>
+      </div>
+    <!-- Go back section end-->
 
     <!-- First section start -->
-    <section class="d-none first-container justify-content-center flex-column align-items-center px-2">
+    <section class="d-none first-container justify-content-center flex-column align-items-center my-auto py-3 px-2">
 
 
         <!-- Card start -->
           <div class="card mb-3 border-0 text-light align-items-center justify-content-center" style="max-width: 100%;">
               <div class="row g-0 align-items-center justify-content-center">
-                <div class="col-7 col-lg-4 mb-4 mb-lg-0 d-flex align-items-center justify-content-center">
+                <div class="col-7 col-lg-4 d-flex flex-column align-items-center justify-content-center">
 
-                  {% if thumbnail == "couldn't find" %}
+                  {% if video_id == "couldn't find" %}
                     <i class="fa-solid fa-triangle-exclamation error_occured mb-2" style="color: #ffffff;"></i>
                   {% else %}
-                    <img src="{{ thumbnail }}" class="img-fluid rounded" alt="Video_thumbnail">
-                  
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item rounded" alt="Video" src="//www.youtube.com/embed/{{ video_id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                  </div>
                   {% endif %}
 
                 </div>
                 <div class="col-md-8 col-lg-6">
-                  <div class="card-body ">
+                  <div class="d-flex flex-column card-body gap-3">
                     <h5 class="card-title text-center fs-4">{{ title }}</h5>
                     <p class="card-text text-center mb-2"><a href="{{ link }}" class="link_to_video" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square" style="color: #78d4fc;"></i>&nbsp; {{ link }}</a></p>
                     <p class="card-text d-flex align-items-center justify-content-center">
@@ -88,8 +86,12 @@
                             Show description
                           </button>
                     </p>
-                    <p class="card-text text-center fs-6 mt-1 mt-sm-0"><i class="fa-solid fa-eye"></i></i> {{ views }}  views</p>
-                    <p class="card-text text-center fs-6"><i class="fa-regular fa-clock"></i> {{ length }} &nbsp;&nbsp;<i class="fa-regular fa-calendar-days"></i>&nbsp; {{ publish_date }}</p>
+                    <p class="card-text text-center fs-5 mt-1 mt-md-0 views"><i class="fa-solid fa-eye me-1"></i></i> {{ views }}  views</p>
+                    <p class="card-text text-center fs-6 ">
+                      <i class="fa-solid fa-thumbs-up"></i> &nbsp; {{ likes }} &nbsp;&nbsp;
+                      <i class="fa-regular fa-comments"></i> &nbsp; {{ comment_count }}
+                    </p>
+                    <p class="card-text text-center fs-6"><i class="fa-regular fa-clock"></i>&nbsp; {{ length }} &nbsp;&nbsp;<i class="fa-regular fa-calendar-days"></i>&nbsp; {{ publish_date }}</p>
                   </div>
                 </div>
               </div>
@@ -103,27 +105,56 @@
 
     <!-- Download section start -->
     {% if thumbnail != "couldn't find" %}
-      <section class="d-none flex-column second-container pb-4">
+      <section class="d-none flex-column second-container pb-4 gap-4 mb-auto">
           <div class="container-fluid gap-2 d-flex mt-2 mt-sm-4 justify-content-center">
             <p class="fs-3" id="floating"><strong>&darr; Download below &darr;</strong></p>
           </div>
 
 
-          <!-- Result box start -->
-          <form class="container-fluid gap-2 d-flex mt-5 justify-content-center cut_width"  method="post">
-              {% csrf_token %}
-              <a type="submit" class="btn btn-dark downloading login100-form-btn" name="sd_quality" href="{% url 'download_page' parameter=link parameter_name='-sd_quality' %}" data-bs-toggle="modal"  data-bs-target="#downloading_Modal">SD quality</a>
-              <a type="submit" class="btn btn-dark downloading login100-form-btn" name="hd_quality" href="{% url 'download_page' parameter=link parameter_name='-hd_quality' %}" data-bs-toggle="modal"  data-bs-target="#downloading_Modal">HD quality</a>
-          </form>
-          <!-- Result box end -->
+          <!-- Download menu start -->
+          <div class="container-fluid gap-5 mt-4 d-flex flex-column justify-content-center align-items-center">
+            
+            <div class="dropup-center dropup streams_data mx-auto">
+              <a class="btn btn-dark py-3 streams_data dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                Video formats
+              </a>
+            
+              <ul class="dropdown-menu streams_data streams_menu" aria-labelledby="dropdownMenuLink">
 
-          <!-- Result box2 start -->
-          <form class="container-fluid gap-2 d-flex mt-4 justify-content-center cut_more_width" method="post">
-            {% csrf_token %}
-            <a type="submit" class="btn btn-dark downloading login100-form-btn" name="mp3" href="{% url 'download_page' parameter=link parameter_name='-mp3' %}" data-bs-toggle="modal"  data-bs-target="#downloading_Modal">MP3 only</a>
-          </form>
+                {% for download_link,info in streams_data_no_audio.items %}
+                  <li>
+                    <a class="dropdown-item" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
+                        <span>{{ info.0 }}</span>
+                        <span class="text-muted float-right">
+                          <i class="fa-solid fa-volume-xmark" style="color: #ff0000;"></i>
+                          &nbsp;
+                          {{ info.1 }}
+                        </span>
+                    </a>
+                  </li>
+                {% endfor %}
 
-          <!-- Result box2 end -->
+                  <li>
+                    <hr>
+                  </li>
+                  
+                {% for download_link,info in streams_data.items %}
+                  <li>
+                    <a class="dropdown-item" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
+                        <span>{{ info.0 }}</span>
+                        <span class="text-muted float-right">{{ info.1 }}</span>
+                    </a>
+                  </li>
+                {% endfor %}
+
+              </ul>
+            </div>
+            <a class="btn btn-dark btn-lg downloading" href="{{ audio_download_url }}" target="_blank" rel="noopener noreferrer" download>Audio only</a>
+          
+          </div>
+          <!-- Download menu end -->
+
+
       </section>
     {% endif %}
     <!-- Download section end -->
@@ -132,8 +163,7 @@
   <!-- Main container end -->
 
 
-</div>
-<!-- Site container end -->
+
 
 
 
@@ -157,22 +187,6 @@
 </div>
 <!-- Modal with description end -->
 
-
-<!-- Modal when downloading start -->
-<div class="modal fade downloading_modal" id="downloading_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="downloading_ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body rounded">
-        <div class="d-flex align-items-center justify-content-center text-light">
-          <div class="spinner-border" role="status" aria-hidden="true"></div>
-            &nbsp;
-            <strong>  Downloading file for you...</strong>
-          </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal when downloading end -->
 
 
 <!-- Toasts container start -->	
@@ -199,7 +213,6 @@
     $(window).on("pageshow", function() {
       $('.modal').modal('hide');
     });
-    
 
     // Fade In page
     $('.first-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
@@ -209,13 +222,6 @@
     $(".toast").toast("show");
     $(".toast").addClass("custom-fade-in").css("opacity", "1");
   });
-
-
-  // Create backdrop when downloading modal is showed
-  $(".downloading_modal").on('shown.bs.modal', function() {
-    $('.modal-backdrop').css('opacity', '0.6');
-  });
-
 
 
   // Add event listener for click event on the close button
@@ -257,6 +263,17 @@
   // Add slideUp animation to Bootstrap dropdown when collapsing.
   $('.dropdown').on('hide.bs.dropdown', function() {
     $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
+  });
+  
+  // Add slideDown animation to Bootstrap dropup when expanding.
+  $('.dropup').on('show.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideToggle(300);
+  });
+
+
+  // Add slideUp animation to Bootstrap dropup when collapsing.
+  $('.dropup').on('hide.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').hide();
   });
 
 </script>

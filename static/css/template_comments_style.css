@@ -45,6 +45,10 @@
   width: 35rem !important;
 }
 
+.pointing-to-link {
+  font-family: "Quicksand", sans-serif;
+}
+
 .input_submit {
   border-radius: 15px !important;
   outline: none !important;
@@ -113,10 +117,6 @@
   scale: 1.1;
 }
 
-.main-container {
-  min-height: 26em !important;
-}
-
 .comments_container {
   max-height: 100% !important;
   height: 100% !important;
@@ -140,6 +140,11 @@
 .card_container {
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.profile_img-container {
+  width: 45px;
+  height: 100%;
 }
 
 .profile_img {
@@ -231,6 +236,12 @@
   color: darkgray !important;
 }
 
+mark {
+  background-color: transparent !important;
+  color:  #5db74f !important;
+  padding: 0 !important;
+}
+
 .vid_info {
   font-family: 'Open Sans', sans-serif;
   font-weight: bold;
@@ -260,14 +271,19 @@
   zoom: 120%;
 }
 
-.sort_menu {
-  margin-top: 3.2em !important;
-}
-
 .sort_menu .dropdown-item {
   text-align: center;
   max-width: 15em !important;
   font-size: 1.2rem !important;
+
+  backface-visibility: hidden;
+  perspective: 1000;
+  transform: translate3d(0, 0, 0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-transform: translateZ(0);
 }
 
 .sort_menu .dropdown-item:focus,
@@ -277,8 +293,26 @@
   transform-origin: bottom;
 }
 
-.vid_thumbnail {
-  box-shadow: 0px 0px 25px 10px black;
+.tooltip-inner {
+  font-size: 1rem;
+}
+
+
+.error_occured,
+.embed-responsive {
+  box-shadow: 0px 0px 25px 10px black !important;
+}
+
+.embed-responsive {
+  width: 75%!important;
+}
+
+.error_occured {
+  scale: 4;
+}
+
+.comments_navbar:not(.form-control) {
+  user-select: none!important;
 }
 
 @media screen and (min-width: 2270px) {
@@ -293,7 +327,7 @@
 }
 
 @media screen and (min-width: 1400px) and (max-width: 2270px) {
-  .main-container {
+  #main_form {
     zoom: 105%;
   }
 
@@ -312,9 +346,6 @@
 }
 
 @media screen and (max-width: 1400px) {
-  .sort_menu {
-    margin-top: 0 !important;
-  }
 
   .comments_results {
     height: calc(100% - 25px - 30px) !important;
@@ -341,25 +372,17 @@
   .sort_menu .dropdown-item {
     text-align: center !important;
   }
-
-  .sort_menu .dropdown-item {
-    margin-top: 1em !important;
-  }
   
 }
 
 @media screen and (max-width: 992px) {
   .badge {
-    margin-right: -4em;
+    margin-right: -2em;
     transform: translate(-100%, -60%) !important;
   }
 
   .comments_card_container {
     flex: 0 0 65%;
-  }
-
-  .main-container {
-    height: calc(160vh - 62px);
   }
 
   .footer, .page-link {

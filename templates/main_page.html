@@ -45,84 +45,84 @@
 {% include "navbar.html" with sites_context=sites_context active_site_name="Video Downloader" active_site_url=the_url %}
 <!-- Navbar end -->    
 
-<!-- Site container start -->
-<div class="d-flex flex-column full_site_container px-4">
+
+<!-- Main container start-->
+<div class="main-container">
+
 
   <!-- First section start -->
-  <section class="d-flex my-top my-lg-auto align-items-center first-container">
+  <section class="d-block my-top my-lg-auto align-items-center first-container snap">
     
     <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto gap-4 p-0" id="main_form" >
         {% csrf_token %}
 
           <span class="text-light fs-1 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
           <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
-          <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" class="form-control text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
-          <button type="submit" class="btn btn-dark btn-lg animate mt-2">Confirm</button>
+          <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" id="input_link" class="form-control text-light" required>
+          <button type="submit" class="btn btn-dark btn-lg animate mt-2 send_request">Confirm</button>
     </form>
 
   </section>
   <!-- First section end -->
 
 
-  <!-- Horizontal line start -->
-  <div class="d-flex my-auto justify-content-center horizontal-line">
-    <hr class="hr">
-  </div>
-  <!-- Horizontal line end -->
-
 
   <!-- Second section start -->
-  <section class="d-flex my-auto flex-column container-fluid carousel_slider align-items-center justify-content-center second-container" style="height: 100%">
-  
+  <section class="d-flex my-auto flex-column container-fluid carousel_slider align-items-center justify-content-center embed-responsive-item second-container">
+
     <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
     <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
 
     {% if logged == True and videos_informations %}
 
-    <div id="DownloadHistorySlider" class="carousel slide " >
-      <ol class="carousel-indicators">
 
-        {% for number in number_of_links %}
-        <li data-target="#DownloadHistorySlider" class="indicator" data-slide-to="{{ number }}"></li>
-        {% endfor %} 
 
-      </ol>
-      <div class="carousel-inner">
+      <div id="DownloadHistorySlider" class=" mx-auto carousel slide snap">
+        <ol class="carousel-indicators">
 
-        {% for video in videos_informations %}
+          {% for number in number_of_links %}
+          <li data-target="#DownloadHistorySlider" class="indicator" data-slide-to="{{ number }}"></li>
+          {% endfor %} 
 
-          <div class="carousel-item">
-            <img class="d-block slider_image img-fluid" src="{{ video.thumbnail }}" alt="slide">
-              <div class="carousel-caption d-block text-center">
-                <span class="caption_text d-block text-truncate"> {{ video.title }} </span>
+        </ol>
+        <div class="carousel-inner">
 
-                <p class="mt-2 date_in_caption"><small><i class="fa-regular fa-calendar-days"></i>&nbsp {{ video.publish_date }}</small></p>
-                {% comment %} <a type="submit" class="mx-auto btn btn-dark downloading login100-form-btn download-button" name="sd_quality" href="{% url 'download_page' %}?link={{ link }}&name=sd_quality"> Download </a> {% endcomment %}
-              </div>
-          </div>
+          {% for video in videos_informations %}
 
-        {% endfor %} 
+            <div class="carousel-item">
+              <img class="d-block slider_image" src="{{ video.thumbnail }}" alt="slide">
+                <div class="carousel-caption d-block text-center">
+                  <span class="caption_text d-block text-truncate"> {{ video.title }} </span>
 
+                  <p class="mt-2 date_in_caption"><small><i class="fa-regular fa-calendar-days"></i>&nbsp {{ video.publish_date }}</small></p>
+                  <a type="submit" class="btn btn-dark my-2" onclick="submitFormWithValue('{{ video.link }}')"> Download </a>
+                </div>
+            </div>
+
+          {% endfor %} 
+
+        </div>
+        <a class="carousel-control-prev" data-target="#DownloadHistorySlider" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" data-target="#DownloadHistorySlider" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
       </div>
-      <a class="carousel-control-prev" data-target="#DownloadHistorySlider" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" data-target="#DownloadHistorySlider" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-    </div>
+
+
   </section>
 
 
   {% elif logged == False %}
-  <section class="d-flex info_for_carousel">
+  <section class="d-flex info_for_carousel snap">
     <span class="text-light fs-2 text-center text-muted"> Log in to see your download history </span>
   </section>
 
   {% else %}
-  <section class="d-flex info_for_carousel">
+  <section class="d-flex info_for_carousel snap">
     <span class="text-light fs-2 text-center text-muted"> Download history is empty </span>
   </section>
 
@@ -130,8 +130,10 @@
   <!-- Second section end -->
 
 
+
 </div>
-<!-- Site container end -->
+<!-- Main container end -->
+
 
 
 <!-- Toasts container start -->
@@ -156,9 +158,13 @@
   var carousel_indicators = document.getElementsByClassName("indicator");
   
   if (carousel_slides[0] != undefined && carousel_indicators[0] != undefined) {
-  carousel_slides[0].classList.add("active");
-  carousel_indicators[0].classList.add("active"); 
+    carousel_slides[0].classList.add("active");
+    carousel_indicators[0].classList.add("active"); 
   }
+
+  $('.carousel').carousel({
+    interval: 2500
+  });
 
   // Changing hamburger icon when clicked
   var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");
@@ -193,7 +199,11 @@
     $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
     $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
   
-
+    $('.send_request').hover(function() {
+      $('.form-control').addClass('align-text-center');
+    }, function() {
+      $('.form-control').removeClass('align-text-center');
+    });
 
     $(".toast").css("opacity", "0");
     $(".toast").toast("show");
@@ -217,6 +227,17 @@
       });
     };
 });
+
+function submitFormWithValue(link) {
+
+  var form = document.getElementById('main_form');
+
+  var input_link = document.getElementById('input_link');
+
+  input_link.value = link;
+
+  form.submit();
+}
 
 </script>
 </body>

@@ -50,16 +50,31 @@ h2 {
   user-select: none;
 }
 
-::selection {
+.btn {
+  background: black !important;
   color: white;
-  background: black;
+  border-radius: 15px !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: 0em 0em 0.15em 0.03em white !important;
+}
+
+.btn:hover {
+  box-shadow: none !important;
+}
+
+::selection {
+  color: black;
+  background: darkgray;
 }
 
 #main-title,
 .navbar-toggler-icon,
+.navbar-toggler,
 a,
 .dropdown-item,
 .form-control,
+.nav-link,
 .btn,
 .btn-close {
   -webkit-transition: all 0.4s !important;
@@ -72,15 +87,34 @@ a,
   z-index: 100;
 }
 
-.nav-link:hover > span .fa-solid,
-.nav-link:hover > span .fa {
+.navbar {
+  user-select: none !important;
+}
+
+.nav-link:not(.highlight_link):hover > span .fa-solid,
+.nav-link:not(.highlight_link):hover > span .fa {
   color: yellow !important;
 }
 
-.nav-link:hover,
-.nav-link[aria-expanded="true"] {
-  transform: scale(1.2) !important;
-  transform-origin: top;
+.highlight_link {
+  border: 0.10em solid #910000;
+  border-radius: 25px;
+  padding: 0.7em !important;
+}
+
+.highlight_link:hover > span .fa-solid, 
+.highlight_link:hover > span .fa {
+  color: #bf0000 !important;
+}
+
+.highlight_link span .fa-user {
+  font-size: 1.5rem !important;
+}
+
+.nav-link:not(.highlight_link):hover,
+.nav-link:not(.highlight_link)[aria-expanded="true"] {
+  text-decoration: underline !important;
+  text-underline-offset: 0.5em;
 }
 
 .nav-link[aria-expanded="true"] > span .fa-solid,
@@ -110,7 +144,7 @@ a,
   border-radius: 15px !important;
 }
 
-.dropdown-menu:not(.sort_menu) {
+.dropdown-menu:not(.sort_menu, .streams_data) {
   backdrop-filter: blur(10px);
   backface-visibility: hidden;
   perspective: 1000;
@@ -178,11 +212,16 @@ h2 {
 }
 
 .navbar-toggler:not(.comments_navbar_toggler) {
-  border: 0.1em solid #fff !important;
+  border: 0.2em solid #910000;
   border-radius: 50% !important;
-  padding: 0.2em !important;
+  padding: 0.5em !important;
   margin-top: 0.5em;
   margin-right: 0.3em;
+}
+
+.navbar-toggler:not(.comments_navbar_toggler):hover,
+.navbar-toggler:not(.comments_navbar_toggler)[aria-expanded="true"] {
+  border-color: #7cf569;
 }
 
 .navbar-toggler-icon {
@@ -233,6 +272,10 @@ h2 {
   text-align: center;
 }
 
+.align-text-center {
+  text-align: center !important;
+}
+
 @keyframes fade-in-animation {
   0% {
     opacity: 0;
@@ -273,16 +316,16 @@ h2 {
     font-size: 175% !important;
   }
 
-  .dropdown-menu:not(.sort_menu) {
+  .dropdown-menu:not(.sort_menu, .streams_data) {
     margin-top: 3.2em !important;
   }
 
-  .dropdown-menu:not(.sort_menu, .selection-menu) {
+  .dropdown-menu:not(.sort_menu, .selection-menu, .streams_data) {
     width: 300% !important;
   }
 
   .main-container {
-    height: calc(100vh - 111px);
+    height: calc(100% - 125px);
   }
 }
 
@@ -293,20 +336,6 @@ h2 {
 
   .nav-link {
     font-size: 1.25rem !important;
-  }
-
-  .main-navbar {
-    margin-top: 2.3em;
-    height: 0;
-  }
-
-  .nav-item {
-    max-height: 0;
-    margin-bottom: 3.1em;
-  }
-
-  .dropdown-menu:not(.sort_menu) {
-    margin-top: 3.2em !important;
   }
 
   .sort_menu {
@@ -322,7 +351,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 97px);
+    height: calc(100% - 106px);
   }
 }
 
@@ -332,7 +361,7 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 97px) !important;
+    height: calc(100% - 106px) !important;
   }
 }
 
@@ -341,19 +370,21 @@ h2 {
     margin-left: auto !important;
   }
 
-  .dropdown-menu:not(.sort_menu, .selection-menu, .account_menu) {
+  .dropdown-menu:not(.sort_menu, .selection-menu, .account_menu, .streams_data) {
     width: 300% !important;
   }
 
   .dropdown-item:not(
       .selection-menu .d-flex .dropdown-item,
       .sort_menu .dropdown-item,
-      .account_menu .dropdown-item
+      .account_menu .dropdown-item,
+      .streams_data .dropdown-item
     ):focus,
   .dropdown-item:not(
       .selection-menu .d-flex .dropdown-item,
       .sort_menu .dropdown-item,
-      .account_menu .dropdown-item
+      .account_menu .dropdown-item,
+      .streams_data .dropdown-item
     ):hover {
     margin-left: 1.1em !important;
   }
@@ -365,13 +396,19 @@ h2 {
   }
 
   .main-container {
-    height: calc(100vh - 62px);
+    height: calc(100% - 90px);
   }
 }
 
 @media screen and (max-width: 1080px) {
   body::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .account_menu {
+    width: 15em !important;
   }
 }
 
@@ -383,7 +420,6 @@ h2 {
   }
 
   .nav-link {
-    width: 6em;
     margin-left: auto;
     margin-right: auto;
     display: flex !important;

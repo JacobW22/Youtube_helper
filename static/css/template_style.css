@@ -1,6 +1,10 @@
-body {
+.main-container {
   scroll-snap-type: y mandatory !important;
   scroll-behavior: smooth !important;
+}
+
+.snap {
+  scroll-snap-align: center !important;
 }
 
 .form-control {
@@ -31,15 +35,6 @@ body {
   user-select: none;
 }
 
-#main_form {
-  transform: scale(1.1) translateY(-25%);
-}
-
-section:not(.first-container),
-nav {
-  scroll-snap-align: center !important;
-}
-
 .container {
   width: 100%;
   height: 100%;
@@ -49,24 +44,21 @@ button {
   position: relative;
 }
 
-.btn {
-  background: black !important;
-  color: white;
-  border-radius: 15px !important;
-  outline: none !important;
-  border: none !important;
-  box-shadow: 0em 0em 0.1em 0.03em white !important;
-}
-
-.btn:hover {
-  box-shadow: none !important;
-}
-
-.carousel-inner .carousel-item > img {
+.carousel-inner .carousel-item > img,
+.carousel-inner>.item {
   -webkit-transition: all 0.4s !important;
   -o-transition: all 0.4s !important;
   -moz-transition: all 0.4s !important;
   transition: all 0.4s !important;
+
+  backface-visibility: hidden;
+  perspective: 1000;
+  transform: translate3d(0, 0, 0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-transform: translateZ(0);
 }
 
 .pointing-to-link,
@@ -75,46 +67,35 @@ button {
   font-family: "Quicksand", sans-serif;
 }
 
-.carousel-inner .carousel-item > img {
-  transform: scale(1.4) !important;
-  height: 100%;
-  width: 100%;
+.slider_image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: fill !important;
   filter: brightness(20%);
   -webkit-filter: brightness(20%);
 }
 
-.carousel-inner .carousel-item > img:hover {
+.carousel:hover > .carousel-inner .carousel-item img {
   filter: brightness(60%);
   -webkit-filter: brightness(60%);
-}
-
-.carousel:hover .carousel-inner .carousel-item > img {
-  transform: scale(1) !important;
 }
 
 .carousel-caption {
   opacity: 0.8;
   position: relative;
-  font-size: 1.5vw;
-}
-
-.download-button {
-  width: 7.5rem !important;
-  scale: 0.7;
+  font-size: 1.5rem;
 }
 
 .date_in_caption {
-  font-size: 1vw;
+  font-size: 1.2rem;
 }
 
 .carousel {
-  border-radius: 10% !important;
+  border-radius: 25px !important;
   overflow: hidden !important;
-  margin-bottom: 10rem;
-  transform: scale(1.5, 1.3);
+  width: auto;
+  height: 60%;
   margin-bottom: 5rem !important;
-  margin-top: 2rem !important;
-  width: 35%;
   box-shadow: 0px 0px 25px 10px black;
 }
 
@@ -134,18 +115,18 @@ button {
   border-radius: 15px !important;
 }
 
-hr {
-  width: 30%;
-  background-color: black;
-  color: black;
-  height: 15px !important;
-  border-radius: 15px;
-  opacity: 100;
-  box-shadow: 0px 0px 25px 2px black;
+.first-container, 
+.carousel_slider {
+  height: calc(100vh - 106px);
 }
 
-.first-container {
-  height: 100%;
+
+#main_form {
+  zoom: 1.1;
+}
+
+.main-container {
+  overflow-y: scroll;
 }
 
 @media screen and (min-width: 2048px) {
@@ -153,61 +134,28 @@ hr {
   .second-container {
     zoom: 175%;
   }
-
-  .carousel-caption,
-  .date_in_caption {
-    font-size: 0.75vw !important;
-  }
-
-  .full_site_container {
-    height: calc(200% + 48px + 111px);
-  }
 }
 
-@media screen and (min-width: 1200px) {
-  .slider_info {
-    margin-bottom: 6rem !important;
-  }
-
+@media screen and (min-width: 1400px) {
   .first-container,
   .second-container {
     zoom: 105%;
   }
 }
 
-@media screen and (min-width: 997px) and (max-width: 2048px) {
-  .full_site_container {
-    height: calc(200% + 48px + 90px);
-  }
-}
-
-@media screen and (max-width: 997px) {
-  .carousel {
-    width: 65% !important;
+@media screen and (max-width: 992px) {
+  .first-container
+  .carousel_slider {
+    height: calc(100vh - 90px);
   }
 
-  .carousel-caption,
-  .date_in_caption {
-    font-size: 2vw !important;
-  }
-
-  hr {
-    width: 75% !important;
-  }
-
-  .full_site_container {
-    height: calc(200% + 48px + 62px);
+  .main-container::-webkit-scrollbar {
+    display: none;
   }
 }
 
 @media screen and (max-width: 576px) {
-  .date_in_caption,
-  .carousel-caption {
-    font-size: 3vw !important;
-  }
-
-  .download-button {
-    width: 2rem !important;
-    scale: 0.7 !important;
+  .carousel-caption, .date_in_caption {
+    font-size: 1rem;
   }
 }
