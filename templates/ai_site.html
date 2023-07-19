@@ -20,8 +20,7 @@
     <!--===============================================================================================-->
       <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
     <!--===============================================================================================-->
-      <script src="{% static 'js/DragToScroll.js' %}"></script>
-    <!--===============================================================================================-->
+    
       
     
     
@@ -40,7 +39,7 @@
     <!--===============================================================================================-->
 
 </head>
-<body onload="DragToScroll('.text_section')" onresize="DragToScroll('.text_section')">
+<body>
     
 
 <!-- Navbar start -->
@@ -53,31 +52,37 @@
 
 
 <!-- Main container start -->
-<div class="d-flex main-container flex-column flex-md-row p-3 m-0 gap-3">
+<div class="d-flex flex-column py-3 px-0 m-0 gap-3">
   
         <!-- First section start -->
-        <section class="d-flex first-section flex-column mx-auto gap-3 w-100 col-md-6">
+        <section class="d-flex w-100 first-section flex-column mx-auto gap-3 px-0">
           <!-- Content container start -->
-          <div class="d-flex content flex-column h-75 my-auto">
-            <span class="text-light fs-1 ai-title ms-3 align-self-top mt-lg-4 text-lg-left text-sm-center">
-                <i class="fa-solid fa-brain" style="color: #ffffff;"></i>&nbsp Generate Video Thumbnail with Ai
-            </span>
+          <div class="d-flex w-100 content flex-column justify-content-center align-items-center my-auto">
+            <div class="d-flex flex-column gap-3 mb-3 text-center justify-content-center align-items-center">
+              <i class="fa-solid fa-brain fs-1" style="color: #ffffff;"></i>
+              <span class="text-light fs-1 ai-title">
+                  Generate Avatar image with Ai
+              </span>
+            </div>
             
-            <span class="d-flex text-light ms-1 flex-column align-self-top col mt-1 mt-lg-4 gap-5 text_section" >
-                <span class="ai-subtitle ps-2 fs-3">
-                How it works?
-                </span>
+            <span class="d-flex text-light w-100 flex-column px-0 align-self-top mt-1 mt-lg-4 gap-5 text_section" >
+                <div class="text-center">
+                  <span class="ai-subtitle text-center px-3 fs-3">
+                    Avatars collection
+                  </span>
+                </div>
                 
-                <span class="ps-2 fs-4 justify-content-center">
-                  The app uses an OpenAI API to communicate with Chat GPT, an advanced language model that can provide personalized responses.
-
-                  With this app, you can send a request to Chat GPT, and receive a small comment and a YouTube video in response.<br><br>
-                  
-                  Our feature is perfect for anyone who is curious about what Ai can recommend to watch and wants to explore the Youtube world.<br><br>
-                  
-                  With Chat GPT, you can discover new ideas, learn new things, and have so much fun. So what are you waiting for? 
-
-                </span>
+                <div class="text-center avatar_gallery w-100">
+                  <img src="{% static 'images/img-60gIrd8ObbkiZhzTnMLTruTK.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-d6cwUNORxNQRZ45LlP6p4xuh.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-ibvNq7JJ394njF7IUhuEtx03.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-jt9NQ6y6dbfOftlQ6TJlRPQh.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-LuHpPcqYgJfLwGBWgRDXWvJE.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-BszahQQvIOyUdNU0hf1BIN9m.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-NlfvemMSRGMAlA4YXw2IbGZJ.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-uuo5NqltONY3oXEarTLQ9WX2.png' %}" alt="icon_example" class="img-fluid">
+                </div>
+                
             </span>
           </div>
           <!-- Content container end -->
@@ -86,8 +91,8 @@
 
 
         <!-- Second section start -->
-        <section class="d-flex second-section flex-column container-fluid mx-auto w-100 col-md-6">
-          <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto mx-auto form-container" id="main_form" >
+        <section class="d-flex second-section flex-column container-fluid mx-auto w-100">
+          <form method="post" class="container-fluid d-flex flex-column align-items-center pb-3 my-auto mx-auto form-container" id="main_form" >
               {% csrf_token %}
 
                   <span class="text-light fs-2 container-for-gears row gap-1">
@@ -95,11 +100,11 @@
                       <span class="col align-self-end p-0 p-sm-1"><small><i class="fa-solid fa-gear" style="color: #ffffff;"></i></small></span>
                   </span>
 
-                  <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default"> Generate a thumbnail for me </span>
+                  <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default"> Create your own </span>
                  
                   <span class="pointing-to-link text-light fs-1 mb-2 p-1 text-center " id="inputGroup-sizing-default"> <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i> </span>
-                  <input type="text" name="description" placeholder="Programming tutorial, Cooking a pizza, Gameplay footage etc." class="form-control text-light mb-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
-                  <span class="fs-6 text-light text-muted text-center mb-5">Describe your video up here</span>
+                  <input type="text" name="description" placeholder="Video Vlogger,  Gamer,  Car Mechanic,  Software Engineer etc." class="form-control text-light mb-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                  <span class="fs-6 text-light text-muted text-center mb-5">Describe your avatar up here</span>
                   <button type="submit" class="btn btn-dark btn-lg rounded-pill send_request animate">Generate</button>
                   
           </form>        
@@ -108,8 +113,8 @@
 
 
         <!-- Modal for request start -->
-        <div class="modal fade modal2" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade downloading_modal" id="downloading_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="downloading_modalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered my-0">
             <div class="modal-content">
               <div class="modal-body">
                 <div class="d-flex align-items-center justify-content-center modal_text">
@@ -134,9 +139,24 @@
 
   <!-- Main container start -->
   <div class="main-container center_container d-inline-block">
-      <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto img_container">
-        <span class="text-light fs-1 fst-italic fw-bold text-center mb-5 truncate" id="inputGroup-sizing-default"> {{ image_title }} &nbsp; <small><i class="fa-solid fa-tag"></i></small></span>
-        <img src="{{ image_link }}" class="img-fluid ai_generated_thumbnail" alt="Video_thumbnail"><!-- Main container end -->
+      <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto main-container">
+        <!-- Go back section start-->
+          <div class="mx-auto mb-3">
+            <button class="text-light highlight_link go_back fs-5 mb-4" onclick="history.back()">
+              <i class="fa-solid fa-arrow-left"></i>&nbsp; Go back
+            </button>
+          </div>
+        <!-- Go back section end-->
+
+        <div>
+          <span class="text-center text-muted fs-3">Description:<span>
+        </div>
+
+        <div class="mb-4">
+          <span class="text-light fs-1 text-center truncate" id="inputGroup-sizing-default"> {{ image_title }}</span>
+        </div>
+
+        <img src="{{ image_link }}" class="img-fluid ai_generated_thumbnail" alt="Video_thumbnail">
         <a type="button" class="btn btn-dark btn-lg rounded-pill download_file mt-5 mb-3 animate" href="{{ image_link }}" target="_blank" rel="noopener noreferrer" download="Thumbnail"> Download &nbsp;<i class="fa-solid fa-up-right-from-square"></i></a>
       </div>
   </div>
@@ -171,7 +191,7 @@
     
     $(window).on("pageshow", function() {
       $('.modal').modal('hide');
-      $("#staticBackdrop").modal('hide');
+      $("#downloading_modal").modal('hide');
     });
 
     // Fade In page
@@ -217,12 +237,12 @@
   });
 
 
-  $(".modal2").on('shown.bs.modal', function() {
+  $(".downloading_modal").on('shown.bs.modal', function() {
     $('.modal-backdrop').css('opacity', '0.6');
   });
 
 	$(".send_request").click(function(){
-		$("#staticBackdrop").modal('show');
+		$("#downloading_modal").modal('show');
 	});
 
 

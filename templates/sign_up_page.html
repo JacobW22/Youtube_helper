@@ -1,4 +1,5 @@
 {% load static %}
+{% load widget_tweaks %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -79,16 +80,16 @@
                   Sign up 
               </span>
 
-              <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-                  {{ form.username }}
-                  <span class="focus-input100"></span>
+              <div class="wrap-input100 validate-input">
+                  {{ form.username|attr:"placeholder:Username"|add_class:"input100 username" }}
+                <span class="focus-input100"></span>
                   <span class="symbol-input100">
                       <i class="fa fa-user" aria-hidden="true"></i>
                   </span>
               </div>
 
               <div class="wrap-input100 validate-input mt-4" data-validate = "Valid email is required: ex@abc.xyz">
-                  {{ form.email }}
+                    {{ form.email|attr:"placeholder:E-mail"|add_class:"input100 email" }}
                   <span class="focus-input100"></span>
                   <span class="symbol-input100">
                       <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -96,7 +97,7 @@
               </div>
 
               <div class="wrap-input100 validate-input" data-validate = "Password is required">
-                  {{ form.password1 }}
+                  {{ form.password1|attr:"placeholder:Password"|add_class:"input100" }}
                   <span class="focus-input100"></span>
                   <span class="symbol-input100">
                       <i class="fa fa-lock" aria-hidden="true"></i>
@@ -104,7 +105,7 @@
               </div>
 
               <div class="wrap-input100 validate-input" data-validate = "Password is required">
-                  {{ form.password2 }}
+                  {{ form.password2|attr:"placeholder:Confirm Password"|add_class:"input100" }}
                   <span class="focus-input100"></span>
                   <span class="symbol-input100">
                       <i class="fa fa-lock" aria-hidden="true"></i>
@@ -175,33 +176,23 @@
       $(".toast").toast("show");
       $(".toast").addClass("custom-fade-in").css("opacity", "1");
 
-      // Add event listener for click event on the close button
-      $('.toast .btn-close').on('click', function() {
-        var toast = $(this).closest('.toast');
-        // Animate the toast element
-        toast.animate({
-          opacity: 0,
-          height: 0,
-          marginBottom: 0
-        }, 500, function() {
-          // Remove the toast element from the DOM
-          toast.remove();
-        });
+      $('.email').keyup(function(){
+        $(this).val($(this).val().toLowerCase());
       });
+  });
 
-      
-      var form_fields = document.getElementsByTagName("input");
-
-      for (const element of form_fields) {
-          element.classList.add("input100");
-      };
-
-      form_fields[1].placeholder = "Username";
-      form_fields[1].classList.add('username');
-      form_fields[2].placeholder = "E-mail";
-      form_fields[3].placeholder = "Password";
-      form_fields[4].placeholder = "Confirm Password";
-
+  // Add event listener for click event on the close button
+  $('.toast .btn-close').on('click', function() {
+    var toast = $(this).closest('.toast');
+    // Animate the toast element
+    toast.animate({
+      opacity: 0,
+      height: 0,
+      marginBottom: 0
+    }, 500, function() {
+      // Remove the toast element from the DOM
+      toast.remove();
+    });
   });
 
 
