@@ -155,10 +155,6 @@
   color: white;
 }
 
-.badge {
-  user-select: none;
-}
-
 .profile_img {
   -webkit-transition: all 0.2s !important;
   -o-transition: all 0.2s !important;
@@ -257,10 +253,12 @@ mark {
 }
 
 .badge {
+  user-select: none;
   height: 1.5em !important;
   margin-bottom: 1.1em !important;
   transform: translate(-60%, -50%) !important;
 }
+
 
 .badge_with_pinned {
   margin-bottom: 3.5em !important;

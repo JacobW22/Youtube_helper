@@ -173,6 +173,10 @@
                         <a href="{{ comment.channel_url }}" class="author_name">
                           {{ comment.author }}
                         </a>
+
+                        <span class="text-muted ms-2" title="replies">
+                          <i class="fa-solid fa-comment me-1"></i>{{ comment.replies }}
+                        </span>
                       </p>
                     </div>
     
@@ -204,13 +208,14 @@
 
                   </div>
 
+
                   {% if comment.pinned == True %}
-                  <span class="mt-auto badge badge_with_pinned rounded-pill bg-danger">
+                    <span class="mt-auto badge badge_with_pinned rounded-pill bg-danger">
                   {% else %}
-                  <span class="mt-auto badge rounded-pill bg-danger" title="likes">
+                    <span class="mt-auto badge likes_badge rounded-pill bg-danger" title="likes">
                   {% endif %}
-                    <i class="fa-solid fa-thumbs-up me-1"></i> {{ comment.likes }}
-                  </span>
+                      <i class="fa-solid fa-thumbs-up me-1"></i> {{ comment.likes }}
+                    </span>
 
                 </div>
 
