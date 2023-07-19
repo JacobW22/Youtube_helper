@@ -48,6 +48,10 @@ button {
   zoom: 1.8;
 }
 
+.email:not(:placeholder-shown) {
+  text-transform: lowercase;
+}
+
 .fa-at {
   transform: translateX(-30%);
 }

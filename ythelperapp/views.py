@@ -100,9 +100,15 @@ def main_page(request, login_context):
             )
 
             time = dt.now()
-            info = [yt.title, link, time.strftime("%d/%m/%Y %H:%M"), yt.thumbnail_url]
-            storage.download_history.append(info)
-            storage.save()
+
+            try:
+                info = [yt.title, link, time.strftime("%d/%m/%Y %H:%M"), yt.thumbnail_url]
+                storage.download_history.append(info)
+                storage.save()
+
+            except Exception as err:
+                msg.info(request, "Something went wrong, history not updated ")
+        
 
         return redirect("download_page", parameter=link)
 
@@ -194,8 +200,12 @@ def download_page(request, login_context, parameter):
     
     context = {}
 
-    context = run_async(parameter)
-
+    try:
+        context = run_async(parameter)
+    except Exception:
+        msg.info(request, "Something went wrong, please try again")
+        return redirect(main_page)
+    
     context.update(login_context)
     context.update({'sites_context': sites_context})
 

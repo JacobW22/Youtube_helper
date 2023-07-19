@@ -2,6 +2,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms 
 from django.contrib.auth.models import User
 from .models import user_data_storage, User
+from django.db.models import UniqueConstraint
+from django.db.models.functions import Lower
 
 class CreateUserForm(UserCreationForm):
     class Meta:
@@ -9,23 +11,22 @@ class CreateUserForm(UserCreationForm):
         fields = ('username','email','password1', 'password2')
 
 
-class LoginUserForm(forms.ModelForm):
-    class Meta:
-        model = User
-
-        fields = ('email','password')
+class LoginUserForm(forms.Form):
+    email = forms.EmailField(max_length = 254)
+    password = forms.CharField()
 
     
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
 
-        try: 
-            account = User.objects.get(email__exact=email)
+       
+        account = User.objects.filter(email__exact=email).first()
+
+        if account:
             return email
-        
-        except User.DoesNotExist: 
+        else:
             raise forms.ValidationError(f'Email {email} is invalid')
-        
+    
         
        
 class UpdateUserForm(forms.ModelForm):
