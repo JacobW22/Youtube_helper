@@ -213,7 +213,7 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
 
         try:
             response_data = openai.Image.create(
-                prompt=description + " user profile img",
+                prompt=description + ", digital art, icon, avatar image, illustration style, epic, user profile image, ultra quality, 1:1",
                 n=1,
                 size="1024x1024"
             )
@@ -391,7 +391,7 @@ def manage_account_Private(request, login_context):
 
 
 
-
+# Non-views functions
 
 def run_async(url):
 
