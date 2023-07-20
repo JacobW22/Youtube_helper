@@ -114,6 +114,10 @@ def main_page(request, login_context):
 
     return render(request, "main_page.html", context)
 
+@login_check
+@not_authenticated_only 
+def passwordReset(request, login_context):
+    pass
 
 @login_check
 @not_authenticated_only
@@ -609,6 +613,7 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
                     channel_url = snippet['authorChannelUrl']
                     text = snippet['textDisplay']
                     likes = f"{snippet['likeCount']:,}"
+                    replies = f"{comment['snippet']['totalReplyCount']:,}"
                     profile_image_url = snippet['authorProfileImageUrl']
                     publish_date = isoparse(snippet['publishedAt']).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -618,6 +623,7 @@ async def get_video_comments(video_id, order, maxResults, previousPageID, pageID
                         'channel_url' : channel_url,
                         'text': text,
                         'likes': likes,
+                        'replies': replies,
                         'profile_image_url': profile_image_url,
                         'publish_date': publish_date
                     })

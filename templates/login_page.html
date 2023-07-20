@@ -110,16 +110,13 @@
 
   <div class="d-block mt-5 mb-3 footer">
     <div class="text-center">
-      <span class="txt1">
-          Forgot
-      </span>
-      <a class="txt2" href="#">
-          Username / Password?
+      <a class="txt2 fs-6" href="{% url 'password_reset' %}">
+        Forgot Password?
       </a>
     </div>
 
     <div class="text-center pt-2 mb-3 footer">
-        <a class="txt2" href="{% url 'sign_up_page' %}">
+        <a class="txt2 fs-6" href="{% url 'sign_up_page' %}">
             Need a new account? Sign up
             <i class="fa fa-long-arrow-right ms-1" aria-hidden="true"></i>
         </a>
