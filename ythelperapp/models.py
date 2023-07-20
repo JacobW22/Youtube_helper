@@ -12,6 +12,8 @@ class user_data_storage(models.Model):
     prompts_history = ArrayField(ArrayField(models.CharField(max_length=500), default=None))
     filtered_comments_history = ArrayField(ArrayField(models.CharField(max_length=200), default=None))
 
+    save_history = models.BooleanField(default=True)
+    
     def __str__(self):
         return self.object_name
 

@@ -34,6 +34,8 @@ class UpdateUserForm(forms.ModelForm):
         model = User
         fields = ('username','email')
 
+    save_history = forms.BooleanField(required=False)
+
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
@@ -64,6 +66,7 @@ class UpdateUserForm(forms.ModelForm):
         account = super(UpdateUserForm, self).save(commit=False)
         account.username = self.cleaned_data['username']
         account.email = self.cleaned_data['email']
+        account.save_history = self.cleaned_data['save_history']
 
         if commit:
             account.save()
@@ -72,6 +75,7 @@ class UpdateUserForm(forms.ModelForm):
                 user=User.objects.get(username=self.cleaned_data['username'])
             )
 
+            storage.save_history = self.cleaned_data['save_history']
             storage.object_name = str(self.cleaned_data['username'])+" storage"
             storage.save()
 
