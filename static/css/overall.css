@@ -68,6 +68,11 @@ h2 {
   background: darkgray;
 }
 
+.go_back:hover {
+  border-color: transparent;
+  color: darkgrey !important;
+}
+
 #main-title,
 .navbar-toggler-icon,
 .navbar-toggler,
@@ -76,7 +81,8 @@ a,
 .form-control,
 .nav-link,
 .btn,
-.btn-close {
+.btn-close,
+.go_back {
   -webkit-transition: all 0.4s !important;
   -o-transition: all 0.4s !important;
   -moz-transition: all 0.4s !important;

@@ -150,18 +150,6 @@ img {
   box-shadow: 0px 0px 5px 5px black;
 }
 
-.go_back {
-  -webkit-transition: all 0.4s !important;
-  -o-transition: all 0.4s !important;
-  -moz-transition: all 0.4s !important;
-  transition: all 0.4s !important;
-}
-
-.go_back:hover {
-  border-color: transparent;
-  color: darkgrey !important;
-}
-
 @keyframes borderAnimation {
   100%,
   0% {

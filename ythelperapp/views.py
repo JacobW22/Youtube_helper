@@ -114,6 +114,10 @@ def main_page(request, login_context):
 
     return render(request, "main_page.html", context)
 
+@login_check
+@not_authenticated_only 
+def passwordReset(request, login_context):
+    pass
 
 @login_check
 @not_authenticated_only
