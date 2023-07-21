@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CreateUserForm, LoginUserForm, UpdateUserForm
+from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
 from .decorators import login_check, not_authenticated_only
 from .models import user_data_storage, User
-
+from .tasks import TransferPlaylist
 
 import os
 import re
@@ -14,6 +14,7 @@ import backoff
 import pytube
 import asyncio
 import isodate
+import spotipy
 
 
 from pytube import YouTube
@@ -23,19 +24,28 @@ from urllib.parse import quote
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from dateutil.parser import isoparse
+from spotipy.oauth2 import SpotifyOAuth
 
 # Hide it from Github
 load_dotenv(find_dotenv())
 
-openai.api_key = os.environ.get("OPENAI_API_KEY")
-google_api_key = os.environ.get("GOOGLE_API_KEY")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
-youtube = build('youtube', 'v3', developerKey=google_api_key)
+CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
+CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
+REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
+
+# The required scopes for playlist creation
+SCOPE = 'playlist-modify-private playlist-modify-public'
+
+youtube = build('youtube', 'v3', developerKey=GOOGLE_API_KEY)
 
 sites_context = {
     "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
-    "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT comments filtering",
-    "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai avatar generator"
+    "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT Comments Filtering",
+    "youtube_to_spotify": "<i class='fa-brands fa-spotify'></i>&nbsp; From Youtube To Spotify",
+    "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai Avatar Generator"
 }
     
 
@@ -335,6 +345,69 @@ def comments(request, login_context):
 
 
 @login_check
+def youtube_to_spotify(request, login_context):
+    context = {}
+    form = StartTaskForm()
+
+    if 'code' not in request.GET:
+        context.update({'not_auth': True})
+
+    if request.method == "POST":
+        sp_oauth = SpotifyOAuth(
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SECRET,
+            redirect_uri=REDIRECT_URI,
+            scope=SCOPE
+        )
+
+        # If the user is not authenticated, redirect them to Spotify's login page
+        if 'code' not in request.GET:
+            auth_url = sp_oauth.get_authorize_url()
+            return redirect(auth_url)
+        
+        form = StartTaskForm(request.POST)
+        if form.is_valid():
+            url = request.POST.get("url")
+            url = url.split("list=", 1)[1]
+            playlist_id = url.split("&", 1)[0]
+
+
+
+            # If the user has granted permission and returned with the authorization code
+            code = request.GET.get('code')
+            token_info = sp_oauth.get_access_token(code)
+
+            sp = spotipy.Spotify(auth=token_info['access_token'])
+            user_id = sp.me()['id']
+            user_account_url = f'https://open.spotify.com/user/{user_id}'
+
+
+            # Pass the access token to a Celery task for further processing
+            TransferPlaylist.delay(sp_token = token_info['access_token'], playlist_id = playlist_id)
+
+            return redirect(youtube_to_spotify_done, account_url=user_account_url)   
+
+
+    context.update({'form': form})
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, 'youtube_to_spotify.html', context)
+
+
+@login_check
+def youtube_to_spotify_done(request, login_context, account_url):
+
+    context = {}
+    context.update({'sp_account_url': account_url})
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, 'youtube_to_spotify_done.html', context)
+
+
+
+@login_check
 def manage_account_General(request, login_context):
     storage = user_data_storage.objects.get(
                 user=User.objects.get(username=login_context['username'])
@@ -468,7 +541,7 @@ async def get_streams_data(url):
 
 
 async def get_video_metadata(url):
-    youtube2 = build('youtube', 'v3', developerKey=google_api_key)
+    youtube2 = build('youtube', 'v3', developerKey=GOOGLE_API_KEY)
 
     video_id = url.split("=", 1)[1]
 
