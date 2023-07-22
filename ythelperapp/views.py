@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import CreateUserForm, LoginUserForm, UpdateUserForm
+from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
 from .decorators import login_check, not_authenticated_only
 from .models import user_data_storage, User
-
+from .tasks import TransferPlaylist
 
 import os
 import re
@@ -14,6 +14,7 @@ import backoff
 import pytube
 import asyncio
 import isodate
+import spotipy
 
 
 from pytube import YouTube
@@ -23,19 +24,28 @@ from urllib.parse import quote
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from dateutil.parser import isoparse
+from spotipy.oauth2 import SpotifyOAuth
 
 # Hide it from Github
 load_dotenv(find_dotenv())
 
-openai.api_key = os.environ.get("OPENAI_API_KEY")
-google_api_key = os.environ.get("GOOGLE_API_KEY")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
-youtube = build('youtube', 'v3', developerKey=google_api_key)
+CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
+CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
+REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
+
+# The required scopes for playlist creation
+SCOPE = 'playlist-modify-private playlist-modify-public'
+
+youtube = build('youtube', 'v3', developerKey=GOOGLE_API_KEY)
 
 sites_context = {
     "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
-    "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT comments filtering",
-    "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai avatar generator"
+    "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT Comments Filtering",
+    "youtube_to_spotify": "<i class='fa-brands fa-spotify'></i>&nbsp; From Youtube To Spotify",
+    "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai Avatar Generator"
 }
     
 
@@ -99,25 +109,22 @@ def main_page(request, login_context):
                 user=User.objects.get(username=username)
             )
 
-            time = dt.now()
+            if storage.save_history == True:
+                time = dt.now()
 
-            try:
-                info = [yt.title, link, time.strftime("%d/%m/%Y %H:%M"), yt.thumbnail_url]
-                storage.download_history.append(info)
-                storage.save()
+                try:
+                    info = [yt.title, link, time.strftime("%d/%m/%Y %H:%M"), yt.thumbnail_url]
+                    storage.download_history.append(info)
+                    storage.save()
 
-            except Exception as err:
-                msg.info(request, "Something went wrong, history not updated ")
+                except Exception:
+                    msg.info(request, "Something went wrong, history not updated ")
         
 
         return redirect("download_page", parameter=link)
 
     return render(request, "main_page.html", context)
 
-@login_check
-@not_authenticated_only 
-def passwordReset(request, login_context):
-    pass
 
 @login_check
 @not_authenticated_only
@@ -249,10 +256,11 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
                 user=User.objects.get(username=username)
             )
 
-            time = dt.now()
-            info = [description, fixed_link.replace('%25', '%'), time.strftime("%d/%m/%Y %H:%M")]
-            storage.prompts_history.append(info)
-            storage.save()
+            if storage.save_history == True:
+                time = dt.now()
+                info = [description, fixed_link.replace('%25', '%'), time.strftime("%d/%m/%Y %H:%M")]
+                storage.prompts_history.append(info)
+                storage.save()
 
         return redirect(ai_page, parameter = fixed_link, parameter_title = description)
 
@@ -293,11 +301,10 @@ def comments(request, login_context):
                     searchInput = request.POST.get("searchInput")
 
 
-                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = False)
+                    context = show_comments(request, order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = False)
                     return render(request, "comments.html", context)
                 
-                except Exception as err:
-                    print(err)
+                except Exception:
                     pageTokens.clear()
                     pageTokens.append(None)
                     msg.info(request, "Something went wrong, please try again")
@@ -319,14 +326,11 @@ def comments(request, login_context):
                     if video_metadata_temp:
                         video_metadata_temp.clear()
 
-                    # Store in history
-                    store_comments_data(video_id, login_context["username"])
 
-                    context = show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = True)
+                    context = show_comments(request, order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime = True)
                     return render(request, "comments.html", context)
                 
-                except Exception as err:
-                    print(err)
+                except Exception:
                     pageTokens.clear()
                     pageTokens.append(None)
                     msg.info(request, "Url is incorrect")
@@ -341,11 +345,79 @@ def comments(request, login_context):
 
 
 @login_check
+def youtube_to_spotify(request, login_context):
+    context = {}
+    form = StartTaskForm()
+
+    if 'code' not in request.GET:
+        context.update({'not_auth': True})
+
+    if request.method == "POST":
+        sp_oauth = SpotifyOAuth(
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SECRET,
+            redirect_uri=REDIRECT_URI,
+            scope=SCOPE
+        )
+
+        # If the user is not authenticated, redirect them to Spotify's login page
+        if 'code' not in request.GET:
+            auth_url = sp_oauth.get_authorize_url()
+            return redirect(auth_url)
+        
+        form = StartTaskForm(request.POST)
+        if form.is_valid():
+            url = request.POST.get("url")
+            url = url.split("list=", 1)[1]
+            playlist_id = url.split("&", 1)[0]
+
+
+
+            # If the user has granted permission and returned with the authorization code
+            code = request.GET.get('code')
+            token_info = sp_oauth.get_access_token(code)
+
+            sp = spotipy.Spotify(auth=token_info['access_token'])
+            user_id = sp.me()['id']
+            user_account_url = f'https://open.spotify.com/user/{user_id}'
+
+
+            # Pass the access token to a Celery task for further processing
+            TransferPlaylist.delay(sp_token = token_info['access_token'], playlist_id = playlist_id)
+
+            return redirect(youtube_to_spotify_done, account_url=user_account_url)   
+
+
+    context.update({'form': form})
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, 'youtube_to_spotify.html', context)
+
+
+@login_check
+def youtube_to_spotify_done(request, login_context, account_url):
+
+    context = {}
+    context.update({'sp_account_url': account_url})
+    context.update(login_context)
+    context.update({'sites_context': sites_context})
+
+    return render(request, 'youtube_to_spotify_done.html', context)
+
+
+
+@login_check
 def manage_account_General(request, login_context):
+    storage = user_data_storage.objects.get(
+                user=User.objects.get(username=login_context['username'])
+    )
+    
     form = UpdateUserForm(
         initial = {
             "username": request.user.username,
-            "email": request.user.email
+            "email": request.user.email,
+            "save_history": storage.save_history
     })
 
     if request.method == "POST":
@@ -469,7 +541,7 @@ async def get_streams_data(url):
 
 
 async def get_video_metadata(url):
-    youtube2 = build('youtube', 'v3', developerKey=google_api_key)
+    youtube2 = build('youtube', 'v3', developerKey=GOOGLE_API_KEY)
 
     video_id = url.split("=", 1)[1]
 
@@ -656,7 +728,7 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
                 video_url = "https://www.youtube.com/watch?v=" + video_id
                 
                 comments_and_VidInfo = await asyncio.gather(get_video_comments(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser), get_video_metadata(video_url))
-                
+
                 video_metadata_temp.update(comments_and_VidInfo[1])
 
                 comments_and_VidInfo = {
@@ -681,44 +753,10 @@ async def get_video_comments_view_async(video_id, order, maxResults, previousPag
     except HttpError as e:
         error_message = f'An HTTP error {e.resp.status} occurred: {e.content}'
         return {'error': error_message}, 500
-
-
-def store_comments_data(video_id, username):
-    youtube3 = build('youtube', 'v3', developerKey=google_api_key)
-
-    video_url = "https://www.youtube.com/watch?v=" + video_id
-
-    # Call the API to retrieve the video details
-    response = youtube3.videos().list(
-        part='snippet',
-        id=video_id
-    ).execute()
-
-
-
-    video = response['items'][0]
-    snippet = video['snippet']
-
     
-    # Store data in user history
-    storage = user_data_storage.objects.get(
-        user=User.objects.get(username=username)
-    )
-
-    time = dt.now()
-
-    try:
-        info = [snippet['title'], video_url, time.strftime("%d/%m/%Y %H:%M")]
-    except Exception:
-        info = ["could't find", video_url, time.strftime("%d/%m/%Y %H:%M")]
-    
-    storage.filtered_comments_history.append(info)
-    storage.save()
-
-    return 
 
 
-def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime):
+def show_comments(request, order, maxResults, pageID, previousPageID, video_id, searchInput, login_context, isFirstTime):
     context = {}
 
     if video_id != None:
@@ -774,6 +812,21 @@ def show_comments(order, maxResults, pageID, previousPageID, video_id, searchInp
         asyncio.set_event_loop(loop)
         comments_and_VidInfo = loop.run_until_complete(get_video_comments_view_async(video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser, isFirstTime))
         
+        if quotaUser and isFirstTime == True:
+            # Store data in user history
+            storage = user_data_storage.objects.get(
+                user=User.objects.get(username=quotaUser)
+            )
+
+            if storage.save_history == True:
+                time = dt.now()
+
+                try:
+                    info = [comments_and_VidInfo['video_metadata']['title'], "https://www.youtube.com/watch?v=" + video_id, time.strftime("%d/%m/%Y %H:%M")]
+                    storage.filtered_comments_history.append(info)
+                    storage.save()
+                except Exception:
+                    msg.info(request, "Error occurred, history not updated")
 
         context.update(comments_and_VidInfo)
         context.update({'count' : len(comments_and_VidInfo['comments'])})

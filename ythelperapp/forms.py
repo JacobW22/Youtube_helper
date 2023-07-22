@@ -1,9 +1,12 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms 
 from django.contrib.auth.models import User
-from .models import user_data_storage, User
 from django.db.models import UniqueConstraint
 from django.db.models.functions import Lower
+
+from .models import user_data_storage, User
+
+import re
 
 class CreateUserForm(UserCreationForm):
     class Meta:
@@ -27,12 +30,13 @@ class LoginUserForm(forms.Form):
         else:
             raise forms.ValidationError(f'Email {email} is invalid')
     
-        
-       
+      
 class UpdateUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username','email')
+
+    save_history = forms.BooleanField(required=False)
 
 
     def clean_email(self):
@@ -64,6 +68,7 @@ class UpdateUserForm(forms.ModelForm):
         account = super(UpdateUserForm, self).save(commit=False)
         account.username = self.cleaned_data['username']
         account.email = self.cleaned_data['email']
+        account.save_history = self.cleaned_data['save_history']
 
         if commit:
             account.save()
@@ -72,7 +77,47 @@ class UpdateUserForm(forms.ModelForm):
                 user=User.objects.get(username=self.cleaned_data['username'])
             )
 
+            storage.save_history = self.cleaned_data['save_history']
             storage.object_name = str(self.cleaned_data['username'])+" storage"
             storage.save()
 
         return account
+    
+class StartTaskForm(forms.Form):
+    url = forms.CharField(max_length=273)
+
+    def clean_youtube_url(self):
+        url = self.cleaned_data['url']
+        # Remove leading/trailing spaces
+        youtube_url = url.strip()
+
+        # Regular expression pattern for matching YouTube URLs
+        youtube_url_pattern = (
+            r'^(https?://)?(www\.)?'
+            r'(youtube\.com|youtu\.be)/'
+            r'((watch\?v=|playlist\?list=)([a-zA-Z0-9_-]+))'
+        )
+
+        # Match the URL pattern
+        match = re.match(youtube_url_pattern, youtube_url)
+
+        if match:
+            try:
+                url = url.split("list=", 1)[1]
+                playlist_id = url.split("&", 1)[0]
+            except Exception:
+                raise forms.ValidationError("Invalid URL")
+            
+            return url
+        
+        # Invalid YouTube URL, return None or raise an error as needed
+        raise forms.ValidationError("Invalid URL")
+    
+
+    def clean(self):
+        cleaned_data = super().clean()
+        # Call the custom cleaning method for 'url' field
+        video_id = self.clean_youtube_url()
+        # Update the cleaned data with the extracted video ID
+        cleaned_data['url'] = video_id
+        return cleaned_data

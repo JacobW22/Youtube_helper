@@ -45,4 +45,7 @@ urlpatterns = [
     path('download/<path:parameter>', main_views.download_page, name='download_page'),
     path('download/<path:parameter><str:parameter_name>', main_views.download_page, name='download_page'),
 
+    path('youtube_to_spotify/', main_views.youtube_to_spotify, name="youtube_to_spotify"),
+    path('youtube_to_spotify/done/<path:account_url>', main_views.youtube_to_spotify_done, name="youtube_to_spotify_done"),
+
 ]

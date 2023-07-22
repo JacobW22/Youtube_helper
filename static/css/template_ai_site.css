@@ -80,6 +80,10 @@
   display: inline-block;
 }
 
+.avatar_gallery {
+  width: 50rem !important;
+  max-width: 100% !important;
+}
 .avatar_gallery::-webkit-scrollbar {
   display: none;
 }

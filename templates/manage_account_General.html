@@ -86,7 +86,12 @@
         <span class="text-center fs-3 mt-5">E-mail address</span>
         {{ form.email|attr:"placeholder:E-mail"|add_class:"form-control" }}
 
-        <button type="submit" class="btn btn-lg mt-5 send_request">Save</button>
+        <div class="d-flex align-items-center form-check form-switch fs-3 mt-5">
+          {{ form.save_history|add_class:"form-check-input fs-4 mb-1"|attr:"id:flexSwitchCheck"}}
+          <label class="mb-0" for="flexSwitchCheck">Save history</label>
+        </div>
+
+        <button type="submit" class="btn btn-lg mt-3 send_request">Save</button>
       </form>
     
     </div>
