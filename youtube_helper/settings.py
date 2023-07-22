@@ -144,7 +144,17 @@ AUTHENTICATION_BACKENDS = [
     'ythelperapp.authentication.EmailAuthBackend' # Custom backend allows to log in via email
     ]
 
-#SMTP Config
+# Redis config
+
+CELERY_BROKER_URL = 'redis://default:3vbvgD879cUmyfH2eWBV@containers-us-west-166.railway.app:6452'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_WORKER_CANCEL_LONG_RUNNING_TASKS_ON_CONNECTION_LOSS = False
+CELERY_WORKER_POOL_RESTARTS = True
+
+
+# SMTP Config
 
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
 EMAIL_HOST = os.environ.get("EMAIL_HOST")

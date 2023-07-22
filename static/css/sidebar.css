@@ -58,3 +58,9 @@
     }
 }
 
+@media screen and (min-width: 992px) {
+    .main_section {
+        overflow-y: scroll;
+    }
+}
+

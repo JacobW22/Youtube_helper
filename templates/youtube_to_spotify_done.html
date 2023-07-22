@@ -45,44 +45,62 @@
 </head>
 <body>
     
+<!-- Navbar start -->
+{% url 'youtube_to_spotify' as the_url %}
+{% include "navbar.html" with sites_context=sites_context active_site_name="From Youtube to Spotify" active_site_url=the_url %}
+<!-- Navbar end -->   
 
 <!-- Main container start -->
-<div class="d-flex justify-content-center container px-4 flex-column">
+<div class="d-flex justify-content-center main-container px-4 flex-column">
+    <div class="container-fluid d-flex flex-column align-items-center gap-3 p-0" id="main_form" >
 
-    <form method="post" class="container-fluid d-flex flex-column align-items-center gap-3 p-0" id="main_form" >
-        {% csrf_token %}
-
-        <i class="fa-solid fa-unlock text-light fs-1"></i>
-        <span class="pointing-to-mail text-light fs-3 text-center">Reset your password</span>
-
-        {% if form %}
-        <span class="pointing-to-mail text-light fs-5 text-center">
-            {% for field,errors in form.errors.items %}
-                {% for error in errors %}
-                <i class="fa-solid fa-circle-exclamation" style="color: #ffff00;"></i>&nbsp; {{ error }}
-                {% endfor %}
-            {% endfor %}
-        </span>
-        {{ form.new_password1|attr:"placeholder:New password"|attr:"type:password"|add_class:"form-control" }}
-        {{ form.new_password2|attr:"placeholder:Confirm password"|attr:"type:password"|add_class:"form-control" }}
-
-        <button type="submit" class="btn btn-dark btn-lg animate mt-2">Send request</button>
-        
-        {% else %}
-        <span class="pointing-to-mail text-muted fs-6 text-center">
-            The password reset link was invalid, possibly because it has already been used. Please request a new password reset.
-        </span>
+        {% if sp_account_url %}
 
         <!-- Go back section start-->
-            <a class="text-light highlight_link go_back fs-5" href="{% url 'main_page' %}">
-                <i class="fa-solid fa-arrow-left"></i>&nbsp; Main Page
-            </a>
+            <div class="mx-auto go_back_container">
+                <a class="text-light highlight_link go_back fs-5" href="{% url 'youtube_to_spotify' %}">
+                    <i class="fa-solid fa-arrow-left"></i>&nbsp; Another playlist
+                </a>
+            </div>
         <!-- Go back section end-->
+
+
+        <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify"></i></span>
+        <span class="pointing-to-mail text-light fs-2 text-center">Check your account</span>
+        <span class="pointing-to-mail text-muted fs-5 text-center">
+            Task was received, check your spotify account for playlist. 
+            Spotify is async based so playlist can be formed in real-time.
+        </span>
+        <span class="pointing-to-mail text-light fs-6 mt-5 text-center">Your spotify account:</span>
+        
+        <i class="fa-solid fa-chevron-down text-light"></i>
+        <a class="pointing-to-mail sp_url fs-5 text-center" href="{{ sp_account_url }}"target="_blank" rel="noopener noreferrer">
+            {{ sp_account_url}}
+        </a>
+        
+        {% else %}
+
+        <!-- Go back section start-->
+        <div class="mx-auto go_back_container">
+            <a class="text-light highlight_link go_back fs-5" href="{% url 'youtube_to_spotify' %}">
+                <i class="fa-solid fa-arrow-left"></i>&nbsp; Another playlist
+            </a>
+        </div>
+        <!-- Go back section end-->
+
+
+        <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify"></i></span>
+        <span class="pointing-to-mail text-light fs-2 text-center">Check your account</span>
+        <span class="pointing-to-mail text-muted fs-5 text-center">
+            Task was received, check your spotify account for playlist. 
+            Spotify is async based so playlist can be formed in real-time.
+        </span>
+
         {% endif %}
-    </form>
+
+    </div>
 </div>  
 <!-- Main container end -->
-
 
 
 <script type="text/javascript">
@@ -93,6 +111,16 @@ $(document).ready(function(){
         $('.form-control').addClass('align-text-center');
     }, function() {
         $('.form-control').removeClass('align-text-center');
+    });
+
+    // Add slideDown animation to Bootstrap dropdown when expanding.
+    $('.dropdown').on('show.bs.dropdown', function() {
+        $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
+    });
+
+    // Add slideUp animation to Bootstrap dropdown when collapsing.
+    $('.dropdown').on('hide.bs.dropdown', function() {
+        $(this).find('.dropdown-menu').hide();
     });
 
 
