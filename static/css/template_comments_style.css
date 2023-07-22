@@ -242,11 +242,9 @@ mark {
 
 .badge {
   user-select: none;
-  height: 1.5em !important;
   margin-bottom: 1.1em !important;
   transform: translate(-60%, -50%) !important;
 }
-
 
 .badge_with_pinned {
   margin-bottom: 3.5em !important;
@@ -283,7 +281,6 @@ mark {
   font-size: 1rem;
 }
 
-
 .error_occured,
 .embed-responsive {
   box-shadow: 0px 0px 25px 10px black !important;
@@ -301,18 +298,8 @@ mark {
   user-select: none!important;
 }
 
-@media screen and (min-width: 2270px) {
-  .main-container {
-    zoom: 175%;
-  }
 
-  .form-control:not(.video_url_input) {
-    width: 25vw !important;
-    margin-top: 15px;
-  }
-}
-
-@media screen and (min-width: 1400px) and (max-width: 2270px) {
+@media screen and (min-width: 1400px) {
   #main_form {
     zoom: 105%;
   }
@@ -364,7 +351,6 @@ mark {
 @media screen and (max-width: 992px) {
   .badge {
     margin-right: -2em;
-    transform: translate(-100%, -60%) !important;
   }
 
   .comments_card_container {

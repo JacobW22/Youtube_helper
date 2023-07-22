@@ -1,8 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms 
-from django.contrib.auth.models import User
-from django.db.models import UniqueConstraint
-from django.db.models.functions import Lower
 
 from .models import user_data_storage, User
 
@@ -108,7 +105,7 @@ class StartTaskForm(forms.Form):
             except Exception:
                 raise forms.ValidationError("Invalid URL")
             
-            return url
+            return playlist_id
         
         # Invalid YouTube URL, return None or raise an error as needed
         raise forms.ValidationError("Invalid URL")

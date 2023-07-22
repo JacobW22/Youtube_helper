@@ -46,6 +46,10 @@ html {
   opacity: 0.5 !important;
 }
 
+a {
+  text-decoration: none;
+}
+
 h2 {
   user-select: none;
 }
@@ -117,8 +121,8 @@ a,
   font-size: 1.5rem !important;
 }
 
-.nav-link:not(.highlight_link):hover,
-.nav-link:not(.highlight_link)[aria-expanded="true"] {
+.nav-link:not(.highlight_link, #navbarDropdown2):hover,
+.nav-link:not(.highlight_link, #navbarDropdown2)[aria-expanded="true"] {
   text-decoration: underline !important;
   text-underline-offset: 0.5em;
 }

@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from pathlib import Path
 import os
 from dotenv import load_dotenv, find_dotenv
 
@@ -40,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'widget_tweaks',
 ]
 
@@ -127,13 +127,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -142,7 +135,41 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend', # Default backend allows to log in via username
     'ythelperapp.authentication.EmailAuthBackend' # Custom backend allows to log in via email
-    ]
+]
+
+
+# AWS S3 config
+
+AWS_S3_HOST = 's3.eu-central-1.amazonaws.com'
+AWS_S3_REGION_NAME="eu-central-1"
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_SECRET_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_CUSTOM_DOMAIN= f'{AWS_S3_HOST}/{os.environ.get("AWS_STORAGE_BUCKET_NAME")}'
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = 'static'
+AWS_QUERYSTRING_AUTH = False
+AWS_HEADERS = {
+    'Access-Control-Allow-Origin': f'{os.environ.get("AWS_ALLOW_ORIGIN")}',
+}
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Redis config
 
