@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans:wght@400;600&family=Quicksand:wght@300;500&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans:wght@400;600&family=Poppins&family=Quicksand:wght@300;500&display=swap');
 html {
   overflow: hidden !important;
 }
@@ -117,8 +116,8 @@ a,
   font-size: 1.5rem !important;
 }
 
-.nav-link:not(.highlight_link):hover,
-.nav-link:not(.highlight_link)[aria-expanded="true"] {
+.nav-link:not(.highlight_link, #navbarDropdown2):hover,
+.nav-link:not(.highlight_link, #navbarDropdown2)[aria-expanded="true"] {
   text-decoration: underline !important;
   text-underline-offset: 0.5em;
 }

@@ -139,6 +139,9 @@
   box-shadow: 0px 0px 10px 0.5px red;
 }
 
+.author_name {
+  text-decoration: none !important;
+}
 .author_name:hover {
   color: white;
 }
@@ -242,7 +245,6 @@ mark {
 
 .badge {
   user-select: none;
-  height: 1.5em !important;
   margin-bottom: 1.1em !important;
   transform: translate(-60%, -50%) !important;
 }
@@ -287,10 +289,6 @@ mark {
 .error_occured,
 .embed-responsive {
   box-shadow: 0px 0px 25px 10px black !important;
-}
-
-.embed-responsive {
-  width: 75%!important;
 }
 
 .error_occured {
@@ -364,7 +362,6 @@ mark {
 @media screen and (max-width: 992px) {
   .badge {
     margin-right: -2em;
-    transform: translate(-100%, -60%) !important;
   }
 
   .comments_card_container {
