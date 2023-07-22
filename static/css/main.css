@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Poppins:wght@200;400;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;500;700&display=swap');
 
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
@@ -14,11 +13,13 @@ body,
 html {
   height: 100%;
   font-family: Poppins, sans-serif;
+  font-weight: 400;
 }
 
 /*---------------------------------------------*/
 a {
   font-family: Poppins;
+  font-weight: 400;
   font-size: 14px;
   line-height: 1.7;
   color: #f8f9fa;
@@ -50,6 +51,7 @@ h6 {
 
 p {
   font-family: Poppins;
+  font-weight: 400;
   font-size: 14px;
   line-height: 1.7;
   color: #f8f9fa;
@@ -149,6 +151,7 @@ iframe {
 [ Utility ]*/
 .txt1 {
   font-family: Poppins;
+  font-weight: 400;
   font-size: 13px;
   line-height: 1.5;
   color: #f8f9fa;
@@ -156,6 +159,7 @@ iframe {
 
 .txt2 {
   font-family: Poppins;
+  font-weight: 400;
   font-size: 13px;
   line-height: 1.5;
   color: #f8f9fa;
@@ -243,7 +247,7 @@ iframe {
 
 .input100 {
   font-family: Poppins;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 15px;
   line-height: 1.5;
   color: #666666;
@@ -336,6 +340,7 @@ iframe {
 
 .login100-form-btn {
   font-family: Montserrat;
+  font-weight: 700;
   font-size: 15px;
   line-height: 1.5;
   color: #fff;

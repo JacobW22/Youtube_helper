@@ -139,9 +139,6 @@
   box-shadow: 0px 0px 10px 0.5px red;
 }
 
-.author_name {
-  text-decoration: none !important;
-}
 .author_name:hover {
   color: white;
 }
@@ -249,7 +246,6 @@ mark {
   transform: translate(-60%, -50%) !important;
 }
 
-
 .badge_with_pinned {
   margin-bottom: 3.5em !important;
 }
@@ -285,10 +281,13 @@ mark {
   font-size: 1rem;
 }
 
-
 .error_occured,
 .embed-responsive {
   box-shadow: 0px 0px 25px 10px black !important;
+}
+
+.embed-responsive {
+  width: 75%!important;
 }
 
 .error_occured {
@@ -299,18 +298,8 @@ mark {
   user-select: none!important;
 }
 
-@media screen and (min-width: 2270px) {
-  .main-container {
-    zoom: 175%;
-  }
 
-  .form-control:not(.video_url_input) {
-    width: 25vw !important;
-    margin-top: 15px;
-  }
-}
-
-@media screen and (min-width: 1400px) and (max-width: 2270px) {
+@media screen and (min-width: 1400px) {
   #main_form {
     zoom: 105%;
   }
