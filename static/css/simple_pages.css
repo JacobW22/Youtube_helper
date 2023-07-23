@@ -74,6 +74,16 @@
     transform: translateY(-5%);
 }
 
+
+.fa-chevron-down {
+    transform: translate(0, -10px);
+
+    animation-name: floating;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+
 @keyframes borderAnimation {
     100%,0% {
       box-shadow: 0 0 0.15em 0.03em rgb(93, 184, 3);
@@ -87,5 +97,17 @@
     75% {
       box-shadow: 0 0 0.15em 0.2em rgb(0, 85, 43);
     }
+}
 
+  
+@keyframes floating {
+    0% {
+        transform: translate(0, -10px);
+    }
+    50% {
+        transform: translate(0, 0px);
+    }
+    100% {
+        transform: translate(0, -10px);
+    }
 }

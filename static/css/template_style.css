@@ -76,8 +76,8 @@ button {
 }
 
 .carousel:hover > .carousel-inner .carousel-item img {
-  filter: brightness(60%);
-  -webkit-filter: brightness(60%);
+  filter: brightness(40%);
+  -webkit-filter: brightness(40%);
 }
 
 .date_in_caption {
@@ -87,10 +87,12 @@ button {
 .carousel {
   border-radius: 25px !important;
   overflow: hidden !important;
-  min-height: 200px;
-  max-width: 100%;
   margin-bottom: 5rem !important;
   box-shadow: 0px 0px 25px 10px black;
+}
+
+.ratio {
+  width: 55%;
 }
 
 .carousel_caption {
@@ -104,7 +106,7 @@ button {
 .carousel-inner,
 .carousel-inner .carousel-item {
   height: 100% !important;
-  width: 100% !important
+  width: 100% !important;
 }
 
 .info_for_carousel {
@@ -114,8 +116,9 @@ button {
 }
 
 .first-container, 
-.carousel_slider {
+.second-container {
   height: calc(100vh - 106px);
+  min-height: 600px;
 }
 
 
@@ -142,18 +145,21 @@ button {
 }
 
 @media screen and (max-width: 992px) {
-  .first-container
-  .carousel_slider {
-    height: calc(100vh - 90px);
-  }
-
   .main-container::-webkit-scrollbar {
     display: none;
+  }
+
+  .ratio {
+    width: 75%;
   }
 }
 
 @media screen and (max-width: 576px) {
   .carousel-caption, .date_in_caption {
     font-size: 1rem;
+  }
+
+  .ratio {
+    width: 100%;
   }
 }

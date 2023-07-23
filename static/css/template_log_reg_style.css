@@ -38,11 +38,6 @@ button {
   zoom: 110%;
 }
 
-.txt2 {
-  text-decoration: underline;
-  text-underline-offset: 0.3em;
-}
-
 .fa-user,
 .fa-at {
   zoom: 1.8;
@@ -53,16 +48,16 @@ button {
 }
 
 .fa-at {
-  transform: translateX(-30%);
+  transform: translateX(-30%) translateY(3%);
 }
 
-.username {
+.username, .log_via_email {
   font-weight: bold;
   scale: 1.1;
   font-size: 110% !important;
 }
 
-.username::placeholder {
+.username::placeholder, .log_via_email::placeholder {
   font-size: 110% !important;
 }
 
