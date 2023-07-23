@@ -140,33 +140,37 @@ AUTHENTICATION_BACKENDS = [
 
 # AWS S3 config
 
-AWS_S3_HOST = 's3.eu-central-1.amazonaws.com'
-AWS_S3_REGION_NAME="eu-central-1"
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_SECRET_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_CUSTOM_DOMAIN= f'{AWS_S3_HOST}/{os.environ.get("AWS_STORAGE_BUCKET_NAME")}'
-AWS_DEFAULT_ACL = 'public-read'
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-AWS_LOCATION = 'static'
-AWS_QUERYSTRING_AUTH = False
-AWS_HEADERS = {
-    'Access-Control-Allow-Origin': f'{os.environ.get("AWS_ALLOW_ORIGIN")}',
-}
+if os.environ.get("USE_AWS") is True:
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
+    AWS_S3_HOST = 's3.eu-central-1.amazonaws.com'
+    AWS_S3_REGION_NAME="eu-central-1"
+    AWS_ACCESS_KEY_ID = os.environ.get("AWS_SECRET_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_CUSTOM_DOMAIN= f'{AWS_S3_HOST}/{os.environ.get("AWS_STORAGE_BUCKET_NAME")}'
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    AWS_LOCATION = 'static'
+    AWS_QUERYSTRING_AUTH = False
+    AWS_HEADERS = {
+        'Access-Control-Allow-Origin': f'{os.environ.get("AWS_ALLOW_ORIGIN")}',
+    }
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+    
+else:
+    STATIC_URL = '/static/'
 
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]

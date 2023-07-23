@@ -44,7 +44,7 @@ youtube = build("youtube", "v3", developerKey=GOOGLE_API_KEY)
 sites_context = {
     "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
     "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT Comments Filtering",
-    "youtube_to_spotify": "<i class='fa-brands fa-spotify'></i>&nbsp; From Youtube To Spotify",
+    "youtube_to_spotify": "<i class='fa-brands fa-spotify'></i>&nbsp; Youtube To Spotify",
     "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai Avatar Generator",
 }
 
@@ -97,7 +97,13 @@ def main_page(request, login_context):
 
     if request.method == "POST":
         link = request.POST.get("sended_link")
-        yt = YouTube(link)
+        try:
+            link = link.split("&", 1)[0]
+            yt = YouTube(link)
+
+        except Exception:
+            msg.info(request, "Invalid url")
+            return redirect(main_page)
 
         # Store data in user history
         if "username" in login_context:

@@ -140,7 +140,7 @@
 }
 
 .author_name:hover {
-  color: white;
+  color: darkgrey;
 }
 
 .profile_img {
@@ -282,12 +282,12 @@ mark {
 }
 
 .error_occured,
-.embed-responsive {
+.ratio iframe {
   box-shadow: 0px 0px 25px 10px black !important;
 }
 
-.embed-responsive {
-  width: 75%!important;
+.ratio {
+  width: 75%;
 }
 
 .error_occured {
@@ -354,10 +354,10 @@ mark {
   }
 
   .comments_card_container {
-    flex: 0 0 65%;
+    height: 70vh !important;
   }
 
-  .footer, .page-link {
-    transform: scale(1.15);
+  .main-container {
+    height: auto !important;
   }
 }
