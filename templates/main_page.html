@@ -54,13 +54,13 @@
 
 
   <!-- Second section start -->
-  <section class="d-flex my-auto flex-column container-fluid carousel_slider align-items-center justify-content-center embed-responsive-item second-container">
+  <section class="d-flex my-auto flex-column container-fluid align-items-center justify-content-center second-container ">
 
     <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
     <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
 
     {% if logged == True and videos_informations %}
-
+      <div class="ratio ratio-16x9 mx-auto">
       <div id="DownloadHistorySlider" class="mx-auto carousel slide snap" data-bs-interval="2000" data-bs-touch="true" data-bs-ride="carousel">
         <div class="carousel-indicators">
 
@@ -95,7 +95,7 @@
           <span class="sr-only">Next</span>
         </a>
       </div>
-
+    </div>
 
   </section>
 
@@ -172,17 +172,6 @@
   });
 
   $(document).ready(function(){
-
-    // Calculate width of the slider, no shrinking when sliding
-    $("#DownloadHistorySlider").css('width', 'auto' );
-    var searchWidth = $("#DownloadHistorySlider").width() + 'px';
-    $("#DownloadHistorySlider").css('width', searchWidth );
-
-    $( window ).on( "resize", function() {
-      $("#DownloadHistorySlider").css('width', 'auto' );
-      var searchWidth = $("#DownloadHistorySlider").width() + 'px';
-      $("#DownloadHistorySlider").css('width', searchWidth );
-    });
 
     // Fade In page
     $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');

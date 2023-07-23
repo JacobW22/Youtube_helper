@@ -50,14 +50,14 @@
 
         <!-- Card start -->
           <div class="card mb-3 border-0 text-light align-items-center justify-content-center" style="max-width: 100%;">
-              <div class="row g-0 align-items-center justify-content-center">
+              <div class="row gap-4 align-items-center justify-content-center">
                 <div class="col-7 col-lg-4 d-flex flex-column align-items-center justify-content-center">
 
                   {% if video_id == "couldn't find" %}
                     <i class="fa-solid fa-triangle-exclamation error_occured mb-2" style="color: #ffffff;"></i>
                   {% else %}
-                  <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item rounded" alt="Video" src="//www.youtube.com/embed/{{ video_id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                  <div class="ratio ratio-16x9">
+                    <iframe class="rounded" alt="Video" src="//www.youtube.com/embed/{{ video_id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                   </div>
                   {% endif %}
 
@@ -110,9 +110,9 @@
 
                 {% for download_link,info in streams_data_no_audio.items %}
                   <li>
-                    <a class="dropdown-item" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
+                    <a class="dropdown-item text-start" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
                         <span>{{ info.0 }}</span>
-                        <span class="text-muted float-right">
+                        <span class="text-muted float-end">
                           <i class="fa-solid fa-volume-xmark" style="color: #ff0000;"></i>
                           &nbsp;
                           {{ info.1 }}
@@ -127,9 +127,9 @@
                   
                 {% for download_link,info in streams_data.items %}
                   <li>
-                    <a class="dropdown-item" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
+                    <a class="dropdown-item text-start" href="{{ download_link }}" target="_blank" rel="noopener noreferrer" download>
                         <span>{{ info.0 }}</span>
-                        <span class="text-muted float-right">{{ info.1 }}</span>
+                        <span class="text-muted float-end">{{ info.1 }}</span>
                     </a>
                   </li>
                 {% endfor %}
