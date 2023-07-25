@@ -43,7 +43,8 @@ def TransferPlaylist(sp_token, playlist_id, ignore_result=True):
     while response:
         # Extract video titles from the response
         for item in response["items"]:
-            video_titles.append(item["snippet"]["title"])
+            if item["snippet"]["title"] != "Private video" and item["snippet"]["title"] != "Deleted video":
+                video_titles.append(item["snippet"]["title"])
 
         # Check if there are more pages to retrieve
         if "nextPageToken" in response:

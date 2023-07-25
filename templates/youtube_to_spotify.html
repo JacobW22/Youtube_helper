@@ -50,7 +50,7 @@
                 {% csrf_token %}
 
                 <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify"></i></span>
-                <span class="pointing-to-mail text-light fs-1 text-center">Convert Youtube playlist to Spotify</span>
+                <span class="pointing-to-mail text-light fs-1 text-center">Transfer Youtube playlist to Spotify</span>
                 <i class="fa-solid fa-chevron-down text-light fs-3"></i>
 
                 <button type="submit" class="d-flex align-items-center sp_login gap-3 animate mt-2">
@@ -66,7 +66,7 @@
                 {% csrf_token %}
 
                 <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify"></i></span>
-                <span class="pointing-to-mail text-light fs-2 text-center">Convert playlist to Spotify</span>
+                <span class="pointing-to-mail text-light fs-2 text-center">Transfer playlist to Spotify</span>
                 <span class="pointing-to-mail text-muted fs-5 text-center">Playlist url:</span>
                 {{ form.url|add_class:"form-control"|attr:"placeholder:https://www.youtube.com/playlist?list=PLAYLIST_ID"|attr:"required"}}
                 <button type="submit" class="btn btn-dark btn-lg animate mt-3">Convert</button>
