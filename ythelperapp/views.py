@@ -149,7 +149,7 @@ def login_page(request, login_context):
 
             if user:
                 login(request, user)
-                msg.success(request, "Welcome " + request.user.username)
+                msg.success(request, "Welcome " + "<b>" + request.user.username + "</b>")
                 return redirect(main_page)
 
             else:
@@ -188,6 +188,7 @@ def sign_up_page(request, login_context):
                 download_history=["registered"],
                 prompts_history=["registered"],
                 filtered_comments_history=["registered"],
+                transferred_playlists_history=["registered"]
             )
 
             storage = user_data_storage.objects.get(
@@ -197,9 +198,10 @@ def sign_up_page(request, login_context):
             storage.download_history.remove("registered")
             storage.prompts_history.remove("registered")
             storage.filtered_comments_history.remove("registered")
+            storage.transferred_playlists_history.remove("registered")
             storage.save()
 
-            msg.success(request, user + " Welcome on board")
+            msg.success(request, "Welcome on board " + "<b>" + user + "</b>")
             return redirect(login_page)
 
     context = {"form": form}
@@ -391,6 +393,35 @@ def youtube_to_spotify(request, login_context):
             url = url.split("list=", 1)[1]
             playlist_id = url.split("&", 1)[0]
 
+            # Store data in user history
+            if "username" in login_context:
+                username = login_context["username"]
+                storage = user_data_storage.objects.get(
+                    user=User.objects.get(username=username)
+                )
+
+                response_for_title = (
+                    youtube.playlists()
+                    .list(part="snippet", id=playlist_id, fields="items(snippet(title))")
+                    .execute()
+                )
+
+                if response_for_title["items"][0]["snippet"]["title"]:
+                    title = response_for_title["items"][0]["snippet"]["title"]
+                else:
+                    title = "Couldn't find"
+
+                if storage.save_history:
+                    time = dt.now()
+                    info = [
+                        title,
+                        request.POST.get("url"),
+                        time.strftime("%d/%m/%Y %H:%M"),
+                    ]
+                    storage.transferred_playlists_history.append(info)
+                    storage.save()
+
+
             # If the user has granted permission and returned with the authorization code
             code = request.GET.get("code")
             token_info = sp_oauth.get_access_token(code)
@@ -465,9 +496,12 @@ def manage_account_Overview(request, login_context):
         "vid_downloads_quantity": len(storage.download_history),
         "prompts_quantity": len(storage.prompts_history),
         "filtered_comments_quantity": len(storage.filtered_comments_history),
+        "transferred_playlists_quantity": len(storage.transferred_playlists_history),
+        
         "download_history": storage.download_history[-6:],
         "prompts_history": storage.prompts_history[-6:],
         "filtered_comments_history": storage.filtered_comments_history[-6:],
+        "transferred_playlists_history": storage.transferred_playlists_history[-6:],
     }
 
     context.update(login_context)
@@ -569,6 +603,7 @@ async def get_streams_data(url):
 
 
 async def get_video_metadata(url):
+    # Another youtube object, first object in use by get_video_comments
     youtube2 = build("youtube", "v3", developerKey=GOOGLE_API_KEY)
 
     video_id = url.split("=", 1)[1]
