@@ -44,7 +44,7 @@ youtube = build("youtube", "v3", developerKey=GOOGLE_API_KEY)
 sites_context = {
     "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
     "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT Comments Filtering",
-    "youtube_to_spotify": "<i class='fa-brands fa-spotify'></i>&nbsp; Youtube To Spotify",
+    "youtube_to_spotify": "<i class='fa-brands fa-spotify'></i>&nbsp; Youtube Playlist To Spotify",
     "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai Avatar Generator",
 }
 
