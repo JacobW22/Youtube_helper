@@ -15,7 +15,6 @@
 
 
     <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
-    <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
     <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
 
@@ -45,7 +44,7 @@
           <span class="text-light fs-1 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
           <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
           <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" id="input_link" class="form-control text-light" required>
-          <button type="submit" class="btn btn-dark btn-lg animate mt-2 send_request">Confirm</button>
+          <button type="submit" class="btn btn-dark btn-lg animate mt-2 input_submit">Confirm</button>
     </form>
 
   </section>
@@ -125,7 +124,7 @@
   {% for message in messages %}
   <div class="toast fade align-items-center text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
     <div class="toast-body">
-      <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message }}
+      <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message|safe }}
     </div>
   </div>
   {% endfor %}
@@ -134,78 +133,15 @@
 
 </body>
 
-
+<script src="{% static 'js/main.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
-  var carousel_slides = document.getElementsByClassName("carousel-item");
-  var carousel_indicators = document.getElementsByClassName("indicator");
-  
-  if (carousel_slides[0] != undefined && carousel_indicators[0] != undefined) {
-    carousel_slides[0].classList.add("active");
-    carousel_indicators[0].classList.add("active"); 
-  }
+var carousel_slides = document.getElementsByClassName("carousel-item");
+var carousel_indicators = document.getElementsByClassName("indicator");
 
-
-  // Changing hamburger icon when clicked
-  var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");
-  hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")";
-
-
-  $( ".navbar-toggler" ).click(function() {
-    var value = $(".navbar-toggler").attr('aria-expanded');
-
-    if (value == 'true') {
-      hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-compact-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67z' fill='white'%3E%3C/path%3E%3C/svg%3E\")"
-    }
-    else hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")";
-  });
-
-
-  // Add slideDown animation to Bootstrap dropdown when expanding.
-  $('.dropdown').on('show.bs.dropdown', function() {
-    $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
-  });
-
-
-  // Add slideUp animation to Bootstrap dropdown when collapsing.
-  $('.dropdown').on('hide.bs.dropdown', function() {
-    $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
-  });
-
-  $(document).ready(function(){
-
-    // Fade In page
-    $('.first-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
-    $('.horizontal-line').fadeIn(3500).removeClass('d-none').addClass('d-flex');
-    $('.second-container').fadeIn(4000).removeClass('d-none').addClass('d-flex');
-  
-    $('.send_request').hover(function() {
-      $('.form-control').addClass('align-text-center');
-    }, function() {
-      $('.form-control').removeClass('align-text-center');
-    });
-
-    $(".toast").css("opacity", "0");
-    $(".toast").toast("show");
-    $(".toast").addClass("custom-fade-in").css("opacity", "1");
-    
-
-    setTimeout(function() {
-      hideToast();
-    }, 5000);
-
-    function hideToast() {
-      var toast = $('.toast');
-      // Animate the toast element
-      toast.animate({
-        opacity: 0,
-        height: 0,
-        marginBottom: 0
-      }, 500, function() {
-        // Remove the toast element from the DOM
-        toast.remove();
-      });
-    };
-});
+if (carousel_slides[0] != undefined && carousel_indicators[0] != undefined) {
+  carousel_slides[0].classList.add("active");
+  carousel_indicators[0].classList.add("active"); 
+}
 
 function submitFormWithValue(link) {
 
@@ -217,5 +153,6 @@ function submitFormWithValue(link) {
 
   form.submit();
 }
+
 </script>
 </html>
