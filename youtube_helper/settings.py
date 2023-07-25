@@ -170,6 +170,7 @@ if os.environ.get("USE_AWS") is True:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
     
 else:
+    
     STATIC_URL = '/static/'
 
 
