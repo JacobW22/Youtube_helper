@@ -46,6 +46,12 @@ html {
   opacity: 0.5 !important;
 }
 
+input[type="search" i]::-webkit-search-cancel-button {
+  cursor: pointer;
+  transform: scale(1.2);
+  filter: invert(0.5);
+}
+
 a {
   text-decoration: none;
 }

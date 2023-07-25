@@ -39,7 +39,6 @@
 .sp_url {
     color: #78d4fc;
     word-break: break-word;
-    
 }
 
 .sp_url:hover {
@@ -74,7 +73,6 @@
     transform: translateY(-5%);
 }
 
-
 .fa-chevron-down {
     transform: translate(0, -10px);
 
@@ -82,7 +80,7 @@
     animation-duration: 1.5s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
-  }
+}
 
 @keyframes borderAnimation {
     100%,0% {
@@ -99,7 +97,6 @@
     }
 }
 
-  
 @keyframes floating {
     0% {
         transform: translate(0, -10px);
