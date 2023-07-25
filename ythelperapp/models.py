@@ -12,6 +12,7 @@ class user_data_storage(models.Model):
     download_history = ArrayField(ArrayField(models.CharField(max_length=200), default=None))
     prompts_history = ArrayField(ArrayField(models.CharField(max_length=500), default=None))
     filtered_comments_history = ArrayField(ArrayField(models.CharField(max_length=200), default=None))
+    transferred_playlists_history = ArrayField(ArrayField(models.CharField(max_length=200), default=None))
 
     save_history = models.BooleanField(default=True)
 
