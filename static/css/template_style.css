@@ -117,7 +117,7 @@ button {
 
 .first-container, 
 .second-container {
-  height: calc(100vh - 106px);
+  height: calc(100vh - 90px);
   min-height: 600px;
 }
 
@@ -130,17 +130,39 @@ button {
   overflow-y: scroll;
 }
 
-@media screen and (min-width: 2048px) {
-  .first-container,
-  .second-container {
-    zoom: 175%;
+.main-container::-webkit-scrollbar {
+  display: none;
+}
+
+.fa-chevron-down {
+  transform: translate(0, -40px);
+
+  animation-name: floating;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes floating {
+  0% {
+      transform: translate(0, -40px);
+  }
+  50% {
+      transform: translate(0, -20px);
+  }
+  100% {
+      transform: translate(0, -40px);
   }
 }
 
+
 @media screen and (min-width: 1400px) {
-  .first-container,
-  .second-container {
-    zoom: 105%;
+  #main_form {
+    zoom: 115%;
+  }
+  
+  .first-container {
+    height: calc(100vh - 106px);
   }
 }
 
