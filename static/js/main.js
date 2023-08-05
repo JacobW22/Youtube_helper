@@ -17,9 +17,10 @@ $('.dropdown').on('show.bs.dropdown', function() {
     $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
 });
 
+
 // Add slideUp animation to Bootstrap dropdown when collapsing.
 $('.dropdown').on('hide.bs.dropdown', function() {
-    $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
+    $(this).find('.dropdown-menu').hide();
 });
 
 

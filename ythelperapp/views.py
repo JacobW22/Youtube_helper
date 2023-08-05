@@ -214,9 +214,6 @@ def sign_up_page(request, login_context):
 
 # Backoff for sending request again ( sometimes titles can't be found by pytube )
 @login_check
-@backoff.on_exception(
-    backoff.expo, (pytube.exceptions.PytubeError, ValueError), max_time=0.3
-)
 def download_page(request, login_context, parameter):
     context = {}
 
@@ -328,8 +325,15 @@ def comments(request, login_context):
             case _:
                 try:
                     video_url = request.POST.get("video_url")
-                    video_id = video_url.split("=", 1)[1]
 
+                    try:
+                        video_url = video_url.split("&", 1)[0]
+                        video_id = video_url.split("=", 1)[1]
+
+                    except Exception:
+                        msg.info(request, "Invalid url")
+                        return redirect(comments)
+                    
                     order = "relevance"
                     maxResults = 25
                     pageID = 1
@@ -355,7 +359,7 @@ def comments(request, login_context):
                 except Exception:
                     pageTokens.clear()
                     pageTokens.append(None)
-                    msg.info(request, "Url is incorrect")
+                    msg.info(request, "Video cannot be found")
                     return redirect(comments)
 
     # On first load

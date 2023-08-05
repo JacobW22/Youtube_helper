@@ -41,7 +41,14 @@
     <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto gap-4 p-0" id="main_form" >
         {% csrf_token %}
 
-          <span class="text-light fs-1 text-center"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span>
+          <div class="d-flex flex-column gap-3 mb-1">
+            <span class="d-flex gap-3 mx-auto text-light fs-1 text-center">
+              <i class="fa-brands fa-youtube"></i>
+              <i class="fa-solid fa-download"></i>
+            </span>
+            <span class="text-muted">Youtube Video Downloader</span> 
+          </div>
+          
           <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
           <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" id="input_link" class="form-control text-light" required>
           <button type="submit" class="btn btn-dark btn-lg animate mt-2 input_submit">Confirm</button>
