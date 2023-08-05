@@ -227,6 +227,10 @@ h2 {
   user-select: none;
 }
 
+.text-muted {
+  user-select: none;
+}
+
 .navbar-toggler:not(.comments_navbar_toggler) {
   border: 0.2em solid #910000;
   border-radius: 50% !important;

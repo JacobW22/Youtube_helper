@@ -75,7 +75,7 @@
                   </form>
 
                     <li class="nav-item nav_select d-flex justify-content-center gap-2">
-                      <h2 class="navbar-brand text-light fs-6 my-auto me-0"> Results per page:</h2>
+                      <span class="text-light fs-5 my-auto me-0"> Results per page:</span>
 
                       <select class="form-select" id="maxResults" aria-label="Default select example">
                         <option value="25">25</option>
@@ -94,6 +94,10 @@
                         <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('time')"><i class="fa-solid fa-arrow-down-long"></i>&nbsp; Time (newest)</a>
                         <a class="dropdown-item fs-6 mx-auto" href="javascript:void(0);" onclick="submitFormWithValue('relevance')">Relevance</a>
                       </div>
+                    </li>
+
+                    <li class="nav-item d-flex">
+                      <span class="my-auto fs-5 mx-auto text-light">Sorting now by: &nbsp; <span class="order">{{ order }}</span></span>
                     </li>
 
                 </ul>
@@ -282,8 +286,15 @@
 
     <form method="post" class="container-fluid d-flex flex-column align-items-center my-auto before_search_container gap-4 p-0" id="main_form" >
         {% csrf_token %}
-        
-        <span class="text-light fs-1 text-center"><i class="fa-solid fa-comments"></i></span>
+
+        <div class="d-flex flex-column gap-3 mb-1">
+          <span class="d-flex gap-3 mx-auto text-light fs-1 text-center">
+            <i class="fa-solid fa-comments"></i>
+            <i class="fa-solid fa-arrow-down-short-wide"></i>
+          </span>
+          <span class="text-muted">Youtube Comments Filtering</span> 
+        </div>
+
         <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
         <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="video_url" class="form-control video_url_input text-light" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
         <button type="submit" class="btn btn-dark input_submit btn-lg animate mt-2">Confirm</button>
