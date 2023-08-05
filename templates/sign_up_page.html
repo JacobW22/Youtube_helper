@@ -38,9 +38,9 @@
 
 
   <!-- Main container start -->
-  <section class="d-none my-auto pt-5 pb-0 px-5 align-items-center justify-content-center main-container">
-      <div class="insides">
-        <form method="POST">
+  <section class="d-none flex-column my-auto pt-5 pb-0 px-5 align-items-center justify-content-center main-container">
+    <div class="insides py-5">
+        <form method="POST" id="registerForm">
           {% csrf_token %}
           <div class="limiter">
             <form class="login100-form validate-form">
@@ -58,7 +58,7 @@
               </div>
 
               <div class="wrap-input100 validate-input mt-4" data-validate = "Valid email is required: ex@abc.xyz">
-                    {{ form.email|attr:"placeholder:E-mail"|add_class:"input100 email" }}
+                    {{ form.email|attr:"placeholder:E-mail"|add_class:"input100 email"|attr:"id:emailField"|attr:"required" }}
                   <span class="focus-input100"></span>
                   <span class="symbol-input100">
                       <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -83,10 +83,11 @@
 
               
               <div class="container-login100-form-btn">
-                  <button class="login100-form-btn animate" type="submit">
+                  <button class="login100-form-btn animate"  onclick="sendForm()" type="button">
                     <i class="fa-solid fa-greater-than"></i>
                     Sign up
                   </button>
+                  <button class="d-none" type="submit" id="submitBtn"></button>
               </div>
             </form>
           </div>
@@ -96,7 +97,7 @@
   <!-- Main container end -->
 
 
-  <div class="d-block mt-5 mb-3 footer">
+  <div class="d-block mt-5 mb-3 pt-5 footer">
     <div class="text-center mt-3 mb-3">
       <a class="fs-6" href="{% url 'login_page' %}">
           Already have an account? Log in 
@@ -136,10 +137,13 @@ $(document).ready(function(){
     // Fade In page
     $('.main-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
 
-    $('.email').keyup(function(){
-      $(this).val($(this).val().toLowerCase());
-    });
 });
+
+function sendForm() {
+  var emailField = document.getElementById("emailField");
+  emailField.value = emailField.value.toLowerCase();
+  document.getElementById("submitBtn").click();
+}
 
 </script>
 </body>

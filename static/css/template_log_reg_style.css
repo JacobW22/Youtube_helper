@@ -32,6 +32,7 @@ button {
 
 .main-container {
   scale: 1.2;
+  min-height: 390px;
 }
 
 .footer {
@@ -41,10 +42,6 @@ button {
 .fa-user,
 .fa-at {
   zoom: 1.8;
-}
-
-.email:not(:placeholder-shown) {
-  text-transform: lowercase;
 }
 
 .fa-at {
