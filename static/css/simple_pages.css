@@ -33,7 +33,12 @@
 }
 
 .go_back_container {
-    transform: translateY(-200%);
+    padding-top: 5em;
+    margin-bottom: 5em;
+}
+
+#main_form {
+    margin-top: 1em;
 }
 
 .sp_url {
@@ -69,10 +74,6 @@
     zoom: 1.1;
 }
 
-#main_form {
-    transform: translateY(-5%);
-}
-
 .fa-chevron-down {
     transform: translate(0, -10px);
 
@@ -80,6 +81,12 @@
     animation-duration: 1.5s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
+}
+
+.pw_reset {
+    width: 50rem;
+    max-width: 100%;
+    padding-top: 5em;
 }
 
 @keyframes borderAnimation {
