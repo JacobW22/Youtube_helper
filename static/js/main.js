@@ -25,18 +25,20 @@ $('.dropdown').on('hide.bs.dropdown', function() {
 
 // Add event listener for click event on the close button
 $('.toast .btn-close').on('click', function() {
-var toast = $(this).closest('.toast');
-// Animate the toast element
-toast.animate({
-    opacity: 0,
-    height: 0,
-    marginBottom: 0
-}, 500, function() {
-    // Remove the toast element from the DOM
-    toast.remove();
-});
+    var toast = $(this).closest('.toast');
+    // Animate the toast element
+    toast.animate({
+        opacity: 0,
+        height: 0,
+        marginBottom: 0
+    }, 500, function() {
+        // Remove the toast element from the DOM
+        toast.remove();
+    });
 });
 
+
+// On submit button hover change text alignment in form
 $('.input_submit').hover(function() {
     $('.form-control').addClass('align-text-center');
 }, function() {
@@ -45,11 +47,13 @@ $('.input_submit').hover(function() {
 
 $(document).ready(function(){
 
-// If any modal, hide it
+// If a modal hasn't disappeared, hide it
 $(window).on("pageshow", function() {
     $('.modal').modal('hide');
 });
 
+
+// Animate toast 
 $(".toast").css("opacity", "0");
 $(".toast").toast("show");
 $(".toast").addClass("custom-fade-in").css("opacity", "1");
@@ -57,6 +61,7 @@ $(".toast").addClass("custom-fade-in").css("opacity", "1");
 setTimeout(function() {
     hideToast();
 }, 5000);
+
 
 function hideToast() {
     var toast = $('.hide_this');
