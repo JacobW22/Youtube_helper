@@ -178,7 +178,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Redis config
 
-CELERY_BROKER_URL = 'redis://default:3vbvgD879cUmyfH2eWBV@containers-us-west-166.railway.app:6452'
+# CELERY_BROKER_URL = 'redis://default:3vbvgD879cUmyfH2eWBV@containers-us-west-166.railway.app:6452'
+CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 BROKER_CONNECTION_RETRY_ON_STARTUP = True

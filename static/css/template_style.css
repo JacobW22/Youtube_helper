@@ -131,7 +131,7 @@ button {
 }
 
 .main-container::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
 
 .fa-chevron-down {
@@ -160,7 +160,7 @@ button {
   #main_form {
     zoom: 115%;
   }
-  
+
   .first-container {
     height: calc(100vh - 106px);
   }
