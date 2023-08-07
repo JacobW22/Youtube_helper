@@ -261,7 +261,7 @@ mark {
 }
 
 .sort_menu .dropdown-item {
-  text-align: center;
+  text-align: left;
   max-width: 15em !important;
   font-size: 1.2rem !important;
 
