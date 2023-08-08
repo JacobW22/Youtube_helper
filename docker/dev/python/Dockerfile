@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.10-slim
 LABEL maintainer = "jwis02202@gmail.com"
 
 COPY ./app /app
