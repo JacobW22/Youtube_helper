@@ -1,0 +1,11 @@
+version: '3'
+services:
+  python:
+    build:
+     context: .
+     dockerfile: docker/prod/python/Dockerfile 
+    volumes:
+      - ./app:/app
+    ports:
+      - 8000:8000 
+    command: gunicorn -w 4 youtube_helper.wsgi -b 0.0.0.0:8000 
