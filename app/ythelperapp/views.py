@@ -10,8 +10,6 @@ from .tasks import TransferPlaylist
 import os
 import re
 import openai
-import backoff
-import pytube
 import asyncio
 import isodate
 import spotipy
