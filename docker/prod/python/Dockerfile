@@ -1,30 +1,36 @@
+FROM python:3.10-alpine AS builder
+
+RUN apk update && \
+    apk add --no-cache musl-dev libpq-dev gcc
+
+RUN python -m venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY /app/requirements/prod.txt .
+
+RUN pip install --no-cache-dir -r prod.txt
+
 FROM python:3.10-alpine
 
-ADD /app/requirements/prod.txt /app/requirements/prod.txt
+RUN apk update && \
+    apk add --no-cache libpq-dev
 
-RUN set -ex \
-    && apk add --no-cache --virtual .build-deps postgresql-dev build-base \
-    && python -m venv /env \
-    && /env/bin/pip install --upgrade pip \
-    && /env/bin/pip install --no-cache-dir -r /app/requirements/prod.txt \
-    && runDeps="$(scanelf --needed --nobanner --recursive /env \
-        | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-        | sort -u \
-        | xargs -r apk info --installed \
-        | sort -u)" \
-    && apk add --virtual rundeps $runDeps \
-    && apk del .build-deps
+COPY --from=builder /opt/venv /opt/venv
 
-ADD app /app
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTOHNUNBUFFERED=1 \
+    PATH="/opt/venv/bin:$PATH"
+
+COPY ./docker/prod/python/entrypoint.sh .
+RUN ["chmod", "+x", "entrypoint.sh"]
+
 WORKDIR /app
 
-ENV VIRTUAL_ENV /env
-ENV PATH /env/bin:$PATH
+ADD app /app
 
-EXPOSE 8000
-
-COPY ./docker/prod/python/entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
+EXPOSE 8000 5432
 
 ENTRYPOINT  ["/entrypoint.sh"]
+
+
