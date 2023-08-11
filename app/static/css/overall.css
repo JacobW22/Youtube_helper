@@ -9,8 +9,9 @@ html {
   width: 100%;
   height: 100%;
   margin: 0;
-  background: linear-gradient(black, red, white);
-  background-size: 800% 800%;
+  /* background: linear-gradient(black, red, white); */
+  background: #000;
+  /* background-size: 800% 800%; */
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -63,14 +64,16 @@ h2 {
 .btn {
   background: black !important;
   color: white;
-  border-radius: 15px !important;
+  border-radius: 10px !important;
   outline: none !important;
   border: none !important;
   box-shadow: 0em 0em 0.15em 0.03em white !important;
 }
 
 .btn:hover {
-  box-shadow: none !important;
+  color: white;
+  transform: translateY(-10%);
+  box-shadow: 0em 0em 0.5em 0.03em white !important;
 }
 
 ::selection {
@@ -105,6 +108,10 @@ a,
 
 .navbar {
   user-select: none !important;
+  width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 90%;
 }
 
 .nav-link:not(.highlight_link):hover > span .fa-solid,
