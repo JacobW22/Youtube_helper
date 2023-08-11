@@ -7,15 +7,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': os.environ.get("DB_NAME"),
+        'NAME': env("POSTGRES_DB"),
 
-        'USER': os.environ.get("DB_USERNAME"),
+        'USER': env("POSTGRES_USER"),
 
-        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'PASSWORD': env("POSTGRES_PASSWORD"),
 
-        'HOST': os.environ.get("DB_HOST"),
+        'HOST': env("POSTGRES_HOST"),
 
-        'PORT': os.environ.get("DB_PORT"),
+        'PORT': env("POSTGRES_PORT"),
     }
 }
 
@@ -23,10 +23,10 @@ DATABASES = {
 
 AWS_S3_HOST = 's3.eu-central-1.amazonaws.com'
 AWS_S3_REGION_NAME="eu-central-1"
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_SECRET_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_CUSTOM_DOMAIN= f'{AWS_S3_HOST}/{os.environ.get("AWS_STORAGE_BUCKET_NAME")}'
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_CUSTOM_DOMAIN= f'{AWS_S3_HOST}/{env("AWS_STORAGE_BUCKET_NAME")}'
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
@@ -34,7 +34,7 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_LOCATION = 'static'
 AWS_QUERYSTRING_AUTH = False
 AWS_HEADERS = {
-    'Access-Control-Allow-Origin': f'{os.environ.get("AWS_ALLOW_ORIGIN")}',
+    'Access-Control-Allow-Origin': f'{env("AWS_ALLOW_ORIGIN")}',
 }
 
 # Static files (CSS, JavaScript, Images)
