@@ -49,7 +49,7 @@ html {
 
 input[type="search" i]::-webkit-search-cancel-button {
   cursor: pointer;
-  transform: scale(1.2);
+  transform: scale(1.2) translateY(-10%);
   filter: invert(0.5);
 }
 
@@ -108,10 +108,8 @@ a,
 
 .navbar {
   user-select: none !important;
-  width: 80rem;
   margin-left: auto;
   margin-right: auto;
-  max-width: 90%;
 }
 
 .nav-link:not(.highlight_link):hover > span .fa-solid,
@@ -318,6 +316,11 @@ h2 {
 }
 
 @media screen and (min-width: 2270px) {
+  .comments_navbar {
+    width: 80rem;
+    max-width: 85%;
+  }
+
   .nav-link {
     font-size: 2rem !important;
   }
@@ -357,6 +360,11 @@ h2 {
 }
 
 @media screen and (min-width: 1400px) and (max-width: 2270px) {
+  .comments_navbar {
+    width: 80rem;
+    max-width: 85%;
+  }
+
   #main-title {
     font-size: 2.5rem !important;
   }
@@ -436,6 +444,11 @@ h2 {
 @media screen and (min-width: 992px) {
   .account_menu {
     width: 15em !important;
+  }
+
+  .navbar:not(.comments_navbar) {
+    width: 80rem;
+    max-width: 90%;
   }
 }
 

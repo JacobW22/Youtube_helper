@@ -16,6 +16,7 @@
     width: 35rem !important;
     margin-top: 10px;
     max-width: 100% !important;
+    zoom: 1.1;
 }
   
 .form-control:focus {
