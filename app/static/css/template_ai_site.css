@@ -38,7 +38,7 @@
 
 .form-control {
   background-color: black !important;
-  border: 0.20em solid #fff !important;
+  border: 0.10em solid #fff !important;
   border-color: white !important;
   border-radius: 10px !important;
   text-align: center;
@@ -47,6 +47,10 @@
 
   width: 40rem !important;
   max-width: 100% !important;
+}
+
+#main_form {
+  zoom: 1.15;
 }
 
 .form-control:focus {

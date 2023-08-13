@@ -123,7 +123,7 @@ button {
 }
 
 #main_form {
-  zoom: 1.1;
+  zoom: 1.2;
 }
 
 .main-container {
@@ -157,10 +157,6 @@ button {
 
 
 @media screen and (min-width: 1400px) {
-  #main_form {
-    zoom: 115%;
-  }
-
   .first-container {
     height: calc(100vh - 106px);
   }

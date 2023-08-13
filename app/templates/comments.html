@@ -51,14 +51,14 @@
           <!-- Comments nav start-->
           <nav class="d-flex flex-grow-0 navbar navbar-expand-xxl w-100 comments_navbar">
             <div class="container-fluid comments_navbar_container">
-                <h2 class="navbar-brand text-light fs-6 d-xxl-none">Search options</h2>
-                <button class="navbar-toggler comments_navbar_toggler ms-0 me-lg-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <h2 class="navbar-brand text-light fs-6 ms-auto d-xxl-none">Search options</h2>
+                <button class="navbar-toggler comments_navbar_toggler me-xxl-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCommentsSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
               <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
                 <ul class="navbar-nav comments_navbar_ul gap-3 mb-sm-0">
                 
-                  <form method="POST" class=" hidden_form" id="hidden_form">
+                  <form method="POST" class="hidden_form" id="hidden_form">
                     {% csrf_token %}
                     <input class="d-none" type="hidden" name="order" value="{{ order }}" id="orderInput">
                     <input class="d-none" type="hidden" name="maxResults" value={{ maxResults }} id="maxResultsInput">
