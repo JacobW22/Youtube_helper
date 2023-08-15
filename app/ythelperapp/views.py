@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
 
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
 from .decorators import login_check, not_authenticated_only
@@ -13,7 +14,8 @@ import openai
 import asyncio
 import isodate
 import spotipy
-
+import boto3
+import random
 
 from pytube import YouTube
 from datetime import datetime as dt
@@ -23,6 +25,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from dateutil.parser import isoparse
 from spotipy.oauth2 import SpotifyOAuth
+from botocore.config import Config
+
 
 # Hide it from Github
 load_dotenv(find_dotenv())
@@ -273,6 +277,7 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
     context.update(login_context)
     context.update({"sites_context": sites_context})
 
+
     if parameter != "":
         context.update(
             {
@@ -281,6 +286,10 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
             }
         )
 
+    else:   
+        users_avatars = get_avatars()  
+        context.update({"users_avatars": users_avatars})
+        
     return render(request, "ai_site.html", context)
 
 
@@ -972,3 +981,42 @@ def show_comments(
         context.update({"sites_context": sites_context})
 
         return context
+
+
+def get_avatars():
+    try:
+        s3 = boto3.client('s3', 
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME,
+            config=Config(signature_version='s3v4')
+        )
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+
+        response = s3.list_objects_v2(Bucket=bucket_name, Prefix='media/', Delimiter='/')
+
+        if 'Contents' in response:
+            objects = response['Contents']
+            image_objects = [obj for obj in objects if obj['Key'].endswith('.png')]
+            image_objects.sort(key=lambda obj: obj['LastModified'], reverse=True)
+            
+            if len(image_objects) <= 8:
+                random_image_objects = image_objects
+            else:
+                random_image_objects = random.sample(image_objects, 8)
+            
+            random_image_urls = []
+            for img_obj in random_image_objects:
+                url = s3.generate_presigned_url(
+                    ClientMethod='get_object',
+                    Params={'Bucket': bucket_name, 'Key': img_obj['Key']},
+                    ExpiresIn=3600,
+                )
+                random_image_urls.append(url)
+            
+            return random_image_urls
+        else:
+            return None
+        
+    except Exception:
+        return None
