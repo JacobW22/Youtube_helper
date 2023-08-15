@@ -108,8 +108,6 @@ a,
 
 .navbar {
   user-select: none !important;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .nav-link:not(.highlight_link):hover > span .fa-solid,
@@ -301,6 +299,11 @@ h2 {
   text-align: center !important;
 }
 
+.main-container::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none !important;
+}
+
 @keyframes fade-in-animation {
   0% {
     opacity: 0;
@@ -435,12 +438,6 @@ h2 {
   }
 }
 
-@media screen and (max-width: 1080px) {
-  body::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 @media screen and (min-width: 992px) {
   .account_menu {
     width: 15em !important;
@@ -449,6 +446,8 @@ h2 {
   .navbar:not(.comments_navbar) {
     width: 80rem;
     max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 

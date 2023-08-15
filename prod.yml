@@ -5,14 +5,14 @@ volumes:
 
 services:
 
-  web:
+  web: &python
     build:
      context: .
      dockerfile: docker/prod/python/Dockerfile 
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$postgres:5432/$POSTGRES_DB
+      DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB
     volumes:
       - ./app:/app
     ports:
@@ -24,13 +24,31 @@ services:
     env_file:
       - .env 
     environment:
-      DB_USERNAME: $POSTGRES_USER
-      DB_NAME: $POSTGRES_DB
-      DB_PASSWORD: $POSTGRES_PASSWORD
-      DB_HOST: postgres
-      DB_PORT: 5432
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_HOST: $POSTGRES_HOST
+      POSTGRES_PORT: $POSTGRES_PORT
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
+  rabbitmq:
+    image: rabbitmq:3.12.2-alpine
+  
+  celery:
+    build:
+     context: .
+     dockerfile: docker/prod/rabbitmq/Dockerfile 
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB
+    volumes:
+      - ./app:/app
+    command: celery -A ythelperapp worker -l INFO --without-gossip --without-mingle --without-heartbeat
+    ports: []
+    depends_on:
+      - rabbitmq
+      - postgres
