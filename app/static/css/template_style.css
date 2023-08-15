@@ -130,10 +130,6 @@ button {
   overflow-y: scroll;
 }
 
-.main-container::-webkit-scrollbar {
-  display: none !important;
-}
-
 .fa-chevron-down {
   transform: translate(0, -40px);
 

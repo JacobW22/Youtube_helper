@@ -36,7 +36,7 @@
 
 
   <!-- First section start -->
-  <section class="d-flex flex-column align-items-center first-container snap">
+  <section class="d-flex flex-column align-items-center first-container snap" id="section1">
     
     <form method="post" class="container-fluid d-flex flex-column my-auto align-items-center gap-4 p-0" id="main_form" >
         {% csrf_token %}
@@ -54,14 +54,16 @@
           <button type="submit" class="btn btn-dark btn-lg animate mt-2 input_submit">Confirm</button>
     </form>
 
-    <i class="fa-solid fa-chevron-down text-light fs-3"></i>
+    <a href="#section2">
+      <i class="fa-solid fa-chevron-down text-light fs-3"></i>
+    </a>
   </section>
   <!-- First section end -->
 
 
 
   <!-- Second section start -->
-  <section class="d-flex my-auto flex-column container-fluid align-items-center justify-content-center second-container ">
+  <section class="d-flex my-auto flex-column container-fluid align-items-center justify-content-center second-container" id="section2">
 
     <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
     <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>

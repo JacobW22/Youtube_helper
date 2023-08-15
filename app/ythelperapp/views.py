@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
 from .decorators import login_check, not_authenticated_only
 from .models import user_data_storage, User
-from .tasks import TransferPlaylist
+from .tasks import TransferPlaylist, download_and_store_image
 
 import os
 import re
@@ -264,6 +264,8 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
                 ]
                 storage.prompts_history.append(info)
                 storage.save()
+
+        download_and_store_image.delay(fixed_link)
 
         return redirect(ai_page, parameter=fixed_link, parameter_title=description)
 

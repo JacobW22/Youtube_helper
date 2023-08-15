@@ -122,7 +122,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Message broker config
 
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://rabbitmq'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 BROKER_CONNECTION_RETRY_ON_STARTUP = True
