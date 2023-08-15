@@ -54,19 +54,14 @@
             <span class="d-flex text-light w-100 flex-column px-0 justify-content-center align-items-center align-self-top mt-1 mt-lg-4 gap-5 text_section" >
                 <div class="text-center">
                   <span class="ai-subtitle text-center px-3 fs-3">
-                    Avatars gallery
+                    Recently created avatars
                   </span>
                 </div>
                 
                 <div class="text-center avatar_gallery">
-                  <img src="{% static 'images/img-60gIrd8ObbkiZhzTnMLTruTK.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-d6cwUNORxNQRZ45LlP6p4xuh.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-Zo9qEiDxsrYAXTOf9sfajjzm.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-jt9NQ6y6dbfOftlQ6TJlRPQh.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-LuHpPcqYgJfLwGBWgRDXWvJE.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-BszahQQvIOyUdNU0hf1BIN9m.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-NlfvemMSRGMAlA4YXw2IbGZJ.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-uuo5NqltONY3oXEarTLQ9WX2.png' %}" alt="icon_example" class="img-fluid">
+                  {% for img_url in users_avatars %}
+                    <img src="{{ img_url }}" alt="icon_example" class="img-fluid">
+                  {% endfor %}
                 </div>
                 
             </span>
@@ -89,7 +84,7 @@
                   <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default"> Create your own </span>
                  
                   <span class="pointing-to-link text-light fs-1 mb-2 p-1 text-center " id="inputGroup-sizing-default"> <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i> </span>
-                  <input type="text" name="description" placeholder="Video Vlogger,  Gamer,  Car Mechanic,  Software Engineer etc." class="form-control text-light mb-3" id="description" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                  <input type="text" name="description" placeholder="Video Vlogger,  Gamer in Anime style,  Car Mechanic,  Software Engineer etc." class="form-control text-light mb-3" id="description" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
                   <span class="fs-6 text-light text-muted text-center mb-5">Describe your avatar up here</span>
                   <button type="submit" class="btn btn-dark btn-lg rounded-pill input_submit animate">Generate</button>
                   
