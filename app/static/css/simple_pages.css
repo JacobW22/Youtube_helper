@@ -34,13 +34,10 @@
     font-family: "Quicksand", sans-serif;
 }
 
-.go_back_container {
-    padding-top: 5em;
-    margin-bottom: 5em;
-}
-
-#main_form {
-    margin-top: 1em;
+#main_form, 
+#main_content {
+    margin-top: 2em;
+    margin-bottom: 3em;
 }
 
 .sp_url {
