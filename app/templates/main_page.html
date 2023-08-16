@@ -115,7 +115,7 @@
   </section>
 
   {% else %}
-  <section class="d-flex info_for_carousel snap">
+  <section class="d-flex info_for_carousel p-5 py-3 py-lg-5 snap">
     <span class="text-light fs-2 text-center text-muted"> Download history is empty </span>
   </section>
 
@@ -132,7 +132,7 @@
 <!-- Toasts container start -->
 <div class="toast-container bottom-0 start-50 translate-middle-x">
   {% for message in messages %}
-  <div class="toast fade align-items-center text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+  <div class="toast fade hide_this align-items-center text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
     <div class="toast-body">
       <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message|safe }}
     </div>

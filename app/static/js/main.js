@@ -70,7 +70,7 @@ function hideToast() {
         opacity: 0,
         height: 0,
         marginBottom: 0
-    }, 500, function() {
+    }, 1000, function() {
     // Remove the toast element from the DOM
     toast.remove();
     });
