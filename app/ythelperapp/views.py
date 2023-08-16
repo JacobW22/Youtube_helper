@@ -403,53 +403,59 @@ def youtube_to_spotify(request, login_context):
         form = StartTaskForm(request.POST)
         if form.is_valid():
             url = request.POST.get("url")
-            url = url.split("list=", 1)[1]
-            playlist_id = url.split("&", 1)[0]
 
-            # Store data in user history
-            if "username" in login_context:
-                username = login_context["username"]
-                storage = user_data_storage.objects.get(
-                    user=User.objects.get(username=username)
+            if "list=RD" not in url: # Block Youtube Mix playlists
+                url = url.split("list=", 1)[1]
+                playlist_id = url.split("&", 1)[0]
+
+                # Store data in user history
+                if "username" in login_context:
+                    username = login_context["username"]
+                    storage = user_data_storage.objects.get(
+                        user=User.objects.get(username=username)
+                    )
+
+                    response_for_title = (
+                        youtube.playlists()
+                        .list(part="snippet", id=playlist_id, fields="items(snippet(title))")
+                        .execute()
+                    )
+
+                    if response_for_title["items"][0]["snippet"]["title"]:
+                        title = response_for_title["items"][0]["snippet"]["title"]
+                    else:
+                        title = "Couldn't find"
+
+                    if storage.save_history:
+                        time = dt.now()
+                        info = [
+                            title,
+                            request.POST.get("url"),
+                            time.strftime("%d/%m/%Y %H:%M"),
+                        ]
+                        storage.transferred_playlists_history.append(info)
+                        storage.save()
+
+
+                # If the user has granted permission and returned with the authorization code
+                code = request.GET.get("code")
+                token_info = sp_oauth.get_access_token(code)
+
+                sp = spotipy.Spotify(auth=token_info["access_token"])
+                user_id = sp.me()["id"]
+                user_account_url = f"https://open.spotify.com/user/{user_id}"
+
+                # Pass the access token to a Celery task for further processing
+                TransferPlaylist.delay(
+                    sp_token=token_info["access_token"], playlist_id=playlist_id
                 )
 
-                response_for_title = (
-                    youtube.playlists()
-                    .list(part="snippet", id=playlist_id, fields="items(snippet(title))")
-                    .execute()
-                )
+                return redirect(youtube_to_spotify_done, account_url=user_account_url)
 
-                if response_for_title["items"][0]["snippet"]["title"]:
-                    title = response_for_title["items"][0]["snippet"]["title"]
-                else:
-                    title = "Couldn't find"
-
-                if storage.save_history:
-                    time = dt.now()
-                    info = [
-                        title,
-                        request.POST.get("url"),
-                        time.strftime("%d/%m/%Y %H:%M"),
-                    ]
-                    storage.transferred_playlists_history.append(info)
-                    storage.save()
-
-
-            # If the user has granted permission and returned with the authorization code
-            code = request.GET.get("code")
-            token_info = sp_oauth.get_access_token(code)
-
-            sp = spotipy.Spotify(auth=token_info["access_token"])
-            user_id = sp.me()["id"]
-            user_account_url = f"https://open.spotify.com/user/{user_id}"
-
-            # Pass the access token to a Celery task for further processing
-            TransferPlaylist.delay(
-                sp_token=token_info["access_token"], playlist_id=playlist_id
-            )
-
-            return redirect(youtube_to_spotify_done, account_url=user_account_url)
-
+            else:
+                msg.info(request, "Youtube Mix is not accepted")
+                return redirect(youtube_to_spotify) 
+            
     context.update({"form": form})
     context.update(login_context)
     context.update({"sites_context": sites_context})

@@ -54,25 +54,28 @@ def TransferPlaylist(self, sp_token, playlist_id, ignore_result=True):
 
         response_for_title = (
             youtube.playlists()
-            .list(part="snippet", id=playlist_id, fields="items(snippet(title))")
+            .list(part="snippet,contentDetails", id=playlist_id)
             .execute()
         )
 
         response = request.execute()
 
-        try:
+        try: # Get title from playlist
             playlist_name = response_for_title["items"][0]["snippet"]["title"]
-        except Exception:
+
+        except Exception: # Get title from first video
             playlist_name = response["items"][0]["snippet"]["title"]
 
         # Initialize an empty list to store the video titles
         video_titles = []
+
 
         while response:
             # Extract video titles from the response
             for item in response["items"]:
                 if item["snippet"]["title"] != "Private video" and item["snippet"]["title"] != "Deleted video":
                     video_titles.append(item["snippet"]["title"])
+
 
             # Check if there are more pages to retrieve
             if "nextPageToken" in response:
@@ -111,7 +114,7 @@ def TransferPlaylist(self, sp_token, playlist_id, ignore_result=True):
         # __ 3: Spotify - Search Songs
 
         track_ids = []
-
+        print(video_titles)
         for title in video_titles:
             search_result = sp.search(q=title, type="track", limit=1)
             if search_result["tracks"]["items"]:
@@ -124,7 +127,7 @@ def TransferPlaylist(self, sp_token, playlist_id, ignore_result=True):
         track_batches = [
             track_ids[i : i + batch_size] for i in range(0, len(track_ids), batch_size)
         ]
-
+        print(track_batches)
         for track_batch in track_batches:
             sp.playlist_add_items(playlist_id, track_batch)
 
