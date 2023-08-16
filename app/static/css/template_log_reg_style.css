@@ -2,14 +2,6 @@
   height: 100% !important;
 }
 
-.form-control {
-  background-color: transparent;
-}
-
-.form-control:focus {
-  background-color: transparent;
-}
-
 button {
   position: relative !important;
 }
