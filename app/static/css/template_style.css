@@ -115,6 +115,16 @@ button {
   animation-timing-function: ease-in-out;
 }
 
+.fa-youtube {
+    transition: filter 300ms;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fa-youtube {
+    animation: funny-bouncing infinite 8s linear;
+  }
+}
+
 @keyframes floating {
   0% {
       transform: translate(0, -40px);
@@ -127,6 +137,23 @@ button {
   }
 }
 
+@keyframes funny-bouncing {
+  0% {
+    transform: rotate(0deg) translateY(0%);
+  }
+  25% {
+    transform: rotate(50deg) translateY(-120%);
+  }
+  50% {
+    transform: rotate(0deg) translateY(0%);
+  }
+  75% {
+    transform: rotate(-45deg) translateY(-50%);
+  }
+  100% {
+    transform: rotate(0deg) translateY(0%);
+  }
+}
 
 @media screen and (min-width: 1400px) {
   .first-container {
@@ -153,3 +180,4 @@ button {
     width: 100%;
   }
 }
+
