@@ -350,11 +350,10 @@ def comments(request, login_context):
                     previousPageID = 1
                     searchInput = ""
 
-                    request.session['pageTokens'].clear()
-                    request.session['pageTokens'].append(None)
-
-                    if request.session['video_metadata_temp']:
-                        request.session['video_metadata_temp'].clear()
+                    request.session['pageTokens'] = [None]
+                    request.session['previous_request_pageID'] = None
+                    request.session['previous_request_previousPageID'] = None
+                    request.session['video_metadata_temp'] = {}
 
                     context = show_comments(
                         request,
@@ -369,7 +368,7 @@ def comments(request, login_context):
                     )
                     return render(request, "comments.html", context)
 
-                except Exception:
+                except Exception as e:
                     msg.info(request, "Video cannot be found")
                     return redirect(comments)
 
