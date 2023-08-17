@@ -293,43 +293,42 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
     return render(request, "ai_site.html", context)
 
 
-pageTokens = [None]
-previous_request_previousPageID = [0]
-previous_request_pageID = [0]
-video_metadata_temp = {}
-
-
 @login_check
 def comments(request, login_context):
     if request.method == "POST":
         match request.POST.get("video_url"):
             case None:
-                try:
-                    order = request.POST.get("order")
-                    maxResults = request.POST.get("maxResults")
-                    previousPageID = request.POST.get("previousPageID")
-                    pageID = request.POST.get("pageID")
-                    video_id = request.POST.get("video_id")
-                    searchInput = request.POST.get("searchInput")
+                # try:
+                order = request.POST.get("order")
+                maxResults = request.POST.get("maxResults")
+                previousPageID = request.POST.get("previousPageID")
+                pageID = request.POST.get("pageID")
+                video_id = request.POST.get("video_id")
+                searchInput = request.POST.get("searchInput")
+                
 
-                    context = show_comments(
-                        request,
-                        order,
-                        maxResults,
-                        pageID,
-                        previousPageID,
-                        video_id,
-                        searchInput,
-                        login_context,
-                        isFirstTime=False,
-                    )
-                    return render(request, "comments.html", context)
+                if int(pageID) == 1 and int(previousPageID) == 1:
+                    if len(request.session['pageTokens']) > 1:
+                        request.session['pageTokens'].clear()
+                        request.session['pageTokens'].append(None)
 
-                except Exception:
-                    pageTokens.clear()
-                    pageTokens.append(None)
-                    msg.info(request, "Something went wrong, please try again")
-                    return redirect(comments)
+                context = show_comments(
+                    request,
+                    order,
+                    maxResults,
+                    pageID,
+                    previousPageID,
+                    video_id,
+                    searchInput,
+                    login_context,
+                    isFirstTime=False,
+                )
+                return render(request, "comments.html", context)
+
+                # except Exception:
+                #     request.session['pageTokens'].clear()
+                #     msg.info(request, "Something went wrong, please try again")
+                #     return redirect(comments)
 
             case _:
                 try:
@@ -343,14 +342,15 @@ def comments(request, login_context):
                         msg.info(request, "Invalid url")
                         return redirect(comments)
                     
+
                     order = "relevance"
                     maxResults = 25
                     pageID = 1
                     previousPageID = 1
                     searchInput = ""
 
-                    if video_metadata_temp:
-                        video_metadata_temp.clear()
+                    if request.session['video_metadata_temp']:
+                        request.session['video_metadata_temp'].clear()
 
                     context = show_comments(
                         request,
@@ -366,12 +366,12 @@ def comments(request, login_context):
                     return render(request, "comments.html", context)
 
                 except Exception:
-                    pageTokens.clear()
-                    pageTokens.append(None)
+                    request.session['pageTokens'].clear()
                     msg.info(request, "Video cannot be found")
                     return redirect(comments)
 
     # On first load
+    context = {}
     context = {}
     context.update(login_context)
     context.update({"sites_context": sites_context})
@@ -629,11 +629,11 @@ async def get_video_metadata(url):
 
     try:
         # Call the API to retrieve the video details
-        request = youtube2.videos().list(
+        yt_request = youtube2.videos().list(
             part="snippet,statistics,contentDetails", id=video_id
         )
 
-        response = await asyncio.to_thread(request.execute)
+        response = await asyncio.to_thread(yt_request.execute)
 
         # Extract the snippet and statistics from the response
         video = response["items"][0]
@@ -651,7 +651,8 @@ async def get_video_metadata(url):
         likes = "{:,}".format(int(statistics["likeCount"])).replace(",", " ")
         comment_count = "{:,}".format(int(statistics["commentCount"])).replace(",", " ")
 
-        length = isodate.parse_duration(content_details["duration"])
+        # length = isodate.parse_duration(content_details["duration"])
+        length = content_details["duration"]
 
     except HttpError as e:
         print(f"An HTTP error occurred: {e}")
@@ -679,17 +680,24 @@ async def get_video_metadata(url):
 
 
 async def get_video_comments(
-    video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser
+    request,
+    video_id, 
+    order, 
+    maxResults, 
+    previousPageID, 
+    pageID, 
+    searchInput, 
+    quotaUser
 ):
     try:
         # Retrieve the comments for the specified video
-        request = youtube.commentThreads().list(
+        yt_request = youtube.commentThreads().list(
             part="snippet",
             videoId=video_id,
             textFormat="html",
             order=order,
             maxResults=maxResults,
-            pageToken=pageTokens[-1],
+            pageToken=request.session['pageTokens'][-1],
             quotaUser=quotaUser,
         )
 
@@ -698,28 +706,28 @@ async def get_video_comments(
 
         match (int(pageID) - int(previousPageID)):
             case 1:
-                response = await asyncio.to_thread(request.execute)
+                response = await asyncio.to_thread(yt_request.execute)
 
                 if "nextPageToken" in response:
-                    pageTokens.append(response["nextPageToken"])
-                    request = youtube.commentThreads().list_next(request, response)
+                    request.session['pageTokens'].append(response["nextPageToken"])
+                    yt_request = youtube.commentThreads().list_next(yt_request, response)
 
             case 0:
                 pass
 
             case -1:
-                pageTokens.pop()
-                request = youtube.commentThreads().list(
+                request.session['pageTokens'].pop()
+                yt_request = youtube.commentThreads().list(
                     part="snippet",
                     videoId=video_id,
                     textFormat="html",
                     order=order,
                     maxResults=maxResults,
-                    pageToken=pageTokens[-1],
+                    pageToken=request.session['pageTokens'][-1],
                     quotaUser=quotaUser,
                 )
 
-        response = await asyncio.to_thread(request.execute)
+        response = await asyncio.to_thread(yt_request.execute)
 
         if "nextPageToken" not in response:
             processed_comments.append("last_page")
@@ -741,7 +749,7 @@ async def get_video_comments(
                         "textDisplay"
                     ]
                     highlighted_comment = re.sub(
-                        f"({re.escape(searchInput)})",
+                        r"(?![^<>]*>)(" + re.escape(searchInput) + r")",
                         r"<mark>\1</mark>",
                         snippet,
                         flags=re.IGNORECASE,
@@ -802,13 +810,16 @@ async def get_video_comments(
                         }
                     )
 
-        if order == "time":
-            date_format = "%Y-%m-%d %H:%M:%S"
-            date1 = dt.strptime(processed_comments[0].get("publish_date"), date_format)
-            date2 = dt.strptime(processed_comments[1].get("publish_date"), date_format)
+        if order == "time" and processed_comments:
+            try:
+                date_format = "%Y-%m-%d %H:%M:%S"
+                date1 = dt.strptime(processed_comments[0].get("publish_date"), date_format)
+                date2 = dt.strptime(processed_comments[1].get("publish_date"), date_format)
 
-            if date1 < date2:
-                processed_comments[0]["pinned"] = True
+                if date1 < date2:
+                    processed_comments[0]["pinned"] = True
+            except Exception:
+                pass
 
         return processed_comments
 
@@ -818,6 +829,7 @@ async def get_video_comments(
 
 
 async def get_video_comments_view_async(
+    request,
     video_id,
     order,
     maxResults,
@@ -837,6 +849,7 @@ async def get_video_comments_view_async(
 
                 comments_and_VidInfo = await asyncio.gather(
                     get_video_comments(
+                        request,
                         video_id,
                         order,
                         maxResults,
@@ -848,7 +861,7 @@ async def get_video_comments_view_async(
                     get_video_metadata(video_url),
                 )
 
-                video_metadata_temp.update(comments_and_VidInfo[1])
+                request.session['video_metadata_temp'].update(comments_and_VidInfo[1])
 
                 comments_and_VidInfo = {
                     "comments": comments_and_VidInfo[0],
@@ -859,6 +872,7 @@ async def get_video_comments_view_async(
 
             case False:
                 comments = await get_video_comments(
+                    request,
                     video_id,
                     order,
                     maxResults,
@@ -870,7 +884,7 @@ async def get_video_comments_view_async(
 
                 comments_and_VidInfo = {
                     "comments": comments,
-                    "video_metadata": video_metadata_temp,
+                    "video_metadata": request.session['video_metadata_temp'],
                 }
 
                 return comments_and_VidInfo
@@ -902,35 +916,27 @@ def show_comments(
             "searchInput": searchInput,
         }
 
-        # Reset previous saved pageTokens
-        if previousPageID == "1" and pageID == "1":
-            pageTokens.clear()
-            pageTokens.append(None)
-
         if login_context.get("logged"):
             quotaUser = login_context.get("username")
         else:
             quotaUser = None
 
         # E.g. previousPage = 1 and Page = 2, so if refreshed next api request won't be sent
-
-        match str(previous_request_pageID[-1]) == str(pageID):
+        match str(request.session['previous_request_pageID']) == str(pageID):
             case True:
                 stopRequest = True
             case False:
-                previous_request_pageID.pop(0)
-                previous_request_pageID.append(pageID)
-
+                request.session['previous_request_pageID'] = pageID
                 stopRequest = False
 
-        match str(previous_request_previousPageID[-1]) == str(previousPageID):
+
+        match str(request.session['previous_request_previousPageID']) == str(previousPageID):
             case True:
                 stopRequest2 = True
             case False:
-                previous_request_previousPageID.pop(0)
-                previous_request_previousPageID.append(previousPageID)
-
+                request.session['previous_request_previousPageID'] = previousPageID
                 stopRequest2 = False
+
 
         if stopRequest and stopRequest2:
             previousPageID = pageID
@@ -940,6 +946,7 @@ def show_comments(
         asyncio.set_event_loop(loop)
         comments_and_VidInfo = loop.run_until_complete(
             get_video_comments_view_async(
+                request,
                 video_id,
                 order,
                 maxResults,
