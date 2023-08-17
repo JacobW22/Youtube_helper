@@ -227,6 +227,7 @@ def download_page(request, login_context, parameter):
 
     context.update(login_context)
     context.update({"sites_context": sites_context})
+    context.update({"video_duration": isodate.parse_duration(context.get("length"))})
 
     return render(request, "download_page.html", context)
 
@@ -298,37 +299,37 @@ def comments(request, login_context):
     if request.method == "POST":
         match request.POST.get("video_url"):
             case None:
-                # try:
-                order = request.POST.get("order")
-                maxResults = request.POST.get("maxResults")
-                previousPageID = request.POST.get("previousPageID")
-                pageID = request.POST.get("pageID")
-                video_id = request.POST.get("video_id")
-                searchInput = request.POST.get("searchInput")
-                
+                try:
+                    order = request.POST.get("order")
+                    maxResults = request.POST.get("maxResults")
+                    previousPageID = request.POST.get("previousPageID")
+                    pageID = request.POST.get("pageID")
+                    video_id = request.POST.get("video_id")
+                    searchInput = request.POST.get("searchInput")
+                    
 
-                if int(pageID) == 1 and int(previousPageID) == 1:
-                    if len(request.session['pageTokens']) > 1:
-                        request.session['pageTokens'].clear()
-                        request.session['pageTokens'].append(None)
+                    if int(pageID) == 1 and int(previousPageID) == 1:
+                        if len(request.session['pageTokens']) > 1:
+                            request.session['pageTokens'].clear()
+                            request.session['pageTokens'].append(None)
 
-                context = show_comments(
-                    request,
-                    order,
-                    maxResults,
-                    pageID,
-                    previousPageID,
-                    video_id,
-                    searchInput,
-                    login_context,
-                    isFirstTime=False,
-                )
-                return render(request, "comments.html", context)
+                    context = show_comments(
+                        request,
+                        order,
+                        maxResults,
+                        pageID,
+                        previousPageID,
+                        video_id,
+                        searchInput,
+                        login_context,
+                        isFirstTime=False,
+                    )
+                    return render(request, "comments.html", context)
 
-                # except Exception:
-                #     request.session['pageTokens'].clear()
-                #     msg.info(request, "Something went wrong, please try again")
-                #     return redirect(comments)
+                except Exception:
+                    request.session['pageTokens'].clear()
+                    msg.info(request, "Something went wrong, please try again")
+                    return redirect(comments)
 
             case _:
                 try:
@@ -349,6 +350,9 @@ def comments(request, login_context):
                     previousPageID = 1
                     searchInput = ""
 
+                    request.session['pageTokens'].clear()
+                    request.session['pageTokens'].append(None)
+
                     if request.session['video_metadata_temp']:
                         request.session['video_metadata_temp'].clear()
 
@@ -366,12 +370,10 @@ def comments(request, login_context):
                     return render(request, "comments.html", context)
 
                 except Exception:
-                    request.session['pageTokens'].clear()
                     msg.info(request, "Video cannot be found")
                     return redirect(comments)
 
     # On first load
-    context = {}
     context = {}
     context.update(login_context)
     context.update({"sites_context": sites_context})
@@ -651,8 +653,8 @@ async def get_video_metadata(url):
         likes = "{:,}".format(int(statistics["likeCount"])).replace(",", " ")
         comment_count = "{:,}".format(int(statistics["commentCount"])).replace(",", " ")
 
-        # length = isodate.parse_duration(content_details["duration"])
         length = content_details["duration"]
+
 
     except HttpError as e:
         print(f"An HTTP error occurred: {e}")
@@ -866,6 +868,7 @@ async def get_video_comments_view_async(
                 comments_and_VidInfo = {
                     "comments": comments_and_VidInfo[0],
                     "video_metadata": comments_and_VidInfo[1],
+                    "video_duration": isodate.parse_duration(comments_and_VidInfo[1].get("length"))
                 }
 
                 return comments_and_VidInfo
@@ -881,10 +884,10 @@ async def get_video_comments_view_async(
                     searchInput,
                     quotaUser,
                 )
-
                 comments_and_VidInfo = {
                     "comments": comments,
                     "video_metadata": request.session['video_metadata_temp'],
+                    "video_duration": isodate.parse_duration(request.session['video_metadata_temp'].get("length")),
                 }
 
                 return comments_and_VidInfo

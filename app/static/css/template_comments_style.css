@@ -298,6 +298,35 @@ mark {
   zoom: 1.1;
 }
 
+.fa-comments {
+  transition: filter 300ms;
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fa-comments {
+    animation: funny-bouncing infinite 8s linear;
+  }
+}
+
+@keyframes funny-bouncing {
+  0% {
+    transform: rotate(-15deg) translateY(0%);
+  }
+  25% {
+    transform: rotate(0deg) translateY(-30%);
+  }
+  50% {
+    transform: rotate(10deg) translateY(0%);
+  }
+  75% {
+    transform: rotate(0deg) translateY(-30%);
+  }
+  100% {
+    transform: rotate(-15deg) translateY(0%);
+  }
+}
+
 @media screen and (min-width: 1400px) {
   .comments_navbar {
     width: auto !important;
