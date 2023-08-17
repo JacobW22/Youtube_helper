@@ -44,6 +44,14 @@
 
 #search_phrase {
   zoom: 1.05;
+  width: 30rem !important;
+  max-width: 50vw;
+  text-align: center;
+}
+
+#search_phrase::placeholder {
+  padding-left: 1em;
+  text-align: center !important;
 }
 
 .black {
@@ -284,6 +292,7 @@ mark {
 .comments_navbar:not(.form-control) {
   user-select: none!important;
 }
+
 
 #main_form {
   zoom: 1.1;

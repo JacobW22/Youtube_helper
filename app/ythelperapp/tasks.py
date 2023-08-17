@@ -114,7 +114,6 @@ def TransferPlaylist(self, sp_token, playlist_id, ignore_result=True):
         # __ 3: Spotify - Search Songs
 
         track_ids = []
-        print(video_titles)
         for title in video_titles:
             search_result = sp.search(q=title, type="track", limit=1)
             if search_result["tracks"]["items"]:
@@ -127,10 +126,8 @@ def TransferPlaylist(self, sp_token, playlist_id, ignore_result=True):
         track_batches = [
             track_ids[i : i + batch_size] for i in range(0, len(track_ids), batch_size)
         ]
-        print(track_batches)
         for track_batch in track_batches:
             sp.playlist_add_items(playlist_id, track_batch)
 
     except Exception as e:
         print("Task failed", e)
-        # raise self.retry(exc=e, countdown=5)
