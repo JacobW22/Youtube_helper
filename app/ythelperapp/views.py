@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+
 
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
-from .decorators import login_check, not_authenticated_only
-from .models import user_data_storage, User
+from .decorators import login_check, login_required, not_authenticated_only, rate_limit, RedirectException
+from .models import user_data_storage, User, Ticket
 from .tasks import TransferPlaylist, download_and_store_image
 
 import os
@@ -185,7 +187,6 @@ def sign_up_page(request, login_context):
             # Create data storage for user in the database / avoid not-null by passing 'registered' string
 
             user_data_storage.objects.create(
-                object_name=str(user) + " storage",
                 user=User.objects.get(username=user),
                 download_history=["registered"],
                 prompts_history=["registered"],
@@ -231,47 +232,17 @@ def download_page(request, login_context, parameter):
 
     return render(request, "download_page.html", context)
 
-
+@login_required
 @login_check
 def ai_page(request, login_context, parameter="", parameter_title=""):
     if request.method == "POST":
         description = request.POST.get("description")
 
         try:
-            response_data = openai.Image.create(
-                prompt=description
-                + ", digital art, icon, avatar image, illustration style, epic, user profile image, ultra quality, 1:1",
-                n=1,
-                size="1024x1024",
-            )
-
-            link = response_data["data"][0]["url"]
-
-            fixed_link = quote(link, safe=":/?&=%")
-
-        except openai.error.RateLimitError:
-            msg.success("Ai model is currently overloaded, please wait a second")
-            return redirect(ai_page)
-
-        # Store data in user history
-        if "username" in login_context:
-            username = login_context["username"]
-            storage = user_data_storage.objects.get(
-                user=User.objects.get(username=username)
-            )
-
-            if storage.save_history:
-                time = dt.now()
-                info = [
-                    description,
-                    fixed_link.replace("%25", "%"),
-                    time.strftime("%d/%m/%Y %H:%M"),
-                ]
-                storage.prompts_history.append(info)
-                storage.save()
-
-        download_and_store_image.delay(fixed_link)
-
+            fixed_link = get_openai_response(request, login_context, description)
+        except RedirectException as e:
+            return redirect(e.url)
+        
         return redirect(ai_page, parameter=fixed_link, parameter_title=description)
 
     context = {}
@@ -288,6 +259,13 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
         )
 
     else:   
+        if login_context['logged'] == True:
+            try:
+                remaining_tickets = Ticket.objects.get(user=User.objects.get(username=login_context['username'])).remaining_tickets
+            except ObjectDoesNotExist:
+                remaining_tickets = 3
+            context.update({"tickets": remaining_tickets})
+
         users_avatars = get_avatars()  
         context.update({"users_avatars": users_avatars})
         
@@ -1035,3 +1013,46 @@ def get_avatars():
         
     except Exception:
         return None
+
+@rate_limit
+def get_openai_response(request, login_context, description):
+    try:
+        response_data = openai.Image.create(
+            prompt=description
+            + " in visual key of Jojo Bizzare Adventure, epic, anime, hyper realistic, handsome, 1:1",
+            n=1,
+            size="1024x1024",
+        )
+
+        link = response_data["data"][0]["url"]
+
+        fixed_link = quote(link, safe=":/?&=%")
+
+        # Store data in user history
+        try:
+            if "username" in login_context:
+                username = login_context["username"]
+                storage = user_data_storage.objects.get(
+                    user=User.objects.get(username=username)
+                )
+
+                if storage.save_history:
+                    time = dt.now()
+                    info = [
+                        description,
+                        fixed_link.replace("%25", "%"),
+                        time.strftime("%d/%m/%Y %H:%M"),
+                    ]
+                    storage.prompts_history.append(info)
+                    storage.save()
+        except Exception:
+            msg.info(request, "Error while saving history")
+
+        download_and_store_image.delay(fixed_link)
+
+        return fixed_link
+
+    except openai.error.RateLimitError:
+        msg.info("Ai model is currently overloaded, please wait a second")
+        return redirect(ai_page)
+    
