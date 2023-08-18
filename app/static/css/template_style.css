@@ -142,7 +142,7 @@ button {
     transform: rotate(0deg) translateY(0%);
   }
   25% {
-    transform: rotate(50deg) translateY(-120%);
+    transform: rotate(50deg) translateY(-130%);
   }
   50% {
     transform: rotate(0deg) translateY(0%);
