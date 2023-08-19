@@ -1,39 +1,43 @@
 <nav class="navbar navbar-expand-lg main-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand text-light ms-lg-2 me-lg-0 d-none d-lg-inline-block" href="{% url 'main_page' %}"><h2 id="main-title">Youtube helper</h2></a>
+        <a class="navbar-brand text-light ms-lg-2 me-lg-0 d-none d-lg-inline-block" href="{% url 'main_page' %}">
+          <h2 id="main-title">Youtube helper</h2>
+        </a>
+      
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
+
       <div class="collapse navbar-collapse mb-sm-2 mt-3" id="navbarSupportedContent">
         <ul class="navbar-nav me-lg-2 gap-4 gap-lg-3 mb-sm-0 align-items-center">
 
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+                <span>  
+                <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
+                </span>
+              </a>
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-                  <span>  
-                  <i class="fa-solid fa-screwdriver-wrench" style="color: #ffffff;"></i>&nbsp Tools
-                  </span>
-                </a>
-
-                <div class="dropdown-menu top_menu" aria-labelledby="navbarDropdown">
-                    {% for value,key in sites_context.items  %}
-                        {% url value as the_url %}
-                            {% if the_url != active_site_url %}
-                                <a class="dropdown-item fs-6 mt-lg-0 mt-3" href={{ the_url }}>{{ key|safe }}</a>
-                            {% else %}
-                                <a class="dropdown-item fs-6 mt-lg-0 mt-3" href="{{ ther_url }}">{{ key|safe }} <span class="text-muted ms-2">Now</span></a>
-                            {% endif %}
-                    {% endfor %}                
-                </div>
-            </li>
+              <div class="dropdown-menu top_menu" aria-labelledby="navbarDropdown">
+                  {% for value,key in sites_context.items  %}
+                      {% url value as the_url %}
+                          {% if the_url != active_site_url %}
+                              <a class="dropdown-item fs-6 mt-lg-0 mt-3" href={{ the_url }}>{{ key|safe }}</a>
+                          {% else %}
+                              <a class="dropdown-item fs-6 mt-lg-0 mt-3" href="{{ ther_url }}">{{ key|safe }} <span class="text-muted ms-2">Now</span></a>
+                          {% endif %}
+                  {% endfor %}                
+              </div>
+          </li>
 
 
 
           <li class="nav-item">
-            <a class="nav-link text-light" aria-current="page" href="{% url 'main_page' %}"><span><i class="fa-solid fa-house"></i>&nbsp Home</span></a>
+            <a class="nav-link text-light" aria-current="page" href="{% url 'main_page' %}"><span><i class="fa-solid fa-cloud"></i>&nbsp; Api</span></a>
           </li>
 
           {% if logged == False %}
+
           <li class="nav-item">
             <a class="nav-link text-light" href="{% url 'login_page' %}"><span><i class="fa-solid fa-right-to-bracket"></i>&nbsp Log in</span></a>
           </li>

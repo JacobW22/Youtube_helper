@@ -4,7 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
-
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
 from .decorators import login_check, login_required, not_authenticated_only, rate_limit, RedirectException
 from .models import user_data_storage, User, Ticket
@@ -51,6 +52,8 @@ sites_context = {
     "youtube_to_spotify": "<i class='fa-brands fa-spotify'></i>&nbsp; Youtube Playlist To Spotify",
     "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai Avatar Generator",
 }
+
+
 
 
 @login_check
@@ -511,6 +514,15 @@ def manage_account_Overview(request, login_context):
 @login_check
 def manage_account_Private(request, login_context):
     context = {}
+
+    context.update({"api_token": Token.objects.get(user=User.objects.get(username=login_context["username"]))})
+    if request.method == "POST":
+        try:
+            Token.objects.create(user=User.objects.get(username=login_context["username"]))
+            return redirect(manage_account_Private)
+        except Exception as e:
+            pass
+
     context.update(login_context)
     context.update({"sites_context": sites_context})
 
