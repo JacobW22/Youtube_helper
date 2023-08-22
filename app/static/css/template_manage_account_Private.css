@@ -22,14 +22,18 @@
     max-width: 100% !important;
 }
 
-.copy_to_clipboard {
+.copy_to_clipboard_icon {
     cursor: pointer;
     transform: translateX(-200%);
 }
 
-.copy_to_clipboard > .fa-copy {
+.copy_to_clipboard_icon > .fa-copy {
     margin-top: 5px;
     zoom: 1.2;
+}
+
+.tooltip {
+    margin-bottom: 1em !important;
 }
 
 @media screen and (min-width: 992px) {
