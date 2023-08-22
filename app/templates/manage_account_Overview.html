@@ -113,9 +113,9 @@
 
               {% for video in download_history reversed %}
               <tr>
-                {% for data in video %}
-                    <td>{{ data }}</td>
-                {% endfor %}
+                  <td>{{ video.title }}</td>
+                  <td>{{ video.link }}</td>
+                  <td>{{ video.saved_on }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -146,9 +146,9 @@
 
               {% for prompt in filtered_comments_history reversed %}
               <tr>
-                {% for data in prompt %}
-                    <td>{{ data }}</td>
-                {% endfor %}
+                    <td>{{ prompt.title }}</td>
+                    <td>{{ prompt.link }}</td>
+                    <td>{{ prompt.saved_on }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -179,9 +179,9 @@
 
               {% for playlist in transferred_playlists_history reversed %}
               <tr>
-                {% for data in playlist %}
-                    <td>{{ data }}</td>
-                {% endfor %}
+                  <td>{{ playlist.title }}</td>
+                  <td>{{ playlist.link }}</td>
+                  <td>{{ playlist.saved_on }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -212,9 +212,9 @@
 
               {% for prompt in prompts_history reversed %}
               <tr>
-                {% for data in prompt %}
-                    <td>{{ data }}</td>
-                {% endfor %}
+                  <td>{{ prompt.title }}</td>
+                  <td>{{ prompt.link }}</td>
+                  <td>{{ prompt.saved_on }}</td>
               </tr>
               {% endfor %}
             </tbody>
