@@ -25,7 +25,7 @@ class LoginUserForm(forms.Form):
         if account:
             return email
         else:
-            raise forms.ValidationError(f'Email {email} is invalid')
+            raise forms.ValidationError('Email is invalid')
     
       
 class UpdateUserForm(forms.ModelForm):

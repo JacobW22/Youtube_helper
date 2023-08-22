@@ -4,11 +4,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
+from rest_framework import viewsets
 from rest_framework import serializers
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
+from .serializers import download_history_Serializer, prompts_history_Serializer, filtered_comments_history_Serializer, transferred_playlists_history_Serializer
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
 from .decorators import login_check, login_required, not_authenticated_only, rate_limit, RedirectException
-from .models import user_data_storage, User, Ticket
+from .models import user_data_storage, download_history_item, prompts_history_item, filtered_comments_history_item, transferred_playlists_history_item, User, Ticket
 from .tasks import TransferPlaylist, download_and_store_image
 
 import os
@@ -30,6 +33,43 @@ from dateutil.parser import isoparse
 from spotipy.oauth2 import SpotifyOAuth
 from botocore.config import Config
 
+
+class RetrieveDownloadHistory(viewsets.ModelViewSet):
+    serializer_class = download_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return download_history_item.objects.filter(user=self.request.user) 
+    
+
+    
+class RetrievePromptsHistory(viewsets.ModelViewSet):
+    serializer_class = prompts_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return prompts_history_item.objects.filter(user=self.request.user)
+
+
+class RetrieveFilteredCommentsHistory(viewsets.ModelViewSet):
+    serializer_class = filtered_comments_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return filtered_comments_history_item.objects.filter(user=self.request.user)
+
+
+class RetrieveTransferredPlaylistsHistory(viewsets.ModelViewSet):
+    serializer_class = transferred_playlists_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return transferred_playlists_history_item.objects.filter(user=self.request.user)
+    
 
 # Hide it from Github
 load_dotenv(find_dotenv())
@@ -62,26 +102,20 @@ def main_page(request, login_context):
 
     # User download history
     if "username" in login_context:
-        username = login_context["username"]
-        storage = user_data_storage.objects.get(
-            user=User.objects.get(username=username)
-        )
-
         # Use download history for slides on the main page
-        # Get random items from history
-        # Eliminate repetitions
+
         Download_videos_informations = []
 
-        Download_history = storage.download_history
+        Download_history = download_history_item.objects.filter(user=User.objects.get(username=login_context["username"]))
 
         unique_videos = []
         unique_titles = set()
 
-        for movie in Download_history:
-            title = movie[0]
+        for video in Download_history:
+            title = video.title
 
             if title not in unique_titles:
-                unique_videos.append(movie)
+                unique_videos.append(video)
                 unique_titles.add(title)
                 if len(unique_videos) == 10:
                     break
@@ -89,10 +123,10 @@ def main_page(request, login_context):
         for vid_info in unique_videos:
             Download_videos_informations.append(
                 {
-                    "title": vid_info[0],
-                    "thumbnail": vid_info[3],
-                    "publish_date": vid_info[2],
-                    "link": vid_info[1],
+                    "title": vid_info.title,
+                    "thumbnail": vid_info.thumbnail_url,
+                    "publish_date": vid_info.saved_on,
+                    "link": vid_info.link,
                 }
             )
 
@@ -114,23 +148,18 @@ def main_page(request, login_context):
 
         # Store data in user history
         if "username" in login_context:
-            username = login_context["username"]
             storage = user_data_storage.objects.get(
-                user=User.objects.get(username=username)
+                user=User.objects.get(username=login_context["username"])
             )
 
             if storage.save_history:
-                time = dt.now()
-
                 try:
-                    info = [
-                        yt.title,
-                        link,
-                        time.strftime("%d/%m/%Y %H:%M"),
-                        yt.thumbnail_url,
-                    ]
-                    storage.download_history.append(info)
-                    storage.save()
+                    download_history_item.objects.create(
+                        user=User.objects.get(username=login_context["username"]), 
+                        title=yt.title,
+                        link=link,
+                        thumbnail_url=yt.thumbnail_url
+                    )
 
                 except Exception:
                     msg.info(request, "Something went wrong, history not updated ")
@@ -184,28 +213,12 @@ def sign_up_page(request, login_context):
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
             user = form.cleaned_data.get("username")
-
-            # Create data storage for user in the database / avoid not-null by passing 'registered' string
+            form.save()
 
             user_data_storage.objects.create(
-                user=User.objects.get(username=user),
-                download_history=["registered"],
-                prompts_history=["registered"],
-                filtered_comments_history=["registered"],
-                transferred_playlists_history=["registered"]
-            )
-
-            storage = user_data_storage.objects.get(
                 user=User.objects.get(username=user)
             )
-
-            storage.download_history.remove("registered")
-            storage.prompts_history.remove("registered")
-            storage.filtered_comments_history.remove("registered")
-            storage.transferred_playlists_history.remove("registered")
-            storage.save()
 
             msg.success(request, "Welcome on board " + "<b>" + user + "</b>")
             return redirect(login_page)
@@ -392,9 +405,8 @@ def youtube_to_spotify(request, login_context):
 
                 # Store data in user history
                 if "username" in login_context:
-                    username = login_context["username"]
                     storage = user_data_storage.objects.get(
-                        user=User.objects.get(username=username)
+                        user=User.objects.get(username=login_context["username"])
                     )
 
                     response_for_title = (
@@ -409,14 +421,11 @@ def youtube_to_spotify(request, login_context):
                         title = "Couldn't find"
 
                     if storage.save_history:
-                        time = dt.now()
-                        info = [
-                            title,
-                            request.POST.get("url"),
-                            time.strftime("%d/%m/%Y %H:%M"),
-                        ]
-                        storage.transferred_playlists_history.append(info)
-                        storage.save()
+                        download_history_item.objects.create(
+                            user=User.objects.get(username=login_context["username"]), 
+                            title=title,
+                            link=request.POST.get("url"),
+                        )
 
 
                 # If the user has granted permission and returned with the authorization code
@@ -486,23 +495,17 @@ def manage_account_General(request, login_context):
 
 @login_check
 def manage_account_Overview(request, login_context):
-    username = login_context["username"]
-
-    storage = user_data_storage.objects.get(user=User.objects.get(username=username))
-
-    for video in storage.download_history[-6:]:
-        del video[3]
 
     context = {
-        "vid_downloads_quantity": len(storage.download_history),
-        "prompts_quantity": len(storage.prompts_history),
-        "filtered_comments_quantity": len(storage.filtered_comments_history),
-        "transferred_playlists_quantity": len(storage.transferred_playlists_history),
+        "vid_downloads_quantity": download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
+        "prompts_quantity": prompts_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
+        "filtered_comments_quantity": filtered_comments_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
+        "transferred_playlists_quantity": transferred_playlists_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
         
-        "download_history": storage.download_history[-6:],
-        "prompts_history": storage.prompts_history[-6:],
-        "filtered_comments_history": storage.filtered_comments_history[-6:],
-        "transferred_playlists_history": storage.transferred_playlists_history[-6:],
+        "download_history": download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
+        "prompts_history": prompts_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
+        "filtered_comments_history": filtered_comments_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
+        "transferred_playlists_history": transferred_playlists_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
     }
 
     context.update(login_context)
@@ -515,13 +518,18 @@ def manage_account_Overview(request, login_context):
 def manage_account_Private(request, login_context):
     context = {}
 
-    context.update({"api_token": Token.objects.get(user=User.objects.get(username=login_context["username"]))})
+    try: 
+        context.update({"api_token": Token.objects.get(user=User.objects.get(username=login_context["username"]))})
+    except Exception:
+        pass
+
     if request.method == "POST":
         try:
             Token.objects.create(user=User.objects.get(username=login_context["username"]))
             return redirect(manage_account_Private)
-        except Exception as e:
+        except Exception:
             pass
+    
 
     context.update(login_context)
     context.update({"sites_context": sites_context})
@@ -529,8 +537,9 @@ def manage_account_Private(request, login_context):
     return render(request, "manage_account_Private.html", context)
 
 
-# Non-views functions
 
+
+# Non-views functions
 
 def run_async(url):
     # Create a new event loop
@@ -957,16 +966,13 @@ def show_comments(
             )
 
             if storage.save_history:
-                time = dt.now()
-
                 try:
-                    info = [
-                        comments_and_VidInfo["video_metadata"]["title"],
-                        "https://www.youtube.com/watch?v=" + video_id,
-                        time.strftime("%d/%m/%Y %H:%M"),
-                    ]
-                    storage.filtered_comments_history.append(info)
-                    storage.save()
+                    filtered_comments_history_item.objects.create(
+                        user=User.objects.get(username=login_context["username"]), 
+                        title=comments_and_VidInfo["video_metadata"]["title"],
+                        link="https://www.youtube.com/watch?v=" + video_id,
+                    )
+
                 except Exception:
                     msg.info(request, "Error occurred, history not updated")
 
@@ -1026,6 +1032,8 @@ def get_avatars():
     except Exception:
         return None
 
+
+
 @rate_limit
 def get_openai_response(request, login_context, description):
     try:
@@ -1043,20 +1051,17 @@ def get_openai_response(request, login_context, description):
         # Store data in user history
         try:
             if "username" in login_context:
-                username = login_context["username"]
                 storage = user_data_storage.objects.get(
-                    user=User.objects.get(username=username)
+                    user=User.objects.get(username=login_context["username"])
                 )
 
                 if storage.save_history:
-                    time = dt.now()
-                    info = [
-                        description,
-                        fixed_link.replace("%25", "%"),
-                        time.strftime("%d/%m/%Y %H:%M"),
-                    ]
-                    storage.prompts_history.append(info)
-                    storage.save()
+                    prompts_history_item.objects.create(
+                        user=User.objects.get(username=login_context["username"]), 
+                        title=description,
+                        link=fixed_link.replace("%25", "%"),
+                    )
+
         except Exception:
             msg.info(request, "Error while saving history")
 

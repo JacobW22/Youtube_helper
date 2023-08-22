@@ -139,11 +139,25 @@ $(document).ready(function(){
 
 });
 
-function sendForm() {
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  var form = document.getElementById("registerForm"); // Replace with your actual form ID
+  form.addEventListener("submit", sendForm);
+});
+
+
+
+function sendForm(event) {
+  event.preventDefault();
+
   var emailField = document.getElementById("emailField");
   emailField.value = emailField.value.toLowerCase();
-  document.getElementById("submitBtn").click();
+
+  var form = event.target; 
+  form.submit();
 }
+
 
 </script>
 </body>

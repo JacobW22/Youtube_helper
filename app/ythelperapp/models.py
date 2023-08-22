@@ -1,26 +1,83 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 import datetime
 
 User._meta.get_field('email')._unique = True
     
+
 class user_data_storage(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    download_history = ArrayField(ArrayField(models.CharField(max_length=200), default=None))
-    prompts_history = ArrayField(ArrayField(models.CharField(max_length=500), default=None))
-    filtered_comments_history = ArrayField(ArrayField(models.CharField(max_length=200), default=None))
-    transferred_playlists_history = ArrayField(ArrayField(models.CharField(max_length=200), default=None))
-
     save_history = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "User's Storage"
-        verbose_name_plural = "User's Storage"
+        verbose_name_plural = "User's Storages"
 
     def __str__(self):
         return str(self.user)
+
+
+
+class download_history_item(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    link = models.CharField(max_length=255)
+    saved_on =  models.DateTimeField(default=timezone.now)
+    thumbnail_url = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = "Download History Item"
+        verbose_name_plural = "Download History Items"
+
+    def __str__(self):
+        return str(f'{self.user} {id}th item')
+
+
+class prompts_history_item(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    link = models.CharField(max_length=255)
+    saved_on =  models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "Prompts History Item"
+        verbose_name_plural = "Prompts History Items"
+
+    def __str__(self):
+        return str(f'{self.user} {id}th item')
+
+
+
+class filtered_comments_history_item(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    link = models.CharField(max_length=255)
+    saved_on = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "Filtered Comments History Item"
+        verbose_name_plural = "Filtered Comments History Items"
+
+    def __str__(self):
+        return str(f'{self.user} {id}th item')
+    
+
+
+class transferred_playlists_history_item(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    link = models.CharField(max_length=255)
+    saved_on = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "Transferred Playlists History Item"
+        verbose_name_plural = "Transferred Playlists History Items"
+
+    def __str__(self):
+        return str(f'{self.user} {id}th item')
+
 
 
 class Ticket(models.Model):
