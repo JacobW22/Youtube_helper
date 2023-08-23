@@ -61,7 +61,7 @@ class RetrieveDownloadHistory(viewsets.ModelViewSet):
     serializer_class = download_history_Serializer
     permission_classes = [IsAuthenticated]
 
-
+    
     def get_queryset(self):
      return download_history_item.objects.filter(user=self.request.user) 
     
@@ -95,44 +95,19 @@ class RetrieveTransferredPlaylistsHistory(viewsets.ModelViewSet):
     def get_queryset(self):
      return transferred_playlists_history_item.objects.filter(user=self.request.user)
     
-    
 
+import random
 @login_check
 def main_page(request, login_context):
     context = {}
 
-    # User download history
     if "username" in login_context:
         # Use download history for slides on the main page
-
-        Download_videos_informations = []
-
-        Download_history = download_history_item.objects.filter(user=User.objects.get(username=login_context["username"]))
-
-        unique_videos = []
-        unique_titles = set()
-
-        for video in Download_history:
-            title = video.title
-
-            if title not in unique_titles:
-                unique_videos.append(video)
-                unique_titles.add(title)
-                if len(unique_videos) == 10:
-                    break
-
-        for vid_info in unique_videos:
-            Download_videos_informations.append(
-                {
-                    "title": vid_info.title,
-                    "thumbnail": vid_info.thumbnail_url,
-                    "publish_date": vid_info.saved_on,
-                    "link": vid_info.link,
-                }
-            )
-
-        context.update({"number_of_links": range(0, len(Download_videos_informations))})
-        context.update({"videos_informations": Download_videos_informations})
+        unique_videos = list(download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('title').distinct('title'))
+        random.shuffle(unique_videos)
+        
+        context.update({"number_of_links": range(0, len(unique_videos[:10]))})
+        context.update({"unique_videos": unique_videos[:10]})
 
     context.update(login_context)
     context.update({"sites_context": sites_context})
@@ -521,7 +496,7 @@ def manage_account_Private(request, login_context):
     context = {}
 
     try: 
-        context.update({"api_token": Token.objects.get(user=User.objects.get(username=login_context["username"]))})
+        context.update({"api_token": f'Token {Token.objects.get(user=User.objects.get(username=login_context["username"]))}'})
     except Exception:
         pass
 

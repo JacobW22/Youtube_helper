@@ -1,7 +1,10 @@
+{% load static %}
 <nav class="navbar navbar-expand-lg main-navbar">
     <div class="container-fluid">
         <a class="navbar-brand text-light ms-lg-2 me-lg-0 d-none d-lg-inline-block" href="{% url 'main_page' %}">
-          <h2 id="main-title">Youtube helper</h2>
+          <h2 id="main-title">
+            Youtube helper
+          </h2>
         </a>
       
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +36,7 @@
 
 
           <li class="nav-item">
-            <a class="nav-link text-light" aria-current="page" href="{% url 'main_page' %}"><span><i class="fa-solid fa-cloud"></i>&nbsp; Api</span></a>
+            <a class="nav-link text-light" aria-current="page" href="{% url 'schema-swagger-ui' %}"><span><i class="fa-solid fa-cloud"></i>&nbsp; Api</span></a>
           </li>
 
           {% if logged == False %}

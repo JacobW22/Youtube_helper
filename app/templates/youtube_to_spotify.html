@@ -12,27 +12,19 @@
 
 {% block content %}
 
-    <div class="container-fluid d-flex flex-column align-items-center gap-5 p-0 my-auto" id="main_form" >
+    <div class="container-fluid d-flex flex-column align-items-center gap-5 p-0 my-auto pb-3">
 
 
-        <!-- Go back section start-->
-            <div class="mx-auto go_back_container">
-                <a class="text-light highlight_link go_back fs-5" href="{% url 'main_page' %}">
-                    <i class="fa-solid fa-arrow-left"></i>&nbsp; Main Page
-                </a>
-            </div>
-        <!-- Go back section end-->
-    
             {% if not_auth %}
 
-            <form method="post" class="container-fluid d-flex flex-column align-items-center gap-3 p-0" id="main_form" >
+            <form method="post" class="container-fluid d-flex flex-column align-items-center gap-4 p-0 pb-5 pb-lg-3" id="main_form" >
                 {% csrf_token %}
 
                 <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify"></i></span>
                 <span class="pointing-to-mail text-light fs-1 text-center">Transfer Youtube playlist to Spotify</span>
-                <i class="fa-solid fa-chevron-down text-light fs-3"></i>
+                <i class="fa-solid fa-chevron-down text-light fs-3 mt-1"></i>
 
-                <button type="submit" class="d-flex align-items-center sp_login gap-3 animate mt-2">
+                <button type="submit" class="d-flex align-items-center sp_login gap-3 animate">
                     <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify" style="color: #1DB954;"></i></span>
                     Login with Spotify
                 </button>
@@ -41,7 +33,7 @@
 
             {% else %}
         
-            <form method="post" class="container-fluid d-flex flex-column align-items-center zoom gap-3 p-0" id="main_form" >
+            <form method="post" class="container-fluid d-flex flex-column align-items-center zoom gap-3 p-0 pb-5 pb-lg-3" id="main_form" >
                 {% csrf_token %}
 
                 <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify"></i></span>
