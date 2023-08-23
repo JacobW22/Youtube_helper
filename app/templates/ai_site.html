@@ -54,19 +54,14 @@
             <span class="d-flex text-light w-100 flex-column px-0 justify-content-center align-items-center align-self-top mt-1 mt-lg-4 gap-5 text_section" >
                 <div class="text-center">
                   <span class="ai-subtitle text-center px-3 fs-3">
-                    Avatars gallery
+                    Recently created avatars
                   </span>
                 </div>
                 
                 <div class="text-center avatar_gallery">
-                  <img src="{% static 'images/img-60gIrd8ObbkiZhzTnMLTruTK.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-d6cwUNORxNQRZ45LlP6p4xuh.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-Zo9qEiDxsrYAXTOf9sfajjzm.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-jt9NQ6y6dbfOftlQ6TJlRPQh.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-LuHpPcqYgJfLwGBWgRDXWvJE.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-BszahQQvIOyUdNU0hf1BIN9m.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-NlfvemMSRGMAlA4YXw2IbGZJ.png' %}" alt="icon_example" class="img-fluid">
-                  <img src="{% static 'images/img-uuo5NqltONY3oXEarTLQ9WX2.png' %}" alt="icon_example" class="img-fluid">
+                  {% for img_url in users_avatars %}
+                    <img src="{{ img_url }}" alt="icon_example" class="img-fluid">
+                  {% endfor %}
                 </div>
                 
             </span>
@@ -78,7 +73,7 @@
 
         <!-- Second section start -->
         <section class="d-flex second-section flex-column container-fluid mx-auto w-100">
-          <form type="post" class="container-fluid d-flex flex-column align-items-center pb-3 my-auto mx-auto form-container" id="main_form" >
+          <form method="post" class="container-fluid d-flex flex-column align-items-center pb-3 my-auto mx-auto form-container" id="main_form" >
               {% csrf_token %}
 
                   <span class="text-light fs-2 container-for-gears row gap-1">
@@ -89,8 +84,21 @@
                   <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default"> Create your own </span>
                  
                   <span class="pointing-to-link text-light fs-1 mb-2 p-1 text-center " id="inputGroup-sizing-default"> <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i> </span>
-                  <input type="text" name="description" placeholder="Video Vlogger,  Gamer,  Car Mechanic,  Software Engineer etc." class="form-control text-light mb-3" id="description" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
-                  <span class="fs-6 text-light text-muted text-center mb-5">Describe your avatar up here</span>
+                  <input type="text" name="description" placeholder=" Your avatar &#128293;" class="form-control text-light mb-3" id="description" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+
+                  {% if logged == True %}
+                    <span class="fs-6 text-light text-muted text-center">Describe your avatar up here</span>
+                    <span class="fs-5 text-light my-4 text-center">Tickets remaining: 
+                      {% if tickets != 0 %}
+                        <span style="color:#7cf569">{{ tickets }}</span>
+                      {% else %}
+                        <span style="color:#f5696e">{{ tickets }}</span>
+                      {% endif %}
+                    </span>
+                  {% else %}
+                    <span class="fs-6 text-light mb-4 text-muted text-center">Describe your avatar up here</span>
+                  {% endif %}
+
                   <button type="submit" class="btn btn-dark btn-lg rounded-pill input_submit animate">Generate</button>
                   
           </form>        
@@ -128,7 +136,7 @@
       <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto main-container">
         <!-- Go back section start-->
           <div class="mx-auto mb-3">
-            <button class="text-light highlight_link go_back fs-5 mb-4" onclick="history.back()">
+            <button class="text-light highlight_link go_back fs-5 mb-4" href="{% url 'ai_page' %}">
               <i class="fa-solid fa-arrow-left"></i>&nbsp; Go back
             </button>
           </div>

@@ -47,6 +47,10 @@ $('.input_submit').hover(function() {
 
 $(document).ready(function(){
 
+// Timezone settings
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // e.g. "America/New_York"
+document.cookie = "django_timezone=" + timezone;
+
 // If a modal hasn't disappeared, hide it
 $(window).on("pageshow", function() {
     $('.modal').modal('hide');
@@ -70,7 +74,7 @@ function hideToast() {
         opacity: 0,
         height: 0,
         marginBottom: 0
-    }, 500, function() {
+    }, 1000, function() {
     // Remove the toast element from the DOM
     toast.remove();
     });

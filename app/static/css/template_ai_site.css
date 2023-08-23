@@ -37,30 +37,15 @@
 }
 
 .form-control {
-  background-color: black !important;
-  border: 0.15em solid #fff !important;
-  border-color: white !important;
-  border-radius: 15px !important;
-  box-shadow: 0px 0px 15px 1px black;
-  text-align: center;
-  font-size: 1.2rem !important;
-  overflow: hidden !important;
-
   width: 40rem !important;
   max-width: 100% !important;
 }
 
-.form-control:focus {
-  border-color: #f5696e !important;
-  box-shadow: 0px 0px 15px 1px black;
-  text-align: left;
+#main_form {
+  zoom: 1.15;
 }
 
-.form-control:not(:placeholder-shown) {
-  border-color: #7cf569 !important;
-}
 
-.form-control::placeholder,
 .pointing-to-link,
 .container-for-gears {
   user-select: none;
@@ -102,7 +87,7 @@
   width: 12.5rem!important;
   height: 12.5rem !important;
   border-radius: 25px !important;
-  box-shadow: 0px 0px 25px 10px black !important;
+  box-shadow: 0px 0px 25px 5px white !important;
 }
 
 .center_container {
@@ -151,7 +136,7 @@
 }
 
 img {
-  box-shadow: 0px 0px 5px 5px black;
+  box-shadow: 0px 0px 10px 2px red;
 }
 
 @keyframes borderAnimation {

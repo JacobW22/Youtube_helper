@@ -1,0 +1,43 @@
+.api_token {
+    box-shadow: none !important;
+    border: 0.10em solid #fff !important;
+    zoom: 1.1;
+    width: 25rem !important;
+    max-width: 100%;
+}
+
+.api_token:not(:placeholder-shown) {
+    box-shadow: none !important;
+    border: 0.10em solid #fff !important;
+}
+
+.input_submit {
+    width: 15rem;
+    max-width: 75%;
+    zoom: 1.05;
+}
+
+.main_section,
+.token_container {
+    max-width: 100% !important;
+}
+
+.copy_to_clipboard_icon {
+    cursor: pointer;
+    transform: translateX(-200%);
+}
+
+.copy_to_clipboard_icon > .fa-copy {
+    margin-top: 5px;
+    zoom: 1.2;
+}
+
+.tooltip {
+    margin-bottom: 1em !important;
+}
+
+@media screen and (min-width: 992px) {
+    .api_token {
+        padding-right: 2em !important;
+    }
+}

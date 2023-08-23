@@ -36,7 +36,7 @@
 
 
   <!-- First section start -->
-  <section class="d-flex flex-column align-items-center first-container snap">
+  <section class="d-flex flex-column align-items-center first-container snap" id="section1">
     
     <form method="post" class="container-fluid d-flex flex-column my-auto align-items-center gap-4 p-0" id="main_form" >
         {% csrf_token %}
@@ -54,19 +54,21 @@
           <button type="submit" class="btn btn-dark btn-lg animate mt-2 input_submit">Confirm</button>
     </form>
 
-    <i class="fa-solid fa-chevron-down text-light fs-3"></i>
+    <a href="#section2">
+      <i class="fa-solid fa-chevron-down text-light fs-3"></i>
+    </a>
   </section>
   <!-- First section end -->
 
 
 
   <!-- Second section start -->
-  <section class="d-flex my-auto flex-column container-fluid align-items-center justify-content-center second-container ">
+  <section class="d-flex my-auto flex-column container-fluid align-items-center justify-content-center second-container" id="section2">
 
     <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
-    <span class="slider_info p-3 text-light fs-2 text-center"> Previously downloaded media </span>
+    <span class="slider_info p-3 text-light fs-2 text-center">Previously downloaded media </span>
 
-    {% if logged == True and videos_informations %}
+    {% if logged == True and unique_videos %}
       <div class="ratio ratio-16x9 mx-auto">
       <div id="DownloadHistorySlider" class="mx-auto carousel slide snap" data-bs-interval="2000" data-bs-touch="true" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -78,14 +80,14 @@
         </div>
         <div class="carousel-inner">
 
-          {% for video in videos_informations %}
+          {% for video in unique_videos %}
 
             <div class="carousel-item">
-              <img class="d-block slider_image" src="{{ video.thumbnail }}" alt="slide">
+              <img class="d-block slider_image" src="{{ video.thumbnail_url }}" alt="slide">
                 <div class="carousel-caption d-block text-center">
                   <span class="caption_text d-block text-truncate"> {{ video.title }} </span>
 
-                  <p class="mt-2 date_in_caption"><small><i class="fa-regular fa-calendar-days"></i>&nbsp {{ video.publish_date }}</small></p>
+                  <p class="mt-2 date_in_caption"><small><i class="fa-regular fa-calendar-days"></i>&nbsp {{ video.saved_on|date:"d/m/Y G:i" }}</small></p>
                   <a type="submit" class="btn btn-dark my-2" onclick="submitFormWithValue('{{ video.link }}')"> Download </a>
                 </div>
             </div>
@@ -108,12 +110,12 @@
 
 
   {% elif logged == False %}
-  <section class="d-flex info_for_carousel snap">
+  <section class="d-flex info_for_carousel p-5 py-3 py-lg-5 snap">
     <span class="text-light fs-2 text-center text-muted"> Log in to see your download history </span>
   </section>
 
   {% else %}
-  <section class="d-flex info_for_carousel snap">
+  <section class="d-flex info_for_carousel p-5 py-3 py-lg-5 snap">
     <span class="text-light fs-2 text-center text-muted"> Download history is empty </span>
   </section>
 
@@ -130,7 +132,7 @@
 <!-- Toasts container start -->
 <div class="toast-container bottom-0 start-50 translate-middle-x">
   {% for message in messages %}
-  <div class="toast fade align-items-center text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+  <div class="toast fade hide_this align-items-center text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
     <div class="toast-body">
       <i class="fa-regular fa-hand-peace"></i>&nbsp {{ message|safe }}
     </div>
@@ -146,6 +148,7 @@
 var carousel_slides = document.getElementsByClassName("carousel-item");
 var carousel_indicators = document.getElementsByClassName("indicator");
 
+console.log(carousel_indicators);
 if (carousel_slides[0] != undefined && carousel_indicators[0] != undefined) {
   carousel_slides[0].classList.add("active");
   carousel_indicators[0].classList.add("active"); 

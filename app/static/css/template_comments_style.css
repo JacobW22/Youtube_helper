@@ -17,32 +17,12 @@
   width: auto !important;
 }
 
-.form-control {
-  background-color: black !important;
-  font-size: 1rem !important;
-  border: 0.15em solid #fff !important;
-  border-color: white !important;
-  border-radius: 15px !important;
-  box-shadow: 0px 0px 15px 1px black;
-  text-align: center;
-  margin-top: 10px;
-}
-
-.form-control:focus {
-  border-color: #f5696e !important;
-  box-shadow: 0px 0px 15px 1px black;
-  text-align: left;
-}
-
-.form-control:not(:placeholder-shown) {
-  border-color: #7cf569 !important;
-}
-
 .video_url_input {
   font-size: 1.2rem !important;
   overflow: hidden !important;
   max-width: 90% !important;
   width: 35rem !important;
+  margin-top: 10px;
 }
 
 .pointing-to-link {
@@ -60,6 +40,18 @@
 #navbarDropdown2:hover,
 #navbarDropdown2[aria-expanded="true"] {
   transform-origin: center;
+}
+
+#search_phrase {
+  zoom: 1.05;
+  width: 30rem !important;
+  max-width: 50vw;
+  text-align: center;
+}
+
+#search_phrase::placeholder {
+  padding-left: 1em;
+  text-align: center !important;
 }
 
 .black {
@@ -213,12 +205,10 @@
 .comment_background {
   border-radius: 15px !important;
   background-color: #121212 !important;
-  box-shadow: 0px 0px 25px 1px black;
-
 }
 
 .comment_text {
-  word-break: break-all!important;
+  word-break: break-word!important;
 }
 
 .comment_text, .vid_info {
@@ -288,7 +278,7 @@ mark {
 
 .error_occured,
 .ratio iframe {
-  box-shadow: 0px 0px 25px 10px black !important;
+  box-shadow: 0px 0px 15px 6px gray !important;
 }
 
 .ratio {
@@ -304,9 +294,44 @@ mark {
 }
 
 
+#main_form {
+  zoom: 1.1;
+}
+
+.fa-comments {
+  transition: filter 300ms;
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fa-comments {
+    animation: funny-bouncing infinite 8s linear;
+  }
+}
+
+@keyframes funny-bouncing {
+  0% {
+    transform: rotate(-15deg) translateY(0%);
+  }
+  25% {
+    transform: rotate(0deg) translateY(-30%);
+  }
+  50% {
+    transform: rotate(10deg) translateY(0%);
+  }
+  75% {
+    transform: rotate(0deg) translateY(-30%);
+  }
+  100% {
+    transform: rotate(-15deg) translateY(0%);
+  }
+}
+
 @media screen and (min-width: 1400px) {
-  #main_form {
-    zoom: 105%;
+  .comments_navbar {
+    width: auto !important;
+    margin-left: auto; 
+    margin-right: auto;
   }
 
   .form-control:not(.video_url_input) {
@@ -362,7 +387,7 @@ mark {
     height: 70vh !important;
   }
 
-  .main-container {
+  .top-container {
     height: auto !important;
   }
 }

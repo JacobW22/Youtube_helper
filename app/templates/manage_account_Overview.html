@@ -111,11 +111,11 @@
             </thead>
             <tbody>
 
-              {% for video in download_history reversed %}
+              {% for video in download_history %}
               <tr>
-                {% for data in video %}
-                    <td>{{ data }}</td>
-                {% endfor %}
+                  <td>{{ video.title }}</td>
+                  <td>{{ video.link }}</td>
+                  <td>{{ video.saved_on|date:"d/m/Y G:i" }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -144,11 +144,11 @@
             </thead>
             <tbody>
 
-              {% for prompt in filtered_comments_history reversed %}
+              {% for prompt in filtered_comments_history %}
               <tr>
-                {% for data in prompt %}
-                    <td>{{ data }}</td>
-                {% endfor %}
+                    <td>{{ prompt.title }}</td>
+                    <td>{{ prompt.link }}</td>
+                    <td>{{ prompt.saved_on|date:"d/m/Y G:i" }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -177,11 +177,11 @@
             </thead>
             <tbody>
 
-              {% for playlist in transferred_playlists_history reversed %}
+              {% for playlist in transferred_playlists_history %}
               <tr>
-                {% for data in playlist %}
-                    <td>{{ data }}</td>
-                {% endfor %}
+                  <td>{{ playlist.title }}</td>
+                  <td>{{ playlist.link }}</td>
+                  <td>{{ playlist.saved_on|date:"d/m/Y G:i" }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -212,9 +212,9 @@
 
               {% for prompt in prompts_history reversed %}
               <tr>
-                {% for data in prompt %}
-                    <td>{{ data }}</td>
-                {% endfor %}
+                  <td>{{ prompt.title }}</td>
+                  <td>{{ prompt.link }}</td>
+                  <td>{{ prompt.saved_on|date:"d/m/Y G:i" }}</td>
               </tr>
               {% endfor %}
             </tbody>
