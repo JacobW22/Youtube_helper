@@ -33,44 +33,6 @@ from dateutil.parser import isoparse
 from spotipy.oauth2 import SpotifyOAuth
 from botocore.config import Config
 
-
-class RetrieveDownloadHistory(viewsets.ModelViewSet):
-    serializer_class = download_history_Serializer
-    permission_classes = [IsAuthenticated]
-
-
-    def get_queryset(self):
-     return download_history_item.objects.filter(user=self.request.user) 
-    
-
-    
-class RetrievePromptsHistory(viewsets.ModelViewSet):
-    serializer_class = prompts_history_Serializer
-    permission_classes = [IsAuthenticated]
-
-
-    def get_queryset(self):
-     return prompts_history_item.objects.filter(user=self.request.user)
-
-
-class RetrieveFilteredCommentsHistory(viewsets.ModelViewSet):
-    serializer_class = filtered_comments_history_Serializer
-    permission_classes = [IsAuthenticated]
-
-
-    def get_queryset(self):
-     return filtered_comments_history_item.objects.filter(user=self.request.user)
-
-
-class RetrieveTransferredPlaylistsHistory(viewsets.ModelViewSet):
-    serializer_class = transferred_playlists_history_Serializer
-    permission_classes = [IsAuthenticated]
-
-
-    def get_queryset(self):
-     return transferred_playlists_history_item.objects.filter(user=self.request.user)
-    
-
 # Hide it from Github
 load_dotenv(find_dotenv())
 
@@ -95,6 +57,45 @@ sites_context = {
 
 
 
+class RetrieveDownloadHistory(viewsets.ModelViewSet):
+    serializer_class = download_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return download_history_item.objects.filter(user=self.request.user) 
+    
+
+    
+class RetrievePromptsHistory(viewsets.ModelViewSet):
+    serializer_class = prompts_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return prompts_history_item.objects.filter(user=self.request.user)
+
+
+
+class RetrieveFilteredCommentsHistory(viewsets.ModelViewSet):
+    serializer_class = filtered_comments_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return filtered_comments_history_item.objects.filter(user=self.request.user)
+
+
+
+class RetrieveTransferredPlaylistsHistory(viewsets.ModelViewSet):
+    serializer_class = transferred_playlists_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return transferred_playlists_history_item.objects.filter(user=self.request.user)
+    
+    
 
 @login_check
 def main_page(request, login_context):
@@ -161,8 +162,8 @@ def main_page(request, login_context):
                         thumbnail_url=yt.thumbnail_url
                     )
 
-                except Exception:
-                    msg.info(request, "Something went wrong, history not updated ")
+                except Exception as e:
+                    msg.info(request, e)
 
         return redirect("download_page", parameter=link)
 
@@ -487,6 +488,7 @@ def manage_account_General(request, login_context):
             return redirect(manage_account_General)
 
     context = {"form": form}
+    context.update({"user": User.objects.get(username=login_context["username"])})
     context.update(login_context)
     context.update({"sites_context": sites_context})
 

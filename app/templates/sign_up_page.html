@@ -152,9 +152,9 @@ function sendForm(event) {
   event.preventDefault();
 
   var emailField = document.getElementById("emailField");
-  emailField.value = emailField.value.toLowerCase();
-
   var form = event.target; 
+
+  emailField.value = emailField.value.toLowerCase();
   form.submit();
 }
 
