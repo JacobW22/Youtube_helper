@@ -18,3 +18,4 @@ spotipy==2.23.0
 boto3>=1.28.21
 djangorestframework>=3.14.0
 django-rest-swagger>=2.2.0
+-U drf-yasg
