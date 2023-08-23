@@ -1,0 +1,5 @@
+app/myenv
+app/static
+__pycache__/
+.git
+.gitignore

@@ -1,11 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
+from rest_framework import viewsets
+from rest_framework import serializers
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
+from .serializers import download_history_Serializer, prompts_history_Serializer, filtered_comments_history_Serializer, transferred_playlists_history_Serializer
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
-from .decorators import login_check, not_authenticated_only
-from .models import user_data_storage, User
-from .tasks import TransferPlaylist
+from .decorators import login_check, login_required, not_authenticated_only, rate_limit, RedirectException
+from .models import user_data_storage, download_history_item, prompts_history_item, filtered_comments_history_item, transferred_playlists_history_item, User, Ticket
+from .tasks import TransferPlaylist, download_and_store_image
 
 import os
 import re
@@ -13,7 +20,8 @@ import openai
 import asyncio
 import isodate
 import spotipy
-
+import boto3
+import random
 
 from pytube import YouTube
 from datetime import datetime as dt
@@ -23,6 +31,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from dateutil.parser import isoparse
 from spotipy.oauth2 import SpotifyOAuth
+from botocore.config import Config
 
 # Hide it from Github
 load_dotenv(find_dotenv())
@@ -47,48 +56,58 @@ sites_context = {
 }
 
 
+
+class RetrieveDownloadHistory(viewsets.ModelViewSet):
+    serializer_class = download_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+    
+    def get_queryset(self):
+     return download_history_item.objects.filter(user=self.request.user) 
+    
+
+    
+class RetrievePromptsHistory(viewsets.ModelViewSet):
+    serializer_class = prompts_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return prompts_history_item.objects.filter(user=self.request.user)
+
+
+
+class RetrieveFilteredCommentsHistory(viewsets.ModelViewSet):
+    serializer_class = filtered_comments_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return filtered_comments_history_item.objects.filter(user=self.request.user)
+
+
+
+class RetrieveTransferredPlaylistsHistory(viewsets.ModelViewSet):
+    serializer_class = transferred_playlists_history_Serializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+     return transferred_playlists_history_item.objects.filter(user=self.request.user)
+    
+
+import random
 @login_check
 def main_page(request, login_context):
     context = {}
 
-    # User download history
     if "username" in login_context:
-        username = login_context["username"]
-        storage = user_data_storage.objects.get(
-            user=User.objects.get(username=username)
-        )
-
         # Use download history for slides on the main page
-        # Get random items from history
-        # Eliminate repetitions
-        Download_videos_informations = []
-
-        Download_history = storage.download_history
-
-        unique_videos = []
-        unique_titles = set()
-
-        for movie in Download_history:
-            title = movie[0]
-
-            if title not in unique_titles:
-                unique_videos.append(movie)
-                unique_titles.add(title)
-                if len(unique_videos) == 10:
-                    break
-
-        for vid_info in unique_videos:
-            Download_videos_informations.append(
-                {
-                    "title": vid_info[0],
-                    "thumbnail": vid_info[3],
-                    "publish_date": vid_info[2],
-                    "link": vid_info[1],
-                }
-            )
-
-        context.update({"number_of_links": range(0, len(Download_videos_informations))})
-        context.update({"videos_informations": Download_videos_informations})
+        unique_videos = list(download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('title').distinct('title'))
+        random.shuffle(unique_videos)
+        
+        context.update({"number_of_links": range(0, len(unique_videos[:10]))})
+        context.update({"unique_videos": unique_videos[:10]})
 
     context.update(login_context)
     context.update({"sites_context": sites_context})
@@ -105,26 +124,21 @@ def main_page(request, login_context):
 
         # Store data in user history
         if "username" in login_context:
-            username = login_context["username"]
             storage = user_data_storage.objects.get(
-                user=User.objects.get(username=username)
+                user=User.objects.get(username=login_context["username"])
             )
 
             if storage.save_history:
-                time = dt.now()
-
                 try:
-                    info = [
-                        yt.title,
-                        link,
-                        time.strftime("%d/%m/%Y %H:%M"),
-                        yt.thumbnail_url,
-                    ]
-                    storage.download_history.append(info)
-                    storage.save()
+                    download_history_item.objects.create(
+                        user=User.objects.get(username=login_context["username"]), 
+                        title=yt.title,
+                        link=link,
+                        thumbnail_url=yt.thumbnail_url
+                    )
 
-                except Exception:
-                    msg.info(request, "Something went wrong, history not updated ")
+                except Exception as e:
+                    msg.info(request, e)
 
         return redirect("download_page", parameter=link)
 
@@ -175,29 +189,12 @@ def sign_up_page(request, login_context):
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
             user = form.cleaned_data.get("username")
-
-            # Create data storage for user in the database / avoid not-null by passing 'registered' string
+            form.save()
 
             user_data_storage.objects.create(
-                object_name=str(user) + " storage",
-                user=User.objects.get(username=user),
-                download_history=["registered"],
-                prompts_history=["registered"],
-                filtered_comments_history=["registered"],
-                transferred_playlists_history=["registered"]
-            )
-
-            storage = user_data_storage.objects.get(
                 user=User.objects.get(username=user)
             )
-
-            storage.download_history.remove("registered")
-            storage.prompts_history.remove("registered")
-            storage.filtered_comments_history.remove("registered")
-            storage.transferred_playlists_history.remove("registered")
-            storage.save()
 
             msg.success(request, "Welcome on board " + "<b>" + user + "</b>")
             return redirect(login_page)
@@ -223,53 +220,27 @@ def download_page(request, login_context, parameter):
 
     context.update(login_context)
     context.update({"sites_context": sites_context})
+    context.update({"video_duration": isodate.parse_duration(context.get("length"))})
 
     return render(request, "download_page.html", context)
 
-
+@login_required
 @login_check
 def ai_page(request, login_context, parameter="", parameter_title=""):
     if request.method == "POST":
         description = request.POST.get("description")
 
         try:
-            response_data = openai.Image.create(
-                prompt=description
-                + ", digital art, icon, avatar image, illustration style, epic, user profile image, ultra quality, 1:1",
-                n=1,
-                size="1024x1024",
-            )
-
-            link = response_data["data"][0]["url"]
-
-            fixed_link = quote(link, safe=":/?&=%")
-
-        except openai.error.RateLimitError:
-            msg.success("Ai model is currently overloaded, please wait a second")
-            return redirect(ai_page)
-
-        # Store data in user history
-        if "username" in login_context:
-            username = login_context["username"]
-            storage = user_data_storage.objects.get(
-                user=User.objects.get(username=username)
-            )
-
-            if storage.save_history:
-                time = dt.now()
-                info = [
-                    description,
-                    fixed_link.replace("%25", "%"),
-                    time.strftime("%d/%m/%Y %H:%M"),
-                ]
-                storage.prompts_history.append(info)
-                storage.save()
-
+            fixed_link = get_openai_response(request, login_context, description)
+        except RedirectException as e:
+            return redirect(e.url)
+        
         return redirect(ai_page, parameter=fixed_link, parameter_title=description)
 
     context = {}
     context.update(login_context)
     context.update({"sites_context": sites_context})
+
 
     if parameter != "":
         context.update(
@@ -279,13 +250,18 @@ def ai_page(request, login_context, parameter="", parameter_title=""):
             }
         )
 
+    else:   
+        if login_context['logged'] == True:
+            try:
+                remaining_tickets = Ticket.objects.get(user=User.objects.get(username=login_context['username'])).remaining_tickets
+            except ObjectDoesNotExist:
+                remaining_tickets = 3
+            context.update({"tickets": remaining_tickets})
+
+        users_avatars = get_avatars()  
+        context.update({"users_avatars": users_avatars})
+        
     return render(request, "ai_site.html", context)
-
-
-pageTokens = [None]
-previous_request_previousPageID = [0]
-previous_request_pageID = [0]
-video_metadata_temp = {}
 
 
 @login_check
@@ -300,6 +276,12 @@ def comments(request, login_context):
                     pageID = request.POST.get("pageID")
                     video_id = request.POST.get("video_id")
                     searchInput = request.POST.get("searchInput")
+                    
+
+                    if int(pageID) == 1 and int(previousPageID) == 1:
+                        if len(request.session['pageTokens']) > 1:
+                            request.session['pageTokens'].clear()
+                            request.session['pageTokens'].append(None)
 
                     context = show_comments(
                         request,
@@ -315,8 +297,7 @@ def comments(request, login_context):
                     return render(request, "comments.html", context)
 
                 except Exception:
-                    pageTokens.clear()
-                    pageTokens.append(None)
+                    request.session['pageTokens'].clear()
                     msg.info(request, "Something went wrong, please try again")
                     return redirect(comments)
 
@@ -332,14 +313,17 @@ def comments(request, login_context):
                         msg.info(request, "Invalid url")
                         return redirect(comments)
                     
+
                     order = "relevance"
                     maxResults = 25
                     pageID = 1
                     previousPageID = 1
                     searchInput = ""
 
-                    if video_metadata_temp:
-                        video_metadata_temp.clear()
+                    request.session['pageTokens'] = [None]
+                    request.session['previous_request_pageID'] = None
+                    request.session['previous_request_previousPageID'] = None
+                    request.session['video_metadata_temp'] = {}
 
                     context = show_comments(
                         request,
@@ -354,9 +338,7 @@ def comments(request, login_context):
                     )
                     return render(request, "comments.html", context)
 
-                except Exception:
-                    pageTokens.clear()
-                    pageTokens.append(None)
+                except Exception as e:
                     msg.info(request, "Video cannot be found")
                     return redirect(comments)
 
@@ -392,53 +374,55 @@ def youtube_to_spotify(request, login_context):
         form = StartTaskForm(request.POST)
         if form.is_valid():
             url = request.POST.get("url")
-            url = url.split("list=", 1)[1]
-            playlist_id = url.split("&", 1)[0]
 
-            # Store data in user history
-            if "username" in login_context:
-                username = login_context["username"]
-                storage = user_data_storage.objects.get(
-                    user=User.objects.get(username=username)
+            if "list=RD" not in url: # Block Youtube Mix playlists
+                url = url.split("list=", 1)[1]
+                playlist_id = url.split("&", 1)[0]
+
+                # Store data in user history
+                if "username" in login_context:
+                    storage = user_data_storage.objects.get(
+                        user=User.objects.get(username=login_context["username"])
+                    )
+
+                    response_for_title = (
+                        youtube.playlists()
+                        .list(part="snippet", id=playlist_id, fields="items(snippet(title))")
+                        .execute()
+                    )
+
+                    if response_for_title["items"][0]["snippet"]["title"]:
+                        title = response_for_title["items"][0]["snippet"]["title"]
+                    else:
+                        title = "Couldn't find"
+
+                    if storage.save_history:
+                        download_history_item.objects.create(
+                            user=User.objects.get(username=login_context["username"]), 
+                            title=title,
+                            link=request.POST.get("url"),
+                        )
+
+
+                # If the user has granted permission and returned with the authorization code
+                code = request.GET.get("code")
+                token_info = sp_oauth.get_access_token(code)
+
+                sp = spotipy.Spotify(auth=token_info["access_token"])
+                user_id = sp.me()["id"]
+                user_account_url = f"https://open.spotify.com/user/{user_id}"
+
+                # Pass the access token to a Celery task for further processing
+                TransferPlaylist.delay(
+                    sp_token=token_info["access_token"], playlist_id=playlist_id
                 )
 
-                response_for_title = (
-                    youtube.playlists()
-                    .list(part="snippet", id=playlist_id, fields="items(snippet(title))")
-                    .execute()
-                )
+                return redirect(youtube_to_spotify_done, account_url=user_account_url)
 
-                if response_for_title["items"][0]["snippet"]["title"]:
-                    title = response_for_title["items"][0]["snippet"]["title"]
-                else:
-                    title = "Couldn't find"
-
-                if storage.save_history:
-                    time = dt.now()
-                    info = [
-                        title,
-                        request.POST.get("url"),
-                        time.strftime("%d/%m/%Y %H:%M"),
-                    ]
-                    storage.transferred_playlists_history.append(info)
-                    storage.save()
-
-
-            # If the user has granted permission and returned with the authorization code
-            code = request.GET.get("code")
-            token_info = sp_oauth.get_access_token(code)
-
-            sp = spotipy.Spotify(auth=token_info["access_token"])
-            user_id = sp.me()["id"]
-            user_account_url = f"https://open.spotify.com/user/{user_id}"
-
-            # Pass the access token to a Celery task for further processing
-            TransferPlaylist.delay(
-                sp_token=token_info["access_token"], playlist_id=playlist_id
-            )
-
-            return redirect(youtube_to_spotify_done, account_url=user_account_url)
-
+            else:
+                msg.info(request, "Youtube Mix is not accepted")
+                return redirect(youtube_to_spotify) 
+            
     context.update({"form": form})
     context.update(login_context)
     context.update({"sites_context": sites_context})
@@ -479,6 +463,7 @@ def manage_account_General(request, login_context):
             return redirect(manage_account_General)
 
     context = {"form": form}
+    context.update({"user": User.objects.get(username=login_context["username"])})
     context.update(login_context)
     context.update({"sites_context": sites_context})
 
@@ -487,23 +472,17 @@ def manage_account_General(request, login_context):
 
 @login_check
 def manage_account_Overview(request, login_context):
-    username = login_context["username"]
-
-    storage = user_data_storage.objects.get(user=User.objects.get(username=username))
-
-    for video in storage.download_history[-6:]:
-        del video[3]
 
     context = {
-        "vid_downloads_quantity": len(storage.download_history),
-        "prompts_quantity": len(storage.prompts_history),
-        "filtered_comments_quantity": len(storage.filtered_comments_history),
-        "transferred_playlists_quantity": len(storage.transferred_playlists_history),
+        "vid_downloads_quantity": download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
+        "prompts_quantity": prompts_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
+        "filtered_comments_quantity": filtered_comments_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
+        "transferred_playlists_quantity": transferred_playlists_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
         
-        "download_history": storage.download_history[-6:],
-        "prompts_history": storage.prompts_history[-6:],
-        "filtered_comments_history": storage.filtered_comments_history[-6:],
-        "transferred_playlists_history": storage.transferred_playlists_history[-6:],
+        "download_history": download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
+        "prompts_history": prompts_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
+        "filtered_comments_history": filtered_comments_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
+        "transferred_playlists_history": transferred_playlists_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
     }
 
     context.update(login_context)
@@ -515,14 +494,29 @@ def manage_account_Overview(request, login_context):
 @login_check
 def manage_account_Private(request, login_context):
     context = {}
+
+    try: 
+        context.update({"api_token": f'Token {Token.objects.get(user=User.objects.get(username=login_context["username"]))}'})
+    except Exception:
+        pass
+
+    if request.method == "POST":
+        try:
+            Token.objects.create(user=User.objects.get(username=login_context["username"]))
+            return redirect(manage_account_Private)
+        except Exception:
+            pass
+    
+
     context.update(login_context)
     context.update({"sites_context": sites_context})
 
     return render(request, "manage_account_Private.html", context)
 
 
-# Non-views functions
 
+
+# Non-views functions
 
 def run_async(url):
     # Create a new event loop
@@ -612,11 +606,11 @@ async def get_video_metadata(url):
 
     try:
         # Call the API to retrieve the video details
-        request = youtube2.videos().list(
+        yt_request = youtube2.videos().list(
             part="snippet,statistics,contentDetails", id=video_id
         )
 
-        response = await asyncio.to_thread(request.execute)
+        response = await asyncio.to_thread(yt_request.execute)
 
         # Extract the snippet and statistics from the response
         video = response["items"][0]
@@ -634,7 +628,8 @@ async def get_video_metadata(url):
         likes = "{:,}".format(int(statistics["likeCount"])).replace(",", " ")
         comment_count = "{:,}".format(int(statistics["commentCount"])).replace(",", " ")
 
-        length = isodate.parse_duration(content_details["duration"])
+        length = content_details["duration"]
+
 
     except HttpError as e:
         print(f"An HTTP error occurred: {e}")
@@ -662,17 +657,24 @@ async def get_video_metadata(url):
 
 
 async def get_video_comments(
-    video_id, order, maxResults, previousPageID, pageID, searchInput, quotaUser
+    request,
+    video_id, 
+    order, 
+    maxResults, 
+    previousPageID, 
+    pageID, 
+    searchInput, 
+    quotaUser
 ):
     try:
         # Retrieve the comments for the specified video
-        request = youtube.commentThreads().list(
+        yt_request = youtube.commentThreads().list(
             part="snippet",
             videoId=video_id,
             textFormat="html",
             order=order,
             maxResults=maxResults,
-            pageToken=pageTokens[-1],
+            pageToken=request.session['pageTokens'][-1],
             quotaUser=quotaUser,
         )
 
@@ -681,28 +683,28 @@ async def get_video_comments(
 
         match (int(pageID) - int(previousPageID)):
             case 1:
-                response = await asyncio.to_thread(request.execute)
+                response = await asyncio.to_thread(yt_request.execute)
 
                 if "nextPageToken" in response:
-                    pageTokens.append(response["nextPageToken"])
-                    request = youtube.commentThreads().list_next(request, response)
+                    request.session['pageTokens'].append(response["nextPageToken"])
+                    yt_request = youtube.commentThreads().list_next(yt_request, response)
 
             case 0:
                 pass
 
             case -1:
-                pageTokens.pop()
-                request = youtube.commentThreads().list(
+                request.session['pageTokens'].pop()
+                yt_request = youtube.commentThreads().list(
                     part="snippet",
                     videoId=video_id,
                     textFormat="html",
                     order=order,
                     maxResults=maxResults,
-                    pageToken=pageTokens[-1],
+                    pageToken=request.session['pageTokens'][-1],
                     quotaUser=quotaUser,
                 )
 
-        response = await asyncio.to_thread(request.execute)
+        response = await asyncio.to_thread(yt_request.execute)
 
         if "nextPageToken" not in response:
             processed_comments.append("last_page")
@@ -724,7 +726,7 @@ async def get_video_comments(
                         "textDisplay"
                     ]
                     highlighted_comment = re.sub(
-                        f"({re.escape(searchInput)})",
+                        r"(?![^<>]*>)(" + re.escape(searchInput) + r")",
                         r"<mark>\1</mark>",
                         snippet,
                         flags=re.IGNORECASE,
@@ -785,13 +787,16 @@ async def get_video_comments(
                         }
                     )
 
-        if order == "time":
-            date_format = "%Y-%m-%d %H:%M:%S"
-            date1 = dt.strptime(processed_comments[0].get("publish_date"), date_format)
-            date2 = dt.strptime(processed_comments[1].get("publish_date"), date_format)
+        if order == "time" and processed_comments:
+            try:
+                date_format = "%Y-%m-%d %H:%M:%S"
+                date1 = dt.strptime(processed_comments[0].get("publish_date"), date_format)
+                date2 = dt.strptime(processed_comments[1].get("publish_date"), date_format)
 
-            if date1 < date2:
-                processed_comments[0]["pinned"] = True
+                if date1 < date2:
+                    processed_comments[0]["pinned"] = True
+            except Exception:
+                pass
 
         return processed_comments
 
@@ -801,6 +806,7 @@ async def get_video_comments(
 
 
 async def get_video_comments_view_async(
+    request,
     video_id,
     order,
     maxResults,
@@ -820,6 +826,7 @@ async def get_video_comments_view_async(
 
                 comments_and_VidInfo = await asyncio.gather(
                     get_video_comments(
+                        request,
                         video_id,
                         order,
                         maxResults,
@@ -831,17 +838,19 @@ async def get_video_comments_view_async(
                     get_video_metadata(video_url),
                 )
 
-                video_metadata_temp.update(comments_and_VidInfo[1])
+                request.session['video_metadata_temp'].update(comments_and_VidInfo[1])
 
                 comments_and_VidInfo = {
                     "comments": comments_and_VidInfo[0],
                     "video_metadata": comments_and_VidInfo[1],
+                    "video_duration": isodate.parse_duration(comments_and_VidInfo[1].get("length"))
                 }
 
                 return comments_and_VidInfo
 
             case False:
                 comments = await get_video_comments(
+                    request,
                     video_id,
                     order,
                     maxResults,
@@ -850,10 +859,10 @@ async def get_video_comments_view_async(
                     searchInput,
                     quotaUser,
                 )
-
                 comments_and_VidInfo = {
                     "comments": comments,
-                    "video_metadata": video_metadata_temp,
+                    "video_metadata": request.session['video_metadata_temp'],
+                    "video_duration": isodate.parse_duration(request.session['video_metadata_temp'].get("length")),
                 }
 
                 return comments_and_VidInfo
@@ -885,35 +894,27 @@ def show_comments(
             "searchInput": searchInput,
         }
 
-        # Reset previous saved pageTokens
-        if previousPageID == "1" and pageID == "1":
-            pageTokens.clear()
-            pageTokens.append(None)
-
         if login_context.get("logged"):
             quotaUser = login_context.get("username")
         else:
             quotaUser = None
 
         # E.g. previousPage = 1 and Page = 2, so if refreshed next api request won't be sent
-
-        match str(previous_request_pageID[-1]) == str(pageID):
+        match str(request.session['previous_request_pageID']) == str(pageID):
             case True:
                 stopRequest = True
             case False:
-                previous_request_pageID.pop(0)
-                previous_request_pageID.append(pageID)
-
+                request.session['previous_request_pageID'] = pageID
                 stopRequest = False
 
-        match str(previous_request_previousPageID[-1]) == str(previousPageID):
+
+        match str(request.session['previous_request_previousPageID']) == str(previousPageID):
             case True:
                 stopRequest2 = True
             case False:
-                previous_request_previousPageID.pop(0)
-                previous_request_previousPageID.append(previousPageID)
-
+                request.session['previous_request_previousPageID'] = previousPageID
                 stopRequest2 = False
+
 
         if stopRequest and stopRequest2:
             previousPageID = pageID
@@ -923,6 +924,7 @@ def show_comments(
         asyncio.set_event_loop(loop)
         comments_and_VidInfo = loop.run_until_complete(
             get_video_comments_view_async(
+                request,
                 video_id,
                 order,
                 maxResults,
@@ -941,16 +943,13 @@ def show_comments(
             )
 
             if storage.save_history:
-                time = dt.now()
-
                 try:
-                    info = [
-                        comments_and_VidInfo["video_metadata"]["title"],
-                        "https://www.youtube.com/watch?v=" + video_id,
-                        time.strftime("%d/%m/%Y %H:%M"),
-                    ]
-                    storage.filtered_comments_history.append(info)
-                    storage.save()
+                    filtered_comments_history_item.objects.create(
+                        user=User.objects.get(username=login_context["username"]), 
+                        title=comments_and_VidInfo["video_metadata"]["title"],
+                        link="https://www.youtube.com/watch?v=" + video_id,
+                    )
+
                 except Exception:
                     msg.info(request, "Error occurred, history not updated")
 
@@ -970,3 +969,84 @@ def show_comments(
         context.update({"sites_context": sites_context})
 
         return context
+
+
+def get_avatars():
+    try:
+        s3 = boto3.client('s3', 
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME,
+            config=Config(signature_version='s3v4')
+        )
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+
+        response = s3.list_objects_v2(Bucket=bucket_name, Prefix='media/', Delimiter='/')
+
+        if 'Contents' in response:
+            objects = response['Contents']
+            image_objects = [obj for obj in objects if obj['Key'].endswith('.png')]
+            image_objects.sort(key=lambda obj: obj['LastModified'], reverse=True)
+            
+            if len(image_objects) <= 8:
+                random_image_objects = image_objects
+            else:
+                random_image_objects = random.sample(image_objects, 8)
+            
+            random_image_urls = []
+            for img_obj in random_image_objects:
+                url = s3.generate_presigned_url(
+                    ClientMethod='get_object',
+                    Params={'Bucket': bucket_name, 'Key': img_obj['Key']},
+                    ExpiresIn=3600,
+                )
+                random_image_urls.append(url)
+            
+            return random_image_urls
+        else:
+            return None
+        
+    except Exception:
+        return None
+
+
+
+@rate_limit
+def get_openai_response(request, login_context, description):
+    try:
+        response_data = openai.Image.create(
+            prompt=description
+            + " in visual key of Jojo Bizzare Adventure, epic, anime, hyper realistic, handsome, 1:1",
+            n=1,
+            size="1024x1024",
+        )
+
+        link = response_data["data"][0]["url"]
+
+        fixed_link = quote(link, safe=":/?&=%")
+
+        # Store data in user history
+        try:
+            if "username" in login_context:
+                storage = user_data_storage.objects.get(
+                    user=User.objects.get(username=login_context["username"])
+                )
+
+                if storage.save_history:
+                    prompts_history_item.objects.create(
+                        user=User.objects.get(username=login_context["username"]), 
+                        title=description,
+                        link=fixed_link.replace("%25", "%"),
+                    )
+
+        except Exception:
+            msg.info(request, "Error while saving history")
+
+        download_and_store_image.delay(fixed_link)
+
+        return fixed_link
+
+    except openai.error.RateLimitError:
+        msg.info("Ai model is currently overloaded, please wait a second")
+        return redirect(ai_page)
+    

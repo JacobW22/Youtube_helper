@@ -9,8 +9,9 @@ html {
   width: 100%;
   height: 100%;
   margin: 0;
-  background: linear-gradient(black, red, white);
-  background-size: 800% 800%;
+  /* background: linear-gradient(black, red, white); */
+  background: #000;
+  /* background-size: 800% 800%; */
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -48,7 +49,7 @@ html {
 
 input[type="search" i]::-webkit-search-cancel-button {
   cursor: pointer;
-  transform: scale(1.2);
+  transform: scale(1.2) translateY(-10%);
   filter: invert(0.5);
 }
 
@@ -60,17 +61,48 @@ h2 {
   user-select: none;
 }
 
+.form-control {
+  background-color: black !important;
+  border: 0.10em solid #fff !important;
+  border-color: white !important;
+  color: white !important;
+  border-radius: 10px !important;
+  text-align: center;
+  font-size: 1.2rem !important;
+  overflow: hidden !important;
+  max-width: 90%;
+  width: 35rem !important;
+  padding-inline: 0.5em !important;
+}
+
+.form-control:focus {
+  border-color: #f5696e !important;
+  box-shadow: 0px 0px 15px 1px #f5696e;
+  text-align: left;
+}
+
+.form-control:not(:placeholder-shown) {
+  border-color: #7cf569 !important;
+  box-shadow: 0px 0px 15px 1px #7cf569;
+}
+
+.form-control::placeholder {
+  user-select: none;
+}
+
 .btn {
   background: black !important;
   color: white;
-  border-radius: 15px !important;
+  border-radius: 10px !important;
   outline: none !important;
   border: none !important;
   box-shadow: 0em 0em 0.15em 0.03em white !important;
 }
 
 .btn:hover {
-  box-shadow: none !important;
+  color: white;
+  transform: translateY(-10%);
+  box-shadow: 0em 0em 0.5em 0.03em white !important;
 }
 
 ::selection {
@@ -249,7 +281,7 @@ h2 {
 }
 
 .btn-close {
-  border: 0.15em solid white;
+  border: 0.15em solid darkgrey;
   border-radius: 50%;
   padding: 0.5em;
   filter: invert(92%) sepia(91%) saturate(26%) hue-rotate(201deg)
@@ -262,6 +294,7 @@ h2 {
 }
 
 .btn-close:hover {
+  border-color: white;
   background-color: gray;
   opacity: 0.8;
   filter: invert(0%) sepia(5%) saturate(18%) hue-rotate(192deg) brightness(94%)
@@ -270,7 +303,7 @@ h2 {
 
 .toast {
   background: black !important;
-  box-shadow: 0px 0px 15px 1px black;
+  box-shadow: 0px 0px 10px 2px red;
   border-radius: 15px;
   font-size: 0.9rem;
 }
@@ -296,6 +329,11 @@ h2 {
   text-align: center !important;
 }
 
+.main-container::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none !important;
+}
+
 @keyframes fade-in-animation {
   0% {
     opacity: 0;
@@ -311,6 +349,11 @@ h2 {
 }
 
 @media screen and (min-width: 2270px) {
+  .comments_navbar {
+    width: 80rem;
+    max-width: 85%;
+  }
+
   .nav-link {
     font-size: 2rem !important;
   }
@@ -350,6 +393,11 @@ h2 {
 }
 
 @media screen and (min-width: 1400px) and (max-width: 2270px) {
+  .comments_navbar {
+    width: 80rem;
+    max-width: 85%;
+  }
+
   #main-title {
     font-size: 2.5rem !important;
   }
@@ -420,15 +468,16 @@ h2 {
   }
 }
 
-@media screen and (max-width: 1080px) {
-  body::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 @media screen and (min-width: 992px) {
   .account_menu {
     width: 15em !important;
+  }
+
+  .navbar:not(.comments_navbar) {
+    width: 80rem;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 

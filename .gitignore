@@ -2,3 +2,5 @@ myenv
 .env
 .flake8
 .cache
+kubernetes/postgres/postgres-credentials.yml
+kubernetes/python/python-django-secret-env.yml

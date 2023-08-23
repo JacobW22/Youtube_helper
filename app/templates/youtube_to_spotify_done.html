@@ -12,7 +12,7 @@
 {% block content %}
 
 
-    <div class="container-fluid d-flex flex-column align-items-center gap-3 px-0 pb-5 mt-2" id="main_form" >
+    <div class="container-fluid d-flex flex-column align-items-center gap-5 p-0 my-auto" id="main_form" >
 
         {% if sp_account_url %}
 
@@ -24,22 +24,22 @@
             </div>
         <!-- Go back section end-->
 
-
-        <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify"></i></span>
-        <span class="text-light fs-2 text-center">
-            Done
-        </span>
-        <span class="pointing-to-mail text-muted fs-5 text-center">
-            Your playlist has been added to the queue.<br> 
-            Check your Spotify account and look forward to the generated playlist.
-        </span>
-        <span class="pointing-to-mail text-light fs-6 mt-5 text-center">Your spotify account:</span>
-        
-        <i class="fa-solid fa-chevron-down text-light"></i>
-        <a class="pointing-to-mail sp_url fs-5 text-center" href="{{ sp_account_url }}"target="_blank" rel="noopener noreferrer">
-            {{ sp_account_url}}
-        </a>
-        
+        <div class="d-flex flex-column align-items-center gap-3" id="main_content">
+            <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify"></i></span>
+            <span class="text-light fs-2 text-center">
+                Done
+            </span>
+            <span class="pointing-to-mail text-muted fs-5 text-center">
+                Your playlist has been added to the queue.<br> 
+                Check your Spotify account and look forward to the generated playlist.
+            </span>
+            <span class="pointing-to-mail text-light fs-6 mt-5 text-center">Your spotify account:</span>
+            
+            <i class="fa-solid fa-chevron-down text-light"></i>
+            <a class="pointing-to-mail sp_url fs-5 text-center" href="{{ sp_account_url }}"target="_blank" rel="noopener noreferrer">
+                {{ sp_account_url}}
+            </a>
+        </div>
         {% else %}
 
         <!-- Go back section start-->
@@ -54,8 +54,8 @@
         <span class="text-light fs-1 text-center"><i class="fa-brands fa-spotify"></i></span>
         <span class="pointing-to-mail text-light fs-2 text-center">Check your account</span>
         <span class="pointing-to-mail text-muted fs-5 text-center">
-            Task was received, check your spotify account for playlist. 
-            Spotify is async based so playlist can be formed in real-time.
+            Your playlist has been added to the queue.<br> 
+            Check your Spotify account and look forward to the generated playlist.
         </span>
 
         {% endif %}
