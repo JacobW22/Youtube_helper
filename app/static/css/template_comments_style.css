@@ -379,6 +379,10 @@ mark {
 }
 
 @media screen and (max-width: 992px) {
+  .comments_container {
+    margin-top: 5em;
+  }
+
   .badge {
     margin-right: -2em;
   }

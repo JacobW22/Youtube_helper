@@ -37,7 +37,7 @@
 <div class="d-flex flex-column my-auto main-container">
 
     <!-- Go back section start-->
-      <div class="mx-auto">
+      <div class="mx-auto top_button">
         <button class="text-light highlight_link go_back fs-5 mb-4" onclick="history.back()">
           <i class="fa-solid fa-arrow-left"></i>&nbsp; Go back
         </button>
@@ -161,7 +161,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5 text-light" id="description_ModalLabel">{{ title }}</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close mx-auto" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text_for_modal">
         {{ description }}
@@ -177,13 +177,13 @@
 
 
 <!-- Toasts container start -->	
-<div class="toast-container bottom-0 start-50 translate-middle-x ">
+<div class="toast-container bottom-0 start-50 translate-middle-x">
   {% for message in messages %}
   <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
     <div class="toast-body">
         <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
     </div>
-    <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
+    <button type="button" class="btn-close ms-auto fs-6 mb-3 toast_dismiss" aria-label="Close"></button>
   </div>
   {% endfor %}
 </div>

@@ -1042,8 +1042,11 @@ def get_openai_response(request, login_context, description):
         except Exception:
             msg.info(request, "Error while saving history")
 
-        download_and_store_image.delay(fixed_link)
-
+        try:
+            download_and_store_image.delay(fixed_link)
+        except Exception:
+            pass
+        
         return fixed_link
 
     except openai.error.RateLimitError:
