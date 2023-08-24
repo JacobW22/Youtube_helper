@@ -38,7 +38,7 @@
 
 
 <!-- Main container start -->
-<div class="d-flex flex-column py-3 px-0 m-0 gap-3">
+<div class="d-flex flex-column py-4 px-0 m-0 gap-3">
   
         <!-- First section start -->
         <section class="d-flex w-100 first-section flex-column mx-auto gap-3 px-0">
@@ -133,7 +133,7 @@
 
   <!-- Main container start -->
   <div class="main-container center_container d-inline-block">
-      <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto main-container">
+      <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto">
         <!-- Go back section start-->
           <div class="mx-auto mb-3">
             <button class="text-light highlight_link go_back fs-5 mb-4" href="{% url 'ai_page' %}">
@@ -150,7 +150,7 @@
           <span class="text-light fs-1 text-center truncate" id="inputGroup-sizing-default"> {{ image_title }}</span>
         </div>
 
-        <img src="{{ image_link }}" class="img-fluid ai_generated_thumbnail" alt="Video_thumbnail">
+        <img src="{{ image_link }}" class="img-fluid ai_generated_thumbnail" alt="avatar">
         <a type="button" class="btn btn-dark btn-lg rounded-pill download_file mt-5 mb-3 animate" href="{{ image_link }}" target="_blank" rel="noopener noreferrer" download="Thumbnail"> Download &nbsp;<i class="fa-solid fa-up-right-from-square"></i></a>
       </div>
   </div>
@@ -164,13 +164,13 @@
 
 
 <!-- Toasts container start -->	
-<div class="toast-container bottom-0 start-50 translate-middle-x ">
+<div class="toast-container bottom-0 start-50 translate-middle-x">
   {% for message in messages %}
   <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
     <div class="toast-body">
         <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
     </div>
-    <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
+    <button type="button" class="btn-close ms-auto fs-6 mb-3 toast_dismiss" aria-label="Close"></button>
   </div>
   {% endfor %}
 </div>
