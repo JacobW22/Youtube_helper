@@ -28,7 +28,7 @@ import spotipy
 import boto3
 import random
 import environ
-
+import logging
 
 from pytube import YouTube
 from datetime import datetime as dt
@@ -38,6 +38,9 @@ from googleapiclient.errors import HttpError
 from dateutil.parser import isoparse
 from spotipy.oauth2 import SpotifyOAuth
 from botocore.config import Config
+
+# Logging
+logger = logging.getLogger('youtube_helper')
 
 # Retrieve environment variables 
 env = environ.Env()
@@ -49,11 +52,14 @@ CLIENT_ID = env("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = env("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = env("SPOTIFY_REDIRECT_URI")
 
+
 # The required scope for Spotify playlist creation
 SCOPE = "playlist-modify-private playlist-modify-public"
 
+
 # Youtube Api object
 youtube = build("youtube", "v3", developerKey=GOOGLE_API_KEY)
+
 
 # Navbar menu info
 sites_context = {
@@ -80,6 +86,7 @@ class RetrieveDownloadHistory(viewsets.ModelViewSet):
 
     
     def get_queryset(self):
+        logger.info(f"Download History Api request for user: {self.request.user.username}")
         return download_history_item.objects.filter(user=self.request.user) 
     
 
@@ -90,6 +97,7 @@ class RetrievePromptsHistory(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
+        logger.info(f"Prompts History Api request for user: {self.request.user.username}")
         return prompts_history_item.objects.filter(user=self.request.user)
 
 
@@ -100,6 +108,7 @@ class RetrieveFilteredCommentsHistory(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
+        logger.info(f"Filtered Comments Api request for user: {self.request.user.username}")
         return filtered_comments_history_item.objects.filter(user=self.request.user)
 
 
@@ -110,6 +119,7 @@ class RetrieveTransferredPlaylistsHistory(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
+        logger.info(f"Transferred Playlists History Api request for user: {self.request.user.username}")
         return transferred_playlists_history_item.objects.filter(user=self.request.user)
     
 
@@ -149,7 +159,8 @@ def main_page(request, login_context):
                 video_url = video_url.split("&", 1)[0]
             yt = YouTube(video_url)
 
-        except Exception:
+        except Exception as e:
+            logger.error(f"Video downloader view, Exception: {e}")
             msg.info(request, "Invalid url")
             return redirect(main_page)
 
@@ -168,8 +179,11 @@ def main_page(request, login_context):
                         link=video_url,
                         thumbnail_url=yt.thumbnail_url
                     )
+                    logger.info(f"Item has been added to database by {request.user.username}")
 
-                except Exception:
+
+                except Exception as e:
+                    logger.error(f"Exception while saving user history: {e}")
                     msg.info(request, "Error while saving history")
 
         return redirect("download_page", video_url=video_url)
@@ -197,6 +211,7 @@ def login_page(request, login_context):
 
             if user:
                 login(request, user)
+                logger.info(f"User {request.user.username} has logged in")
                 msg.success(request, "Welcome " + "<b>" + request.user.username + "</b>")
                 return redirect(main_page)
 
@@ -213,6 +228,7 @@ def login_page(request, login_context):
 
 
 def logoutUser(request):
+    logger.info(f"User {request.user.username} has logged out")
     logout(request)
     return redirect(main_page)
 
@@ -228,10 +244,14 @@ def sign_up_page(request, login_context):
         if form.is_valid():
             username = form.cleaned_data.get("username")
             form.save()
+            logger.info(f"User {username} has been created")
+
 
             user_data_storage.objects.create(
                 user=User.objects.get(username=username)
             )
+            logger.info(f"User's {username} storage has been created")
+
 
             msg.success(request, "Welcome on board " + "<b>" + username + "</b>")
             return redirect(login_page)
@@ -252,7 +272,9 @@ def download_page(request, login_context, video_url):
     try:    
         # Extract video metadata and download links
         context = run_async(video_url)
-    except Exception:
+
+    except Exception as e:
+        logger.error(f"Download_page view, Exception: {e}")
         msg.info(request, "Something went wrong, please try again")
         return redirect(main_page)
 
@@ -296,6 +318,7 @@ def ai_page(request, login_context, image_url="", image_description=""):
                 remaining_tickets = Ticket.objects.get(user=User.objects.get(username=login_context['username'])).remaining_tickets
             except ObjectDoesNotExist:
                 remaining_tickets = 3
+
             context.update({"tickets": remaining_tickets})
 
         users_avatars = get_avatars()  
@@ -338,8 +361,8 @@ def comments(request, login_context):
 
                 except Exception as e:
                     request.session['pageTokens'].clear()
-                    # msg.info(request, "Something went wrong, please try again")
-                    msg.info(request, e)
+                    logger.error(f"Comments view, Exception: {e}")
+                    msg.info(request, "Something went wrong, please try again")
                     return redirect(comments)
 
             case _:
@@ -355,7 +378,8 @@ def comments(request, login_context):
                             video_url = video_url.split("&", 1)[0]
                             video_id = video_url.split("=", 1)[1]
 
-                    except Exception:
+                    except Exception as e:
+                        logger.error(f"Comments view, Exception: {e}")
                         msg.info(request, "Invalid url")
                         return redirect(comments)
                     
@@ -384,7 +408,8 @@ def comments(request, login_context):
                     )
                     return render(request, "comments.html", context)
 
-                except Exception:
+                except Exception as e:
+                    logger.error(f"Comments view, Exception: {e}")
                     msg.info(request, "Video cannot be found")
                     return redirect(comments)
 
@@ -449,6 +474,8 @@ def youtube_to_spotify(request, login_context):
                             title=title,
                             link=request.POST.get("url"),
                         )
+                        logger.info(f"Item has been added to database by {request.user.username}")
+
 
 
                 # If the user has granted permission and returned with the authorization code
@@ -684,7 +711,8 @@ async def get_video_metadata(url):
         length = content_details["duration"]
 
 
-    except HttpError:
+    except HttpError as e:
+        logger.error(f"Video metadata, Http Exception: {e}")
         title = "Could not find or video was deleted by YouTube"
         length = "couldn't find"
         views = "couldn't find"
@@ -877,6 +905,7 @@ async def get_video_comments(
         return processed_comments
 
     except HttpError as e:
+        logger.error(f"Comments view, Http exception: {e}")
         error_message = f"An HTTP error {e.resp.status} occurred: {e.content}"
         raise HttpError(e.resp, error_message)
 
@@ -947,6 +976,7 @@ async def get_video_comments_view_async(
                 return comments_and_VidInfo
 
     except HttpError as e:
+        logger.error(f"Comments_view, Http Exception: {e}")
         error_message = f"An HTTP error {e.resp.status} occurred: {e.content}"
         return {"error": error_message}, 500
 
@@ -1010,8 +1040,11 @@ def show_comments(
                         title=comments_and_VidInfo["video_metadata"]["title"],
                         link="https://www.youtube.com/watch?v=" + video_id,
                     )
+                    logger.info(f"Item has been added to database by {request.user.username}")
 
-                except Exception:
+
+                except Exception as e:
+                    logger.error(f"Comments view, Exception while saving history: {e}")
                     msg.info(request, "Error occurred, history not updated")
 
         context.update(comments_and_VidInfo)
@@ -1068,7 +1101,8 @@ def get_avatars():
         else:
             return None
         
-    except Exception:
+    except Exception as e:
+        logger.error(f"Ai_page view, get_avatars func Exception: {e}")
         return None
 
 
@@ -1099,18 +1133,22 @@ def get_openai_response(request, login_context, description):
                         title=description,
                         link=fixed_link.replace("%25", "%"),
                     )
+                    logger.info(f"Item has been added to database by {request.user.username}")
 
         except Exception:
+            logger.error(f"Ai page, Exception while saving history: {e}")
             msg.info(request, "Error while saving history")
 
         try:
             download_and_store_image.delay(fixed_link)
-        except Exception:
+        except Exception as e:
+            logger.info(f"Ai_page, Exception while sending task: {e}")
             pass
         
         return fixed_link
 
     except openai.error.RateLimitError:
+        logger.info("OpenAi RateLimitError")
         msg.info("Ai model is currently overloaded, please wait a second")
         return redirect(ai_page)
     
