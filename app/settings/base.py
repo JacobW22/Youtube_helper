@@ -160,6 +160,42 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
+# Logger
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {asctime} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',  # Output to console
+            "formatter": "simple",
+        },
+        'file': {
+            'level': 'DEBUG',  # Adjust as needed
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',  # Path to the log file
+            "formatter": "verbose",
+
+        },
+    },
+    'loggers': {
+        'youtube_helper': {  # The top-level logger
+            'handlers': ['console', 'file'],  # Use both console and file handlers
+            'level': 'INFO',  # Capture messages of all levels
+        },
+    }
+}
+
 # Message broker config
 
 CELERY_BROKER_URL = 'amqp://rabbitmq'
