@@ -2,8 +2,13 @@
   display: none !important;
 }
 
-.downloading_modal {
-  user-select: none;
+.text_for_modal {
+  max-width: 100% !important;
+  word-break: break-word;
+}
+
+.modal-title {
+  max-width: 89%;
 }
 
 .container {
@@ -107,8 +112,11 @@ img,
   font-size: 1.2rem !important;
 }
 
+@media screen and (max-width: 992px) {
+  .top_button {
+    margin-top: 1em;
+  }
 
-@media screen and (max-width: 768px) {
   .streams_data {
     width: 15rem !important;
   }

@@ -40,7 +40,7 @@
   <!-- Main container start -->
   <section class="d-none flex-column my-auto pt-5 px-4 align-items-center justify-content-center main-container">
     <div class="insides">
-        <form method="POST" id="registerForm">
+        <form method="POST" id="main_form">
           {% csrf_token %}
           <div class="limiter d-flex flex-column gap-1">
             <form class="login100-form validate-form">
@@ -57,7 +57,7 @@
                   </span>
               </div>
 
-              <div class="wrap-input100 validate-input mt-3" data-validate = "Valid email is required: ex@abc.xyz">
+              <div class="wrap-input100 validate-input mt-3">
                     {{ form.email|attr:"placeholder:E-mail"|add_class:"input100 email"|attr:"id:emailField"|attr:"required" }}
                   <span class="focus-input100"></span>
                   <span class="symbol-input100">
@@ -83,7 +83,7 @@
 
               
               <div class="container-login100-form-btn">
-                  <button class="login100-form-btn animate"  onclick="sendForm()" type="button">
+                  <button class="login100-form-btn animate"  onclick="sendFormWithClick()" type="button">
                     <i class="fa-solid fa-greater-than"></i>
                     Sign up
                   </button>
@@ -97,7 +97,7 @@
   <!-- Main container end -->
 
 
-  <div class="d-block mt-5 mb-3 footer">
+  <div class="d-block mb-3 footer">
     <div class="text-center mt-5 mb-3">
       <a class="fs-6" href="{% url 'login_page' %}">
           Already have an account? Log in 
@@ -113,7 +113,7 @@
 
 
 <!-- Toasts container start-->
-<div class="toast-container bottom-0 start-50 translate-middle-x mb-5 ">
+<div class="toast-container bottom-0 start-50 translate-middle-x">
   {% for field,errors in form.errors.items %}
       {% for error in errors %}
         <div class="toast text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
@@ -142,11 +142,9 @@ $(document).ready(function(){
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  var form = document.getElementById("registerForm"); // Replace with your actual form ID
+  var form = document.getElementById("main_form"); // Replace with your actual form ID
   form.addEventListener("submit", sendForm);
 });
-
-
 
 function sendForm(event) {
   event.preventDefault();
@@ -156,6 +154,17 @@ function sendForm(event) {
 
   emailField.value = emailField.value.toLowerCase();
   form.submit();
+}
+
+
+function sendFormWithClick() {
+  event.preventDefault();
+
+  var emailField = document.getElementById("emailField");
+  var submit = document.getElementById("submitBtn"); 
+
+  emailField.value = emailField.value.toLowerCase();
+  submit.click();
 }
 
 

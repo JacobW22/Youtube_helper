@@ -7,6 +7,12 @@
   scroll-snap-align: center !important;
 }
 
+.first-container,
+.second-container {
+  height: 100%;
+  min-height: 500px!important;
+}
+
 .form-control {
   margin-top: 10px;
 }
@@ -44,6 +50,11 @@ button {
 }
 
 .slider_image {
+  z-index: 0!important;
+  -moz-border-radius: 25px !important; /* FF1+ */
+  -webkit-border-radius: 25px !important; /* Saf3-4, iOS 1+, Android 1.5+ */
+  border-radius: 25px !important; /* Opera 10.5, IE9, Saf5, Chrome, FF4 */
+  overflow:hidden;
   height: 100% !important;
   width: 100% !important;
   object-fit: fill !important;
@@ -61,6 +72,7 @@ button {
 }
 
 .carousel {
+  z-index: 5 !important;
   border-radius: 25px !important;
   overflow: hidden !important;
   margin-bottom: 5rem !important;
@@ -72,6 +84,7 @@ button {
 }
 
 .carousel_caption {
+  z-index: 5 !important;
   color: darkgrey;
 }
 
@@ -81,6 +94,9 @@ button {
 
 .carousel-inner,
 .carousel-inner .carousel-item {
+  border: 0.1em solid transparent;
+  overflow: hidden !important;
+  border-radius: 25px !important;
   height: 100% !important;
   width: 100% !important;
 }
@@ -90,12 +106,6 @@ button {
   border-radius: 15px !important;
   border: 2px solid white;
   max-width: 90%;
-}
-
-.first-container, 
-.second-container {
-  height: calc(100vh - 90px);
-  min-height: 600px;
 }
 
 #main_form {
@@ -152,12 +162,6 @@ button {
   }
   100% {
     transform: rotate(0deg) translateY(0%);
-  }
-}
-
-@media screen and (min-width: 1400px) {
-  .first-container {
-    height: calc(100vh - 106px);
   }
 }
 

@@ -1,7 +1,11 @@
 from django.shortcuts import redirect
 from django.contrib import messages as msg
 from .models import Ticket
+
 import datetime
+import logging
+
+logger = logging.getLogger('youtube_helper')
 
 
 def login_check(view_func):
@@ -61,6 +65,8 @@ def rate_limit(view_func):
 
             user_ticket.remaining_tickets -= 1
             user_ticket.save()
+            logger.info(f"User {request.user.username} used Ticket")
+
 
         return view_func(request, *args, **kwargs)
     

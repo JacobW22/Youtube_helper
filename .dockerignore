@@ -3,3 +3,4 @@ app/static
 __pycache__/
 .git
 .gitignore
+debug.log
