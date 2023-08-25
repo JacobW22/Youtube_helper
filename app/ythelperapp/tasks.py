@@ -18,10 +18,12 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 @app.task
 def download_and_store_image(url):
     try:
-        s3 = boto3.client('s3',    
+        s3 = boto3.client(
+            's3',    
             aws_access_key_id=settings.AWS_ACCESS_KEY_ID, 
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
         )
+        
         bucket_name = settings.AWS_STORAGE_BUCKET_NAME
 
 

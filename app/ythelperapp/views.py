@@ -80,7 +80,7 @@ class RetrieveDownloadHistory(viewsets.ModelViewSet):
 
     
     def get_queryset(self):
-     return download_history_item.objects.filter(user=self.request.user) 
+        return download_history_item.objects.filter(user=self.request.user) 
     
 
     
@@ -90,7 +90,7 @@ class RetrievePromptsHistory(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-     return prompts_history_item.objects.filter(user=self.request.user)
+        return prompts_history_item.objects.filter(user=self.request.user)
 
 
 
@@ -100,7 +100,7 @@ class RetrieveFilteredCommentsHistory(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-     return filtered_comments_history_item.objects.filter(user=self.request.user)
+        return filtered_comments_history_item.objects.filter(user=self.request.user)
 
 
 
@@ -110,7 +110,7 @@ class RetrieveTransferredPlaylistsHistory(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-     return transferred_playlists_history_item.objects.filter(user=self.request.user)
+        return transferred_playlists_history_item.objects.filter(user=self.request.user)
     
 
 
@@ -291,7 +291,7 @@ def ai_page(request, login_context, image_url="", image_description=""):
 
     else:
         # If no image provided check user's remaining Tickets   
-        if login_context['logged'] == True:
+        if login_context['logged']:
             try:
                 remaining_tickets = Ticket.objects.get(user=User.objects.get(username=login_context['username'])).remaining_tickets
             except ObjectDoesNotExist:
@@ -894,7 +894,7 @@ async def get_video_comments_view_async(
 ):
     if not video_id:
         msg.info(request, "Cannot retrieve video id")
-        return redirect(comments)
+        return redirect('comments')
 
     try:
         # Check whether to run request for video metadata
@@ -1034,8 +1034,9 @@ def show_comments(
 
 def get_avatars():
     try:
-        s3 = boto3.client('s3', 
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        s3 = boto3.client(
+            's3', 
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
             region_name=settings.AWS_S3_REGION_NAME,
             config=Config(signature_version='s3v4')
