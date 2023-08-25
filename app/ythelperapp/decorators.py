@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 from django.contrib import messages as msg
+from django.utils import timezone
 from .models import Ticket
 
 import datetime
@@ -54,7 +55,7 @@ def rate_limit(view_func):
 
             if current_time > reset_time:
                 user_ticket.remaining_tickets = 3
-                current_time = datetime.datetime.now(datetime.timezone.utc)
+                current_time = timezone.now().astimezone()
                 user_ticket.last_reset_time = current_time.replace(hour=0, minute=0, second=0, microsecond=0)
                 user_ticket.save()
 

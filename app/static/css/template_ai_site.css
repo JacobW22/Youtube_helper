@@ -139,6 +139,9 @@ img {
   box-shadow: 0px 0px 10px 2px red;
 }
 
+#countdown {
+  font-size: 0.8rem;
+}
 @keyframes borderAnimation {
   100%,
   0% {

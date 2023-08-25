@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-import datetime
-
 User._meta.get_field('email')._unique = True
     
 
@@ -87,7 +85,7 @@ class transferred_playlists_history_item(models.Model):
 class Ticket(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     remaining_tickets = models.PositiveIntegerField(default=3)
-    last_reset_time = models.DateTimeField(default=datetime.datetime.now(datetime.timezone.utc).replace(hour=0,minute=0,second=0,microsecond=0))
+    last_reset_time = models.DateTimeField(default=timezone.now().astimezone().replace(hour=0, minute=0, second=0, microsecond=0))
 
     class Meta:
         verbose_name = "User's Tickets"
