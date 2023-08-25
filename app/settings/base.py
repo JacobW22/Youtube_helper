@@ -16,7 +16,7 @@ import environ
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Take environment variables from .env file
+# Retrieve environment variables 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '..', '.env'))
 
@@ -26,7 +26,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party apps
+    
     'storages',
     'widget_tweaks',
     'rest_framework',
@@ -56,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'ythelperapp.middleware.TimezoneMiddleware'
+    'ythelperapp.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'youtube_helper.urls'
@@ -115,7 +116,7 @@ REST_FRAMEWORK = {
     ),
 
 
-    'PAGE_SIZE': 50
+    'PAGE_SIZE': 50,
 }
 
 SWAGGER_SETTINGS = {
@@ -154,9 +155,46 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend', # Default backend allows to log in via username
     'ythelperapp.authentication.EmailAuthBackend' # Custom backend allows to log in via email
 ]
-
     
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# Logger
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {asctime} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',  # Output to console
+            "formatter": "simple",
+        },
+        'file': {
+            'level': 'DEBUG',  # Adjust as needed
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',  # Path to the log file
+            "formatter": "verbose",
+
+        },
+    },
+    'loggers': {
+        'youtube_helper': {  # The top-level logger
+            'handlers': ['console', 'file'],  # Use both console and file handlers
+            'level': 'INFO',  # Capture messages of all levels
+        },
+    }
+}
 
 # Message broker config
 
@@ -177,4 +215,3 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'

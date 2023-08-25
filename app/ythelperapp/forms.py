@@ -10,6 +10,10 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ('username','email','password1', 'password2')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'autofocus': False})
+
 
 class LoginUserForm(forms.Form):
     email = forms.EmailField(max_length = 254)
@@ -113,8 +117,10 @@ class StartTaskForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+
         # Call the custom cleaning method for 'url' field
         video_id = self.clean_youtube_url()
+        
         # Update the cleaned data with the extracted video ID
         cleaned_data['url'] = video_id
         return cleaned_data
