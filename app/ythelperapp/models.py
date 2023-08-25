@@ -24,7 +24,7 @@ class download_history_item(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False)
     title = models.CharField(max_length=255)
     link = models.CharField(max_length=255)
-    saved_on =  models.DateTimeField(default=timezone.now)
+    saved_on = models.DateTimeField(default=timezone.now)
     thumbnail_url = models.CharField(max_length=255)
 
     class Meta:
@@ -40,7 +40,7 @@ class prompts_history_item(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False)
     title = models.CharField(max_length=255)
     link = models.CharField(max_length=255)
-    saved_on =  models.DateTimeField(default=timezone.now)
+    saved_on = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['-id']

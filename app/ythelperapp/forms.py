@@ -117,8 +117,10 @@ class StartTaskForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+
         # Call the custom cleaning method for 'url' field
         video_id = self.clean_youtube_url()
+        
         # Update the cleaned data with the extracted video ID
         cleaned_data['url'] = video_id
         return cleaned_data
