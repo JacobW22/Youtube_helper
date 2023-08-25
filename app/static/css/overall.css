@@ -9,9 +9,7 @@ html {
   width: 100%;
   height: 100%;
   margin: 0;
-  /* background: linear-gradient(black, red, white); */
   background: #000;
-  /* background-size: 800% 800%; */
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -136,6 +134,8 @@ a,
 
 .navbar {
   user-select: none !important;
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  border-radius: 25px !important;
 }
 
 .navbar > .container-fluid {
@@ -188,8 +188,7 @@ a,
   padding: 0 !important;
 }
 
-.dropdown-menu,
-.comments_navbar {
+.dropdown-menu {
   background: transparent !important;
   border: none !important;
   border-radius: 15px !important;
@@ -391,11 +390,6 @@ body::-webkit-scrollbar {
 }
 
 @media screen and (min-width: 1400px) and (max-width: 2270px) {
-  .comments_navbar {
-    width: 80rem;
-    max-width: 85%;
-  }
-
   #main-title {
     font-size: 2.5rem !important;
   }
@@ -488,12 +482,13 @@ body::-webkit-scrollbar {
     position: absolute;
     right: 0;
     max-height: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
     overflow: auto !important;
   }
 
   .navbar-collapse {
     width: 100vw!important;
-    background: black !important;
   }
 
   .navbar-nav {

@@ -1,13 +1,18 @@
+# Django dependencies
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
+# Api
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+# App Views module
 from ythelperapp import views 
 
+
+# Swagger schema 
 schema_view = get_schema_view(
     openapi.Info(
         title="Youtube Helper Api",
@@ -19,9 +24,10 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
-urlpatterns = [
 
-    # Site
+urlpatterns = [
+    
+    # App url's
 
     path('admin/', admin.site.urls),
     path('', views.main_page, name='main_page'),
@@ -33,7 +39,7 @@ urlpatterns = [
     path('comments/', views.comments, name='comments'),
     
     path('ai_generator/', views.ai_page, name='ai_page'),
-    path('ai_generator/<path:parameter>/<str:parameter_title>', views.ai_page, name='ai_page'),
+    path('ai_generator/<path:image_url>/<str:image_description>', views.ai_page, name='ai_page'),
     
     path('login/', views.login_page, name='login_page'),
     path('sign_up/', views.sign_up_page, name='sign_up_page'),
@@ -45,14 +51,12 @@ urlpatterns = [
 
     path('login/reset/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_confirm.html"), name='password_reset_confirm'),
     
-    path('download/<path:parameter>', views.download_page, name='download_page'),
-    path('download/<path:parameter><str:parameter_name>', views.download_page, name='download_page'),
+    path('download/<path:video_url>', views.download_page, name='download_page'),
 
     path('youtube_to_spotify/', views.youtube_to_spotify, name="youtube_to_spotify"),
     path('youtube_to_spotify/done/<path:account_url>', views.youtube_to_spotify_done, name="youtube_to_spotify_done"),
-
-
-    # Api
+    
+    # Api url's
 
     path('api/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/download_history/', views.RetrieveDownloadHistory.as_view({'get': 'list'})),

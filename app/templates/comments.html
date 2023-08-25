@@ -57,23 +57,24 @@
                 </button>
               <div class="collapse navbar-collapse" id="navbarCommentsSupportedContent">
                 <ul class="navbar-nav comments_navbar_ul gap-3 mb-sm-0">
-                
-                  <form method="POST" class="hidden_form" id="hidden_form">
-                    {% csrf_token %}
-                    <input class="d-none" type="hidden" name="order" value="{{ order }}" id="orderInput">
-                    <input class="d-none" type="hidden" name="maxResults" value={{ maxResults }} id="maxResultsInput">
-                    <input class="d-none" type="hidden" name="previousPageID" value={{ pageID }} id="previousPageIdInput">
-                    <input class="d-none" type="hidden" name="pageID" value={{ pageID }} id="pageIdInput">
-                    <input class="d-none" type="hidden" name="video_id" value="{{ video_id }}" id="video_idInput">
-                  
+                  <div class="d-flex col-xxl-6 justify-content-center">
+                    <form method="POST" class="hidden_form" id="hidden_form">
+                      {% csrf_token %}
+                      <input class="d-none" type="hidden" name="order" value="{{ order }}" id="orderInput">
+                      <input class="d-none" type="hidden" name="maxResults" value={{ maxResults }} id="maxResultsInput">
+                      <input class="d-none" type="hidden" name="previousPageID" value={{ pageID }} id="previousPageIdInput">
+                      <input class="d-none" type="hidden" name="pageID" value={{ pageID }} id="pageIdInput">
+                      <input class="d-none" type="hidden" name="video_id" value="{{ video_id }}" id="video_idInput">
+                    
 
 
-                    <li class="nav-item">
-                      <input class="form-control mx-auto text-light p-1 mt-1 px-2" type="search" name="searchInput" id="search_phrase" value="{{ searchInput }}" title="Press Enter" placeholder="Search &#128269;&#xFE0E;" aria-label="Search">
-                    </li>
+                      <li class="nav-item">
+                        <input class="form-control mx-auto text-light p-1 mt-3 mt-lg-1 px-2" type="search" name="searchInput" id="search_phrase" value="{{ searchInput }}" title="Press Enter" placeholder="Search &#128269;&#xFE0E;" aria-label="Search">
+                      </li>
 
-                  </form>
-
+                    </form>
+                  </div>
+                  <div class="d-flex flex-column flex-xxl-row col-xxl-6 gap-4 justify-content-center">
                     <li class="nav-item nav_select d-flex justify-content-center gap-2">
                       <span class="text-light fs-5 my-auto me-0"> Results per page:</span>
 
@@ -108,7 +109,7 @@
                     <li class="nav-item d-flex">
                       <span class="my-auto fs-5 mx-auto text-light">Sorting now by: &nbsp; <span class="order">{{ order }}</span></span>
                     </li>
-
+                  </dvi>
                 </ul>
               </div>
             </div>
@@ -251,29 +252,28 @@
         <span class="mx-auto text-light mt-3 mb-2">Displayed comments: &nbsp;{{ count }}</span>
 
           <footer class="d-flex flex-grow-0 page_navigation mx-auto mb-4">
-            <ul class="pagination justify-content-center" >
+            <ul class="d-flex gap-3 pagination justify-content-center" >
 
               {% if last_page and pageID == 1 %}
 
-              <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+              <li class="page-item active"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
 
               {% elif last_page %}
 
-              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">...{{ pageID|add:-1 }}</a></li>
-              <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">{{ pageID|add:-1 }}</a></li>
+              <li class="page-item active"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
               
               {% elif pageID > 1 %}
 
-
-              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">... {{ pageID|add:-1 }}</a></li>
-              <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }} ...</a></li>
+              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:-1 }}')">{{ pageID|add:-1 }}</a></li>
+              <li class="page-item active"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}</a></li>
 
       
               {% else %}
 
-              <li class="page-item"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
-              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}...</a></li>
+              <li class="page-item active"><a class="page-link active_page" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID }}')">{{ pageID }}</a></li>
+              <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="changePageWithValue('{{ pageID|add:1 }}')">{{ pageID|add:1 }}</a></li>
             
               {% endif %}
 
@@ -376,12 +376,12 @@
       var value = navbar.find(".navbar-toggler").attr('aria-expanded');
   
       if (value == 'true') {
-        navbar.addClass("comments_navbar_absolute black");
+        navbar.addClass("comments_navbar_absolute");
       }
 
       else {
         navbar.find(".navbar-collapse").on('hidden.bs.collapse', function() {
-          navbar.removeClass("comments_navbar_absolute black");
+          navbar.removeClass("comments_navbar_absolute");
         });
       }
     });

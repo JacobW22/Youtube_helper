@@ -16,7 +16,7 @@ import environ
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Take environment variables from .env file
+# Retrieve environment variables 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '..', '.env'))
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party apps
+    
     'storages',
     'widget_tweaks',
     'rest_framework',
@@ -56,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'ythelperapp.middleware.TimezoneMiddleware'
+    'ythelperapp.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'youtube_helper.urls'
@@ -115,7 +116,7 @@ REST_FRAMEWORK = {
     ),
 
 
-    'PAGE_SIZE': 50
+    'PAGE_SIZE': 50,
 }
 
 SWAGGER_SETTINGS = {
@@ -154,9 +155,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend', # Default backend allows to log in via username
     'ythelperapp.authentication.EmailAuthBackend' # Custom backend allows to log in via email
 ]
-
     
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # Message broker config
 
@@ -177,4 +179,3 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'

@@ -1,19 +1,24 @@
+# Django dependencies
 from django.shortcuts import render, redirect
 from django.contrib import messages as msg
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
+# Api
 from rest_framework import viewsets
-from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from .serializers import download_history_Serializer, prompts_history_Serializer, filtered_comments_history_Serializer, transferred_playlists_history_Serializer
+
+# App packages
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
 from .decorators import login_check, login_required, not_authenticated_only, rate_limit, RedirectException
 from .models import user_data_storage, download_history_item, prompts_history_item, filtered_comments_history_item, transferred_playlists_history_item, User, Ticket
 from .tasks import TransferPlaylist, download_and_store_image
+from settings.base import BASE_DIR
 
+# Python dependencies
 import os
 import re
 import openai
@@ -22,10 +27,11 @@ import isodate
 import spotipy
 import boto3
 import random
+import environ
+
 
 from pytube import YouTube
 from datetime import datetime as dt
-from dotenv import load_dotenv, find_dotenv
 from urllib.parse import quote
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -33,21 +39,23 @@ from dateutil.parser import isoparse
 from spotipy.oauth2 import SpotifyOAuth
 from botocore.config import Config
 
-# Hide it from Github
-load_dotenv(find_dotenv())
+# Retrieve environment variables 
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '..', '.env'))
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+OPENAI_API_KEY = env("OPENAI_API_KEY")
+GOOGLE_API_KEY = env("GOOGLE_API_KEY")
+CLIENT_ID = env("SPOTIFY_CLIENT_ID")
+CLIENT_SECRET = env("SPOTIFY_CLIENT_SECRET")
+REDIRECT_URI = env("SPOTIFY_REDIRECT_URI")
 
-CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
-CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
-REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
-
-# The required scopes for playlist creation
+# The required scope for Spotify playlist creation
 SCOPE = "playlist-modify-private playlist-modify-public"
 
+# Youtube Api object
 youtube = build("youtube", "v3", developerKey=GOOGLE_API_KEY)
 
+# Navbar menu info
 sites_context = {
     "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
     "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT Comments Filtering",
@@ -56,6 +64,15 @@ sites_context = {
 }
 
 
+
+
+"""
+
+
+Api Views
+   ↓
+
+"""
 
 class RetrieveDownloadHistory(viewsets.ModelViewSet):
     serializer_class = download_history_Serializer
@@ -96,31 +113,46 @@ class RetrieveTransferredPlaylistsHistory(viewsets.ModelViewSet):
      return transferred_playlists_history_item.objects.filter(user=self.request.user)
     
 
-import random
+
+
+"""
+
+
+Function Views
+      ↓
+      
+"""
+
 @login_check
 def main_page(request, login_context):
     context = {}
 
+    # Use download history for slides on the main page
     if "username" in login_context:
-        # Use download history for slides on the main page
         unique_videos = list(download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('title').distinct('title'))
         random.shuffle(unique_videos)
         
         context.update({"number_of_links": range(0, len(unique_videos[:10]))})
         context.update({"unique_videos": unique_videos[:10]})
 
-    context.update(login_context)
-    context.update({"sites_context": sites_context})
 
     if request.method == "POST":
-        link = request.POST.get("sended_link")
+        video_url = request.POST.get("sended_link")
+
         try:
-            link = link.split("&", 1)[0]
-            yt = YouTube(link)
+            if "youtu.be" in video_url:
+                video_url = video_url.split("youtu.be/", 1)[1]
+                video_id = video_url.split("?", 1)[0]
+                video_url = f'https://www.youtube.com/watch?v={video_id}'
+
+            else:
+                video_url = video_url.split("&", 1)[0]
+            yt = YouTube(video_url)
 
         except Exception:
             msg.info(request, "Invalid url")
             return redirect(main_page)
+
 
         # Store data in user history
         if "username" in login_context:
@@ -133,15 +165,18 @@ def main_page(request, login_context):
                     download_history_item.objects.create(
                         user=User.objects.get(username=login_context["username"]), 
                         title=yt.title,
-                        link=link,
+                        link=video_url,
                         thumbnail_url=yt.thumbnail_url
                     )
 
-                except Exception as e:
-                    msg.info(request, e)
+                except Exception:
+                    msg.info(request, "Error while saving history")
 
-        return redirect("download_page", parameter=link)
+        return redirect("download_page", video_url=video_url)
+    
 
+    context.update(login_context)
+    context.update({"sites_context": sites_context})
     return render(request, "main_page.html", context)
 
 
@@ -157,6 +192,7 @@ def login_page(request, login_context):
             email = request.POST.get("email").lower()
             password = request.POST.get("password")
 
+            # Custom authorization backend
             user = authenticate(email=email, password=password)
 
             if user:
@@ -188,15 +224,16 @@ def sign_up_page(request, login_context):
 
     if request.method == "POST":
         form = CreateUserForm(request.POST)
+
         if form.is_valid():
-            user = form.cleaned_data.get("username")
+            username = form.cleaned_data.get("username")
             form.save()
 
             user_data_storage.objects.create(
-                user=User.objects.get(username=user)
+                user=User.objects.get(username=username)
             )
 
-            msg.success(request, "Welcome on board " + "<b>" + user + "</b>")
+            msg.success(request, "Welcome on board " + "<b>" + username + "</b>")
             return redirect(login_page)
 
     context = {"form": form}
@@ -209,11 +246,12 @@ def sign_up_page(request, login_context):
 
 # Backoff for sending request again ( sometimes titles can't be found by pytube )
 @login_check
-def download_page(request, login_context, parameter):
+def download_page(request, login_context, video_url):
     context = {}
 
-    try:
-        context = run_async(parameter)
+    try:    
+        # Extract video metadata and download links
+        context = run_async(video_url)
     except Exception:
         msg.info(request, "Something went wrong, please try again")
         return redirect(main_page)
@@ -224,33 +262,35 @@ def download_page(request, login_context, parameter):
 
     return render(request, "download_page.html", context)
 
+
 @login_required
 @login_check
-def ai_page(request, login_context, parameter="", parameter_title=""):
+def ai_page(request, login_context, image_url="", image_description=""):
     if request.method == "POST":
         description = request.POST.get("description")
 
         try:
-            fixed_link = get_openai_response(request, login_context, description)
+            safe_link = get_openai_response(request, login_context, description)
         except RedirectException as e:
             return redirect(e.url)
         
-        return redirect(ai_page, parameter=fixed_link, parameter_title=description)
+        return redirect(ai_page, image_url=safe_link, image_description=description)
 
     context = {}
     context.update(login_context)
     context.update({"sites_context": sites_context})
 
 
-    if parameter != "":
+    if image_url != "":
         context.update(
             {
-                "image_link": parameter.replace("%25", "%"),
-                "image_title": parameter_title,
+                "image_link": image_url.replace("%25", "%"),
+                "image_title": image_description,
             }
         )
 
-    else:   
+    else:
+        # If no image provided check user's remaining Tickets   
         if login_context['logged'] == True:
             try:
                 remaining_tickets = Ticket.objects.get(user=User.objects.get(username=login_context['username'])).remaining_tickets
@@ -277,7 +317,7 @@ def comments(request, login_context):
                     video_id = request.POST.get("video_id")
                     searchInput = request.POST.get("searchInput")
                     
-
+                    # Clear page Tokens on first page
                     if int(pageID) == 1 and int(previousPageID) == 1:
                         if len(request.session['pageTokens']) > 1:
                             request.session['pageTokens'].clear()
@@ -296,18 +336,24 @@ def comments(request, login_context):
                     )
                     return render(request, "comments.html", context)
 
-                except Exception:
+                except Exception as e:
                     request.session['pageTokens'].clear()
-                    msg.info(request, "Something went wrong, please try again")
+                    # msg.info(request, "Something went wrong, please try again")
+                    msg.info(request, e)
                     return redirect(comments)
 
             case _:
+                # If the url has been passed on
                 try:
                     video_url = request.POST.get("video_url")
 
                     try:
-                        video_url = video_url.split("&", 1)[0]
-                        video_id = video_url.split("=", 1)[1]
+                        if "youtu.be" in video_url:
+                            video_url = video_url.split("youtu.be/", 1)[1]
+                            video_id = video_url.split("?", 1)[0]
+                        else:
+                            video_url = video_url.split("&", 1)[0]
+                            video_id = video_url.split("=", 1)[1]
 
                     except Exception:
                         msg.info(request, "Invalid url")
@@ -338,11 +384,10 @@ def comments(request, login_context):
                     )
                     return render(request, "comments.html", context)
 
-                except Exception as e:
+                except Exception:
                     msg.info(request, "Video cannot be found")
                     return redirect(comments)
 
-    # On first load
     context = {}
     context.update(login_context)
     context.update({"sites_context": sites_context})
@@ -359,6 +404,8 @@ def youtube_to_spotify(request, login_context):
         context.update({"not_auth": True})
 
     if request.method == "POST":
+
+        # Create Spotify authorization object
         sp_oauth = SpotifyOAuth(
             client_id=CLIENT_ID,
             client_secret=CLIENT_SECRET,
@@ -379,7 +426,7 @@ def youtube_to_spotify(request, login_context):
                 url = url.split("list=", 1)[1]
                 playlist_id = url.split("&", 1)[0]
 
-                # Store data in user history
+                # Store data in user history 
                 if "username" in login_context:
                     storage = user_data_storage.objects.get(
                         user=User.objects.get(username=login_context["username"])
@@ -516,7 +563,13 @@ def manage_account_Private(request, login_context):
 
 
 
-# Non-views functions
+"""
+
+
+Non-view Functions
+        ↓
+      
+"""
 
 def run_async(url):
     # Create a new event loop
@@ -557,6 +610,7 @@ async def get_streams_data(url):
         "2160p",
         "4320p",
     ]
+
     filtered_streams = await asyncio.get_event_loop().run_in_executor(
         None, lambda: yt.streams.filter(resolution=resolutions, only_video=False)
     )
@@ -605,14 +659,13 @@ async def get_video_metadata(url):
     video_id = url.split("=", 1)[1]
 
     try:
-        # Call the API to retrieve the video details
+        # Call youtube Api to retrieve video details
         yt_request = youtube2.videos().list(
             part="snippet,statistics,contentDetails", id=video_id
         )
 
         response = await asyncio.to_thread(yt_request.execute)
 
-        # Extract the snippet and statistics from the response
         video = response["items"][0]
         snippet = video["snippet"]
         statistics = video["statistics"]
@@ -631,8 +684,7 @@ async def get_video_metadata(url):
         length = content_details["duration"]
 
 
-    except HttpError as e:
-        print(f"An HTTP error occurred: {e}")
+    except HttpError:
         title = "Could not find or video was deleted by YouTube"
         length = "couldn't find"
         views = "couldn't find"
@@ -667,33 +719,45 @@ async def get_video_comments(
     quotaUser
 ):
     try:
-        # Retrieve the comments for the specified video
-        yt_request = youtube.commentThreads().list(
-            part="snippet",
-            videoId=video_id,
-            textFormat="html",
-            order=order,
-            maxResults=maxResults,
-            pageToken=request.session['pageTokens'][-1],
-            quotaUser=quotaUser,
-        )
-
-        # Process the comments
-        processed_comments = []
-
+        # Check if the page is previous, the same or next
         match (int(pageID) - int(previousPageID)):
             case 1:
-                response = await asyncio.to_thread(yt_request.execute)
-
-                if "nextPageToken" in response:
-                    request.session['pageTokens'].append(response["nextPageToken"])
-                    yt_request = youtube.commentThreads().list_next(yt_request, response)
-
+                # Retrieve the comments for the specified video
+                yt_request = youtube.commentThreads().list(
+                    part="snippet",
+                    videoId=video_id,
+                    textFormat="html",
+                    order=order,
+                    maxResults=maxResults,
+                    pageToken=request.session['pageTokens'][-1],
+                    quotaUser=quotaUser,
+                )
+                        
             case 0:
-                pass
+                if len(request.session['pageTokens']) > 1 and int(pageID) != int(previousPageID):
+                    request.session['pageTokens'].pop()
+                    request.session.modified = True
+
+                # Retrieve the comments for the specified video
+                yt_request = youtube.commentThreads().list(
+                    part="snippet",
+                    videoId=video_id,
+                    textFormat="html",
+                    order=order,
+                    maxResults=maxResults,
+                    pageToken=request.session['pageTokens'][-1],
+                    quotaUser=quotaUser,
+                )
 
             case -1:
-                request.session['pageTokens'].pop()
+                if len(request.session['pageTokens']) > 2:	
+                    request.session['pageTokens'] = request.session['pageTokens'][:-2]
+                    request.session.modified = True
+                else:
+                    request.session['pageTokens'].pop()
+                    request.session.modified = True
+
+                # Retrieve the comments for the specified video
                 yt_request = youtube.commentThreads().list(
                     part="snippet",
                     videoId=video_id,
@@ -705,10 +769,21 @@ async def get_video_comments(
                 )
 
         response = await asyncio.to_thread(yt_request.execute)
+        
+        if "nextPageToken" in response:
+            request.session['pageTokens'].append(response["nextPageToken"])
+            request.session.modified = True
 
+
+        # Process the comments
+        processed_comments = []
+
+        # Check if the page is the last one
         if "nextPageToken" not in response:
+            print("sss")
             processed_comments.append("last_page")
 
+        # Process the user search phrase
         if searchInput != "":
             if "items" in response:
                 filtered_comments = [
@@ -722,27 +797,25 @@ async def get_video_comments(
                 ]
 
                 for comment in filtered_comments:
-                    snippet = comment["snippet"]["topLevelComment"]["snippet"][
-                        "textDisplay"
-                    ]
+                    # Html mark around phrase
                     highlighted_comment = re.sub(
                         r"(?![^<>]*>)(" + re.escape(searchInput) + r")",
                         r"<mark>\1</mark>",
-                        snippet,
+                        comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"],
                         flags=re.IGNORECASE,
                     )
-                    comment["snippet"]["topLevelComment"]["snippet"][
-                        "textDisplay"
-                    ] = highlighted_comment
+
+                    comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"] = highlighted_comment
 
                 for comment in filtered_comments:
-                    # Extract the comment snippet
                     snippet = comment["snippet"]["topLevelComment"]["snippet"]
 
+                    # Retrieve comment info
                     author = snippet["authorDisplayName"]
                     channel_url = snippet["authorChannelUrl"]
                     text = snippet["textDisplay"]
                     likes = f"{snippet['likeCount']:,}"
+                    replies = f"{comment['snippet']['totalReplyCount']:,}"
                     profile_image_url = snippet["authorProfileImageUrl"]
                     publish_date = isoparse(snippet["publishedAt"]).strftime(
                         "%Y-%m-%d %H:%M:%S"
@@ -755,6 +828,7 @@ async def get_video_comments(
                             "channel_url": channel_url,
                             "text": text,
                             "likes": likes,
+                            "replies": replies,
                             "profile_image_url": profile_image_url,
                             "publish_date": publish_date,
                         }
@@ -762,8 +836,9 @@ async def get_video_comments(
         else:
             if "items" in response:
                 for comment in response["items"]:
-                    # Extract the comment snippet
                     snippet = comment["snippet"]["topLevelComment"]["snippet"]
+
+                    # Retrieve comment info
                     author = snippet["authorDisplayName"]
                     channel_url = snippet["authorChannelUrl"]
                     text = snippet["textDisplay"]
@@ -787,6 +862,7 @@ async def get_video_comments(
                         }
                     )
 
+        # Check if comment is pinned by the author
         if order == "time" and processed_comments:
             try:
                 date_format = "%Y-%m-%d %H:%M:%S"
@@ -817,9 +893,11 @@ async def get_video_comments_view_async(
     isFirstTime,
 ):
     if not video_id:
-        return {"error": "No video_id parameter provided"}, 400
+        msg.info(request, "Cannot retrieve video id")
+        return redirect(comments)
 
     try:
+        # Check whether to run request for video metadata
         match isFirstTime:
             case True:
                 video_url = "https://www.youtube.com/watch?v=" + video_id
@@ -859,6 +937,7 @@ async def get_video_comments_view_async(
                     searchInput,
                     quotaUser,
                 )
+
                 comments_and_VidInfo = {
                     "comments": comments,
                     "video_metadata": request.session['video_metadata_temp'],
@@ -885,7 +964,7 @@ def show_comments(
 ):
     context = {}
 
-    if video_id is not None:
+    if video_id:
         context = {
             "order": order,
             "maxResults": maxResults,
@@ -894,30 +973,12 @@ def show_comments(
             "searchInput": searchInput,
         }
 
-        if login_context.get("logged"):
-            quotaUser = login_context.get("username")
+        if login_context["logged"]:
+            quotaUser = login_context["username"]
         else:
             quotaUser = None
 
-        # E.g. previousPage = 1 and Page = 2, so if refreshed next api request won't be sent
-        match str(request.session['previous_request_pageID']) == str(pageID):
-            case True:
-                stopRequest = True
-            case False:
-                request.session['previous_request_pageID'] = pageID
-                stopRequest = False
-
-
-        match str(request.session['previous_request_previousPageID']) == str(previousPageID):
-            case True:
-                stopRequest2 = True
-            case False:
-                request.session['previous_request_previousPageID'] = previousPageID
-                stopRequest2 = False
-
-
-        if stopRequest and stopRequest2:
-            previousPageID = pageID
+ 
 
         # Create a new event loop
         loop = asyncio.new_event_loop()
@@ -1008,7 +1069,6 @@ def get_avatars():
         
     except Exception:
         return None
-
 
 
 @rate_limit

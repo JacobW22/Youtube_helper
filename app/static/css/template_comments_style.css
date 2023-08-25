@@ -54,11 +54,6 @@
   text-align: center !important;
 }
 
-.black {
-  background-color: rgba(0, 0, 0, 0.9) !important;
-  border-radius: 25px !important;
-}
-
 .selection-menu .d-flex .dropdown-item {
   text-align: center;
   width: 100% !important;
@@ -153,46 +148,43 @@
 }
 
 .page-link {
+  padding-inline: 0.9rem;
+  height: 100%;
+  width: 100% !important;
+  border-radius: 0!important;
   background-color: transparent !important;
   border: none !important;
   color: #fff !important;
 }
 
 .page-link:focus,
-.page-link:hover,
-.page-link:active {
-  color: yellow !important;
+.page-item:hover {
   background-color: transparent !important;
   border-color: transparent !important;
   outline: none !important;
   box-shadow: none !important;
 }
 
-#pagination_first_element {
-  border-radius: 15px 0 0 15px;
+.page-item:hover > .page-link{
+  color: yellow !important;
 }
 
-#pagination_last_element {
-  border-radius: 0 15px 15px 0;
-}
-
-.active_page {
+.page-item {
+  user-select: none;
   color: yellow !important;
   transform-origin: center !important;
-  box-shadow: inset 1em 1em 1em -0.5em red;
-  border-radius: 100% !important;
-  height: 2.1em !important;
+  box-shadow: inset 1em 1em 0.7em -0.5em red ;
+  border-radius: 50% !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.page-item.active {
+  box-shadow: inset 1em 1em 0.9em -0.5em #7cf569;
 }
 
 .page-item .page-link:hover {
   transform: scale(1.5);
   transform-origin: bottom !important;
-}
-
-.page-item {
-  height: 0 !important;
-  margin-bottom: 1.5em !important;
-  transition: transform 0.3s ease-in-out;
 }
 
 .background {
@@ -272,6 +264,14 @@ mark {
   transform-origin: bottom;
 }
 
+.tooltip {
+  padding-left: 2em;
+}
+
+.tooltip-arrow {
+  padding-left: 0.7em;
+}
+
 .tooltip-inner {
   font-size: 1rem;
 }
@@ -292,7 +292,6 @@ mark {
 .comments_navbar:not(.form-control) {
   user-select: none!important;
 }
-
 
 #main_form {
   zoom: 1.1;
@@ -328,8 +327,8 @@ mark {
 }
 
 @media screen and (min-width: 1400px) {
-  .comments_navbar {
-    width: auto !important;
+  .comments_navbar_ul {
+    width: 100%;
     margin-left: auto; 
     margin-right: auto;
   }
@@ -349,7 +348,6 @@ mark {
 }
 
 @media screen and (max-width: 1400px) {
-
   .comments_results {
     height: calc(100% - 25px - 30px) !important;
   }
