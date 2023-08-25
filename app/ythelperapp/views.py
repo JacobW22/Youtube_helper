@@ -264,7 +264,6 @@ def sign_up_page(request, login_context):
     return render(request, "sign_up_page.html", context)
 
 
-# Backoff for sending request again ( sometimes titles can't be found by pytube )
 @login_check
 def download_page(request, login_context, video_url):
     context = {}
@@ -310,7 +309,6 @@ def ai_page(request, login_context, image_url="", image_description=""):
                 "image_title": image_description,
             }
         )
-
     else:
         # If no image provided check user's remaining Tickets   
         if login_context['logged']:
@@ -324,6 +322,7 @@ def ai_page(request, login_context, image_url="", image_description=""):
         users_avatars = get_avatars()  
         context.update({"users_avatars": users_avatars})
         
+
     return render(request, "ai_site.html", context)
 
 
@@ -444,10 +443,12 @@ def youtube_to_spotify(request, login_context):
             return redirect(auth_url)
 
         form = StartTaskForm(request.POST)
+
         if form.is_valid():
             url = request.POST.get("url")
 
-            if "list=RD" not in url: # Block Youtube Mix playlists
+            # Block Youtube Mix playlists
+            if "list=RD" not in url: 
                 url = url.split("list=", 1)[1]
                 playlist_id = url.split("&", 1)[0]
 
@@ -457,12 +458,13 @@ def youtube_to_spotify(request, login_context):
                         user=User.objects.get(username=login_context["username"])
                     )
 
+                    # Retrieve playlist title
                     response_for_title = (
                         youtube.playlists()
                         .list(part="snippet", id=playlist_id, fields="items(snippet(title))")
                         .execute()
                     )
-
+                    
                     if response_for_title["items"][0]["snippet"]["title"]:
                         title = response_for_title["items"][0]["snippet"]["title"]
                     else:
@@ -808,10 +810,9 @@ async def get_video_comments(
 
         # Check if the page is the last one
         if "nextPageToken" not in response:
-            print("sss")
             processed_comments.append("last_page")
 
-        # Process the user search phrase
+        # Process the user's search phrase
         if searchInput != "":
             if "items" in response:
                 filtered_comments = [
@@ -838,7 +839,7 @@ async def get_video_comments(
                 for comment in filtered_comments:
                     snippet = comment["snippet"]["topLevelComment"]["snippet"]
 
-                    # Retrieve comment info
+                    # Retrieve comment data
                     author = snippet["authorDisplayName"]
                     channel_url = snippet["authorChannelUrl"]
                     text = snippet["textDisplay"]
@@ -866,7 +867,7 @@ async def get_video_comments(
                 for comment in response["items"]:
                     snippet = comment["snippet"]["topLevelComment"]["snippet"]
 
-                    # Retrieve comment info
+                    # Retrieve comment data
                     author = snippet["authorDisplayName"]
                     channel_url = snippet["authorChannelUrl"]
                     text = snippet["textDisplay"]
@@ -926,7 +927,7 @@ async def get_video_comments_view_async(
         return redirect('comments')
 
     try:
-        # Check whether to run request for video metadata
+        # Check whether to run new request for video metadata 
         match isFirstTime:
             case True:
                 video_url = "https://www.youtube.com/watch?v=" + video_id
@@ -1111,7 +1112,7 @@ def get_openai_response(request, login_context, description):
     try:
         response_data = openai.Image.create(
             prompt=description
-            + " in visual key of Jojo Bizzare Adventure, epic, anime, hyper realistic, handsome, 1:1",
+            + " in visual key of Jojo Bizzare Adventure, epic, anime style, japanese anime, nice background, hyper realistic, handsome, 1:1",
             n=1,
             size="1024x1024",
         )
@@ -1135,7 +1136,7 @@ def get_openai_response(request, login_context, description):
                     )
                     logger.info(f"Item has been added to database by {request.user.username}")
 
-        except Exception:
+        except Exception as e:
             logger.error(f"Ai page, Exception while saving history: {e}")
             msg.info(request, "Error while saving history")
 

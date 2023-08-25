@@ -38,7 +38,7 @@
 
 
 <!-- Main container start -->
-<div class="d-flex flex-column py-4 px-0 m-0 gap-3">
+<div class="d-flex flex-column py-5 px-0 m-0 gap-3">
   
         <!-- First section start -->
         <section class="d-flex w-100 first-section flex-column mx-auto gap-3 px-0">
@@ -88,13 +88,14 @@
 
                   {% if logged == True %}
                     <span class="fs-6 text-light text-muted text-center">Describe your avatar up here</span>
-                    <span class="fs-5 text-light my-4 text-center">Tickets remaining: 
+                    <span class="fs-5 text-light mt-4 text-center">Tickets remaining: 
                       {% if tickets != 0 %}
                         <span style="color:#7cf569">{{ tickets }}</span>
                       {% else %}
                         <span style="color:#f5696e">{{ tickets }}</span>
                       {% endif %}
                     </span>
+                    <span class=" text-light mt-3 mb-4 text-muted text-center" id="countdown"></span>
                   {% else %}
                     <span class="fs-6 text-light mb-4 text-muted text-center">Describe your avatar up here</span>
                   {% endif %}
@@ -136,7 +137,7 @@
       <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto">
         <!-- Go back section start-->
           <div class="mx-auto mb-3">
-            <button class="text-light highlight_link go_back fs-5 mb-4" href="{% url 'ai_page' %}">
+            <button class="text-light highlight_link go_back fs-5 mb-4" onclick="history.back()">
               <i class="fa-solid fa-arrow-left"></i>&nbsp; Go back
             </button>
           </div>
@@ -180,6 +181,9 @@
 
 <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+  updateCountdown();
+});
 
 $(".downloading_modal").on('shown.bs.modal', function() {
   $('.modal-backdrop').css('opacity', '0.6');
@@ -190,7 +194,26 @@ $('#main_form').submit(function (event) {
   // do your logic
 });
 
+function getTimeUntilMidnight() {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0); // Set to midnight of the next day
 
+  const timeDifference = midnight - now;
+  return timeDifference;
+}
+
+function updateCountdown() {
+  const countdownElement = document.getElementById('countdown');
+  const timeDifference = getTimeUntilMidnight();
+  const seconds = Math.floor(timeDifference / 1000) % 60;
+  const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+  const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+
+  countdownElement.textContent = `New Tickets avalivable: ${hours}h ${minutes}m ${seconds}s`;
+
+  setTimeout(updateCountdown, 1000);
+}
 
 </script>
 </body>
