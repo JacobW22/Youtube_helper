@@ -18,7 +18,9 @@
       <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
       <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
       <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
-  
+      
+      {% block head_imports %} 
+      {% endblock%}
   
       <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
       <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
@@ -30,11 +32,13 @@
     
 {% block navbar %} {% endblock %}
 <!-- Main container start -->
-<div class="d-flex flex-column px-4 main-container">
+<div class="d-flex flex-column align-items-center default_container main-container px-4">
 
   {% block content %}{% endblock %}
 
 </div>  
+
+{% block container_content %}{% endblock %}
 <!-- Main container end -->
 
 

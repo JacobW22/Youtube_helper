@@ -376,7 +376,7 @@ mark {
   
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 1200px) {
   .comments_container {
     margin-top: 5em;
   }

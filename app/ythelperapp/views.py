@@ -134,6 +134,20 @@ Function Views
 """
 
 @login_check
+def landing_page(request, login_context):
+    context = {
+        'vid_downloads_quantity': download_history_item.objects.all().count(),
+        'prompts_quantity': prompts_history_item.objects.all().count(),
+        'filtered_comments_quantity': filtered_comments_history_item.objects.all().count(),
+        'transferred_playlists_quantity': transferred_playlists_history_item.objects.all().count(),
+    }
+
+    context.update(login_context)
+    context.update({"sites_context": sites_context})
+    return render(request, "landing_page.html", context)
+
+
+@login_check
 def main_page(request, login_context):
     context = {}
 

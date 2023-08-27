@@ -165,11 +165,7 @@ button {
   }
 }
 
-@media screen and (max-width: 992px) {
-  .main-container::-webkit-scrollbar {
-    display: none;
-  }
-
+@media screen and (max-width: 1200px) {
   .ratio {
     width: 75%;
   }

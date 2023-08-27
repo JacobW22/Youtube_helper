@@ -49,7 +49,7 @@
     animation: borderAnimationHover 6s infinite linear !important;
 }
 
-.fa-spotify:not(.sp_login .fa-spotify, .dropdown-item .fa-spotify) {
+.fa-spotify:not(.sp_login .fa-spotify, .dropdown-item .fa-spotify, .sites .fa-spotify) {
     zoom: 1.5;
 }
 
