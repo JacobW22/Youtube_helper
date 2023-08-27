@@ -134,8 +134,13 @@ a,
 
 .navbar {
   user-select: none !important;
-  background-color: rgba(0, 0, 0, 0.9) !important;
+  background-color: transparent !important;
   border-radius: 25px !important;
+}
+
+.change_navbar_bg {
+  transition: background-color 0.3s ease; 
+  background-color: rgba(0, 0, 0, 0.9) !important;
 }
 
 .navbar > .container-fluid {
@@ -183,9 +188,13 @@ a,
 }
 
 .navbar-toggler {
-  background: transparent !important;
+  background-color: transparent !important;
   border: none;
   padding: 0 !important;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none !important;
 }
 
 .dropdown-menu {
@@ -385,7 +394,7 @@ body::-webkit-scrollbar {
   }
 
   .main-container {
-    height: calc(100% - 125px);
+    height: calc(100vh - 125px);
   }
 }
 
@@ -411,21 +420,32 @@ body::-webkit-scrollbar {
   }
 
   .main-container {
-    height: calc(100% - 106px);
+    height: calc(100vh - 106px);
   }
 }
 
-@media screen and (min-width: 997px) and (max-width: 1400px) {
+@media screen and (min-width: 1200px) and (max-width: 1400px) {
   #main-title {
     font-size: 2.5rem !important;
   }
 
   .main-container {
-    height: calc(100% - 106px) !important;
+    height: calc(100vh - 106px) !important;
   }
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 1200px) {
+  .account_menu {
+    width: 15em !important;
+  }
+
+  .navbar:not(.comments_navbar) {
+    width: 80rem;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .main-navbar .navbar-nav {
     margin-left: auto !important;
   }
@@ -450,32 +470,9 @@ body::-webkit-scrollbar {
   }
 }
 
-@media screen and (max-width: 1400px) {
-  .nav-link {
-    font-size: 1.25em !important;
-  }
-
+@media screen and (max-width: 1200px) {
   .main-container {
-    height: calc(100% - 90px);
-  }
-}
-
-@media screen and (min-width: 992px) {
-  .account_menu {
-    width: 15em !important;
-  }
-
-  .navbar:not(.comments_navbar) {
-    width: 80rem;
-    max-width: 90%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .main-container {
-    height: 100%;
+    height: 100vh;
   }
 
   .navbar:not(.comments_navbar) {
@@ -507,5 +504,13 @@ body::-webkit-scrollbar {
 
   .top_menu .dropdown-item {
     text-align: center;
+  }
+
+  .nav-link {
+    font-size: 1.25em !important;
+  }
+
+  .main-container {
+    height: calc(100vh - 90px);
   }
 }

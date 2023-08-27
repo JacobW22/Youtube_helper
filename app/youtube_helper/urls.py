@@ -30,7 +30,8 @@ urlpatterns = [
     # App url's
 
     path('admin/', admin.site.urls),
-    path('', views.main_page, name='main_page'),
+    path('', views.landing_page, name='landing_page'),
+    path('downloader/', views.main_page, name='main_page'),
     
     path('manage_account/General', views.manage_account_General, name='manage_account_General'),
     path('manage_account/Overview', views.manage_account_Overview, name='manage_account_Overview'),

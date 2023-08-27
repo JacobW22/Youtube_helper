@@ -1,0 +1,107 @@
+{% extends "simple_template.html" %}
+{% load static %}
+
+{% block head_imports %}
+    <link rel="stylesheet" href="{% static 'css/landing_page.css' %}">
+{% endblock %}
+
+{% block container_content %}
+
+        <div clas="d-flex flex-column justify-content-center align-items-center">
+            <div class="d-flex flex-column justify-content-center section_containers position-relative pt-5 pt-lg-0">
+               
+                <a class="navbar-brand text-light d-inline-block mx-auto" href="{% url 'landing_page' %}">
+                    <h2 id="main-title">
+                        Youtube helper
+                    </h2>
+                </a>
+
+                <span class="text-center text-light fs-1 pb-5 d-block mx-auto tools_title">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> 
+                    &nbsp; Available Tools &nbsp;
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                </span>
+
+                <div class="d-flex flex-column gap-5 justify-content-center align-items-center">
+                    {% for value,key in sites_context.items %}
+                    {% url value as the_url %}
+
+                        <a class="d-flex align-items-center justify-content-center sites p-3 text-center" href={{ the_url }}>
+                            {{ key|safe }}
+                        </a>
+
+                    {% endfor %}
+                </div>
+
+                <a href="#section2" class="d-flex pt-5">
+                    <i class="fa-solid fa-chevron-down text-light fs-3 mx-auto position-absolute  start-50 end-50"></i>
+                </a>
+            </div>
+            
+
+            <div class="d-flex flex-column section_containers justify-content-center gap-5 position-relative"> 
+                <span class="d-inline-block text-light text-center mx-auto tiles_title">
+                    Worldwide Numbers
+                </span>
+
+                <div class="d-flex flex-wrap justify-content-center position-relative tiles_container gap-5">
+                    <!-- Recent downloads -->
+                    <div class="d-flex flex-column align-items-center justify-content-center gap-5">
+                        <span class="d-inline-block text-light text-center mx-auto title">
+                            Downloaded Videos
+                        </span>
+
+                        <div class="d-flex align-items-center vid_downloads">
+                            <div class="container-fluid text-center analyse analyse_second_section">
+                                <span class="count"> {{ vid_downloads_quantity }} </span>       
+                                <span class="sub-title"> Times </span>       
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent requests for comments-->
+                    <div class="d-flex flex-column align-items-center justify-content-center gap-5">
+                        <span class="d-inline-block text-light text-center mx-auto title">
+                            Filtered Comments
+                        </span>
+
+                        <div class="d-flex justify-content-center align-items-center vid_downloads">
+                            <div class="container-fluid text-center analyse analyse_second_section">
+                                <span class="count"> {{ filtered_comments_quantity }} </span>    
+                                <span class="sub-title"> Times </span>          
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Recent transferred playlists-->
+                    <div class="d-flex flex-column align-items-center justify-content-center gap-5">
+                        <span class="d-inline-block text-light text-center mx-auto title">
+                            Transferred Playlists
+                        </span>
+
+                        <div class="d-flex justify-content-center align-items-center vid_downloads">
+                            <div class="container-fluid text-center analyse analyse_second_section">
+                                <span class="count"> {{ transferred_playlists_quantity }} </span>
+                                <span class="sub-title"> Times </span>              
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Recent prompts -->
+                    <div class="d-flex flex-column align-items-center justify-content-center gap-5">
+                        <span class="d-inline-block text-light text-center mx-auto title">
+                            Used Ai Prompts
+                        </span>
+                        <div class="d-flex justify-content-center align-items-center vid_downloads">
+                            <div class="container-fluid text-center analyse analyse_second_section">
+                                <span class="count"> {{ prompts_quantity }} </span>       
+                                <span class="sub-title"> Times </span>       
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+
+        </div>
+{% endblock %}
