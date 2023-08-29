@@ -105,7 +105,7 @@ body {
     padding-right: 1em;
     border-radius: 25px;
     font-size: 3rem;
-    
+    max-width: 90%;
 }
 
 .sub-title {
@@ -118,7 +118,7 @@ body {
     }
 
     .navbar-brand {
-        transform: translateY(-15%);
+        transform: translateY(15%);
         padding-bottom: 2em;
     }
 
@@ -160,5 +160,11 @@ body {
 
     .section_containers {
         scroll-snap-align: center !important;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .navbar-brand {
+        transform: translateY(-15%);
     }
 }
