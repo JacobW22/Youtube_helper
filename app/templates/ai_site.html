@@ -38,7 +38,7 @@
 
 
 <!-- Main container start -->
-<div class="d-flex flex-column py-4 px-0 m-0 gap-3">
+<div class="d-flex flex-column py-5 px-0 m-0 gap-3">
   
         <!-- First section start -->
         <section class="d-flex w-100 first-section flex-column mx-auto gap-3 px-0">
@@ -88,18 +88,21 @@
 
                   {% if logged == True %}
                     <span class="fs-6 text-light text-muted text-center">Describe your avatar up here</span>
-                    <span class="fs-5 text-light my-4 text-center">Tickets remaining: 
+                    <span class="fs-5 text-light mt-4 text-center">Tickets remaining: 
                       {% if tickets != 0 %}
                         <span style="color:#7cf569">{{ tickets }}</span>
                       {% else %}
                         <span style="color:#f5696e">{{ tickets }}</span>
                       {% endif %}
                     </span>
+                    <span class=" text-light mt-3 mb-4 text-muted text-center" id="countdown"></span>
                   {% else %}
                     <span class="fs-6 text-light mb-4 text-muted text-center">Describe your avatar up here</span>
                   {% endif %}
 
-                  <button type="submit" class="btn btn-dark btn-lg rounded-pill input_submit animate">Generate</button>
+                  <button type="submit" class="btn btn-dark btn-lg mb-4 rounded-pill first_form_submit input_submit animate" data-bs-toggle="modal" data-bs-target="#downloading_modal">Generate</button>
+
+                  <button type="button" class="btn btn-dark btn-lg rounded-pill input_submit mt-2 animate" data-bs-toggle="modal" data-bs-target="#selection_modal">Random Avatar</button>
                   
           </form>        
         </section>
@@ -109,9 +112,9 @@
         <!-- Modal for request start -->
         <div class="modal fade downloading_modal" id="downloading_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="downloading_modalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered my-0">
-            <div class="modal-content">
+            <div class="modal-content rainbow_effect">
               <div class="modal-body">
-                <div class="d-flex align-items-center justify-content-center modal_text">
+                <div class="d-flex align-items-center justify-content-center rainbow_effect_text">
                     &nbsp;
                     &nbsp;
                     <strong>  Sending request</strong>
@@ -127,16 +130,49 @@
         </div>
         <!-- Modal for request end -->
 
+        <!-- Modal with selection start -->
+        <div class="modal fade selection_modal" id="selection_modal" tabindex="-1" aria-labelledby="selection_modalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable text-dark">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-2 text-light" id="selection_modalLabel">Select Gender</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form method="POST" class="d-flex justify-content-center gap-5 p-5" id="#second_form">
+                  {% csrf_token %}
+                  
+                  <div class="d-flex flex-column justify-content-center align-items-center genders">
+                    <i class="fa-solid fa-mars fa-xl"></i>
+                    <input type="submit" class="btn btn-dark btn-lg position_icons rounded-pill input_submit animate" name="random_avatar" value="Male" data-bs-toggle="modal" data-bs-target="#downloading_modal">
+                  </div>
+
+                  <div class="d-flex flex-column justify-content-center align-items-center genders">
+                    <i class="fa-solid fa-venus fa-xl"></i>
+                    <input type="submit" class="btn btn-dark btn-lg position_icons rounded-pill input_submit animate" name="random_avatar" value="Female" data-bs-toggle="modal" data-bs-target="#downloading_modal">
+                  </div>
+
+                  
+                </form>
+              </div>
+              <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary login100-form-btn" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal with selection end -->
+
 
 {% else %}
 
 
   <!-- Main container start -->
-  <div class="main-container center_container d-inline-block">
+  <div class="main-container center_container d-inline-block p-4 p-xl-0">
       <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto">
         <!-- Go back section start-->
           <div class="mx-auto mb-3">
-            <button class="text-light highlight_link go_back fs-5 mb-4" href="{% url 'ai_page' %}">
+            <button class="text-light highlight_link go_back fs-5 mb-4" onclick="history.back()">
               <i class="fa-solid fa-arrow-left"></i>&nbsp; Go back
             </button>
           </div>
@@ -180,17 +216,49 @@
 
 <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+
+  updateCountdown();
+
+  $( ".position_icons" ).hover(
+    function() {
+      $(this).closest( '.d-flex' ).find(".fa-solid").css({'transform':'translateY(-0.30em)'});
+    }, function() {
+      $(this).closest( '.d-flex' ).find(".fa-solid").css({'transform':'translateY(0)'});
+    }
+  );
+
+});
 
 $(".downloading_modal").on('shown.bs.modal', function() {
   $('.modal-backdrop').css('opacity', '0.6');
 });
 
-$('#main_form').submit(function (event) {
-  $("#downloading_modal").modal('show'); 
-  // do your logic
+$( ".position_icons" ).on( "click", function() {
+  $('#selection_modal').modal("hide");
 });
+z
 
+function getTimeUntilMidnight() {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0); // Set to midnight of the next day
 
+  const timeDifference = midnight - now;
+  return timeDifference;
+}
+
+function updateCountdown() {
+  const countdownElement = document.getElementById('countdown');
+  const timeDifference = getTimeUntilMidnight();
+  const seconds = Math.floor(timeDifference / 1000) % 60;
+  const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+  const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+
+  countdownElement.textContent = `New Tickets avalivable in: ${hours}h ${minutes}m ${seconds}s`;
+
+  setTimeout(updateCountdown, 1000);
+}
 
 </script>
 </body>

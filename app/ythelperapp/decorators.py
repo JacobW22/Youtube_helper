@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 from django.contrib import messages as msg
+from django.utils import timezone
 from .models import Ticket
 
 import datetime
@@ -54,16 +55,13 @@ def rate_limit(view_func):
 
             if current_time > reset_time:
                 user_ticket.remaining_tickets = 3
-                current_time = datetime.datetime.now(datetime.timezone.utc)
+                current_time = timezone.now().astimezone()
                 user_ticket.last_reset_time = current_time.replace(hour=0, minute=0, second=0, microsecond=0)
                 user_ticket.save()
 
             if user_ticket.remaining_tickets <= 0:
-                # Handle rate limit exceeded response
-                msg.info(request, "No tickets remaining")
-                raise RedirectException('ai_page')
+                return view_func(request, *args, **kwargs)
 
-            user_ticket.remaining_tickets -= 1
             user_ticket.save()
             logger.info(f"User {request.user.username} used Ticket")
 
@@ -71,8 +69,3 @@ def rate_limit(view_func):
         return view_func(request, *args, **kwargs)
     
     return wrapper_func
-
-class RedirectException(Exception):
-    def __init__(self, url):
-        self.url = url
-        super().__init__()

@@ -112,9 +112,9 @@ img,
   font-size: 1.2rem !important;
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 1200px) {
   .top_button {
-    margin-top: 1em;
+    margin-top: 1.5em;
   }
 
   .streams_data {

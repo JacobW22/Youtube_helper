@@ -1,0 +1,170 @@
+body {
+    scroll-snap-type: y mandatory !important;
+    scroll-behavior: smooth !important;
+}
+
+.default_container {
+    display: none !important;
+}
+
+.section_containers {
+    height: 100%;
+    min-height: 100vh;
+    padding-top: 2.5em;
+    padding-bottom: 2.5em;
+}
+
+.section_containers:not(:nth-child(1)) {
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+.sites {
+    zoom: 1.5;
+    width: 20rem;
+    max-width: 90%;
+    border: 0.15em solid white; 
+    border-radius: 10px;
+}
+
+.sites:hover {
+    transform: translateY(-10%);
+    color: rgba(255, 255, 255, 0.6);
+    border-color:#910000;
+}
+
+.fa-download,
+.fa-comments,
+.fa-image {
+    font-size: 1rem;
+}
+
+.fa-spotify {
+    font-size: 1.25rem;
+}
+
+.fa-chevron-down {
+    bottom: 25px;
+}
+
+.navbar-brand {
+    transform: translateY(-100%);
+}
+
+.vid_downloads {
+    width: 15em;
+    max-width: 90%;
+    height: 8em;    
+    border-radius: 2em;
+    background-color: black;
+    color: darkgrey;
+    box-shadow: 0px 0px 15px 0.5px white;
+    font-size: 1.5rem;
+
+    -webkit-transition: all 0.4s !important;
+    -o-transition: all 0.4s !important;
+    -moz-transition: all 0.4s !important;
+    transition: all 0.4s !important;
+}
+
+.vid_downloads:hover {
+    transform: scale(1.18);
+    user-select: none;
+}
+
+.analyse_second_section > span {
+    display: block;
+}
+
+.analyse_second_section {
+    font-size: 4rem;
+}
+
+.title {
+    word-break: break-word;
+    position: relative;
+    max-width: 90%;
+    font-size: 2.5rem;
+    padding-bottom: 1em;
+}   
+
+.title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 37.5%; 
+    width: 25%;
+    height: 0.10em;
+    background-color: #910000; 
+}
+
+.tiles_title {
+    border-bottom: 0.15em solid #910000;
+    padding-bottom: 0.3em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-radius: 25px;
+    font-size: 3rem;
+    max-width: 90%;
+}
+
+.sub-title {
+    font-size: 1.5rem;
+}
+
+@media screen and (max-height: 900px) {
+    .main-container {
+        scroll-snap-align: center !important;
+    }
+
+    .navbar-brand {
+        transform: translateY(15%);
+        padding-bottom: 2em;
+    }
+
+    #main-title {
+        font-size: 2.5rem;
+    }
+
+    .analyse_second_section {
+        font-size: 3rem;
+    }
+
+    .tiles_container {
+        gap: 10rem !important;
+    }
+
+    .tiles_container{
+        padding-top: 5rem !important;
+    }
+
+    .fa-download,
+    .fa-comments,
+    .fa-image {
+        font-size: 1.25rem;
+    }   
+    
+    .fa-spotify {
+        font-size: 1.75rem;
+    }
+}
+
+@media screen and (min-width: 1685px) {
+    .tiles_title {
+        transform: translateY(-100%);
+    }
+
+    #navbar {
+        scroll-snap-align: center !important;
+    }
+
+    .section_containers {
+        scroll-snap-align: center !important;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .navbar-brand {
+        transform: translateY(-15%);
+    }
+}
