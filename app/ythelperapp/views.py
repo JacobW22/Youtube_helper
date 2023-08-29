@@ -13,7 +13,7 @@ from .serializers import download_history_Serializer, prompts_history_Serializer
 
 # App packages
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
-from .decorators import login_check, login_required, not_authenticated_only, rate_limit, RedirectException
+from .decorators import login_check, login_required, not_authenticated_only, rate_limit
 from .models import user_data_storage, download_history_item, prompts_history_item, filtered_comments_history_item, transferred_playlists_history_item, User, Ticket
 from .tasks import TransferPlaylist, download_and_store_image
 from settings.base import BASE_DIR
@@ -297,21 +297,26 @@ def download_page(request, login_context, video_url):
 
     return render(request, "download_page.html", context)
 
-
 @login_required
 @login_check
+@rate_limit
 def ai_page(request, login_context, image_url="", image_description=""):
     if request.method == "POST":
         description = request.POST.get("description")
 
-        try:
+        if request.POST.get("random_avatar"):
+            description = f'Random {request.POST.get("random_avatar")} avatar'
+
+        if Ticket.objects.get(user=request.user).remaining_tickets > 0:
             safe_link = get_openai_response(request, login_context, description)
-        except RedirectException as e:
-            return redirect(e.url)
+        else:
+            msg.info(request, "No tickets remaining")
+            return redirect(ai_page)
         
         return redirect(ai_page, image_url=safe_link, image_description=description)
 
     context = {}
+            
     context.update(login_context)
     context.update({"sites_context": sites_context})
 
@@ -325,13 +330,12 @@ def ai_page(request, login_context, image_url="", image_description=""):
         )
     else:
         # If no image provided check user's remaining Tickets   
-        if login_context['logged']:
-            try:
-                remaining_tickets = Ticket.objects.get(user=User.objects.get(username=login_context['username'])).remaining_tickets
-            except ObjectDoesNotExist:
-                remaining_tickets = 3
+        try:
+            remaining_tickets = Ticket.objects.get(user=request.user).remaining_tickets
+        except ObjectDoesNotExist:
+            remaining_tickets = 3
 
-            context.update({"tickets": remaining_tickets})
+        context.update({"tickets": remaining_tickets})
 
         users_avatars = get_avatars()  
         context.update({"users_avatars": users_avatars})
@@ -1121,7 +1125,6 @@ def get_avatars():
         return None
 
 
-@rate_limit
 def get_openai_response(request, login_context, description):
     try:
         response_data = openai.Image.create(
@@ -1160,6 +1163,9 @@ def get_openai_response(request, login_context, description):
             logger.info(f"Ai_page, Exception while sending task: {e}")
             pass
         
+        user_ticket = Ticket.objects.get(user=request.user)
+        user_ticket.remaining_tickets -= 1
+        user_ticket.save()
         return fixed_link
 
     except openai.error.RateLimitError:

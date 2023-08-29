@@ -509,8 +509,4 @@ body::-webkit-scrollbar {
   .nav-link {
     font-size: 1.25em !important;
   }
-
-  .main-container {
-    height: calc(100vh - 90px);
-  }
 }
