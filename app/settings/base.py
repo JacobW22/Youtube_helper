@@ -185,6 +185,7 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'debug.log',  # Path to the log file
             "formatter": "verbose",
+            'mode': 'w',
 
         },
     },

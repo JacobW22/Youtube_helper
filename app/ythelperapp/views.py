@@ -1140,16 +1140,16 @@ def get_openai_response(request, login_context, description):
 
         # Store data in user history
         try:
-            if "username" in login_context:
+            if request.user:
                 storage = user_data_storage.objects.get(
-                    user=User.objects.get(username=login_context["username"])
+                    user=request.user
                 )
 
                 if storage.save_history:
                     prompts_history_item.objects.create(
-                        user=User.objects.get(username=login_context["username"]), 
+                        user=request.user, 
                         title=description,
-                        link=fixed_link.replace("%25", "%"),
+                        link=fixed_link,
                     )
                     logger.info(f"Item has been added to database by {request.user.username}")
 

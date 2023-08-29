@@ -37,7 +37,7 @@ class download_history_item(models.Model):
 class prompts_history_item(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False)
     title = models.CharField(max_length=255)
-    link = models.CharField(max_length=255)
+    link = models.TextField()
     saved_on = models.DateTimeField(default=timezone.now)
 
     class Meta:
