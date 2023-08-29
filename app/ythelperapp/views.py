@@ -153,7 +153,7 @@ def main_page(request, login_context):
 
     # Use download history for slides on the main page
     if "username" in login_context:
-        unique_videos = list(download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('title').distinct('title'))
+        unique_videos = list(download_history_item.objects.filter(user=request.user).order_by('title').distinct('title'))
         random.shuffle(unique_videos)
         
         context.update({"number_of_links": range(0, len(unique_videos[:10]))})
@@ -182,13 +182,13 @@ def main_page(request, login_context):
         # Store data in user history
         if "username" in login_context:
             storage = user_data_storage.objects.get(
-                user=User.objects.get(username=login_context["username"])
+                user=request.user
             )
 
             if storage.save_history:
                 try:
                     download_history_item.objects.create(
-                        user=User.objects.get(username=login_context["username"]), 
+                        user=request.user, 
                         title=yt.title,
                         link=video_url,
                         thumbnail_url=yt.thumbnail_url
@@ -473,7 +473,7 @@ def youtube_to_spotify(request, login_context):
                 # Store data in user history 
                 if "username" in login_context:
                     storage = user_data_storage.objects.get(
-                        user=User.objects.get(username=login_context["username"])
+                        user=request.user
                     )
 
                     # Retrieve playlist title
@@ -489,8 +489,8 @@ def youtube_to_spotify(request, login_context):
                         title = "Couldn't find"
 
                     if storage.save_history:
-                        download_history_item.objects.create(
-                            user=User.objects.get(username=login_context["username"]), 
+                        transferred_playlists_history_item.objects.create(
+                            user=request.user, 
                             title=title,
                             link=request.POST.get("url"),
                         )
@@ -537,7 +537,7 @@ def youtube_to_spotify_done(request, login_context, account_url):
 @login_check
 def manage_account_General(request, login_context):
     storage = user_data_storage.objects.get(
-        user=User.objects.get(username=login_context["username"])
+        user=request.user
     )
 
     form = UpdateUserForm(
@@ -557,7 +557,7 @@ def manage_account_General(request, login_context):
             return redirect(manage_account_General)
 
     context = {"form": form}
-    context.update({"user": User.objects.get(username=login_context["username"])})
+    context.update({"user": request.user})
     context.update(login_context)
     context.update({"sites_context": sites_context})
 
@@ -568,15 +568,15 @@ def manage_account_General(request, login_context):
 def manage_account_Overview(request, login_context):
 
     context = {
-        "vid_downloads_quantity": download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
-        "prompts_quantity": prompts_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
-        "filtered_comments_quantity": filtered_comments_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
-        "transferred_playlists_quantity": transferred_playlists_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
+        "vid_downloads_quantity": download_history_item.objects.filter(user=request.user).count(),
+        "prompts_quantity": prompts_history_item.objects.filter(user=request.user).count(),
+        "filtered_comments_quantity": filtered_comments_history_item.objects.filter(user=request.user).count(),
+        "transferred_playlists_quantity": transferred_playlists_history_item.objects.filter(user=request.user).count(),
         
-        "download_history": download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
-        "prompts_history": prompts_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
-        "filtered_comments_history": filtered_comments_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
-        "transferred_playlists_history": transferred_playlists_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
+        "download_history": download_history_item.objects.filter(user=request.user).order_by('-saved_on')[:6],
+        "prompts_history": prompts_history_item.objects.filter(user=request.user).order_by('-saved_on')[:6],
+        "filtered_comments_history": filtered_comments_history_item.objects.filter(user=request.user).order_by('-saved_on')[:6],
+        "transferred_playlists_history": transferred_playlists_history_item.objects.filter(user=request.user).order_by('-saved_on')[:6],
     }
 
     context.update(login_context)
@@ -590,13 +590,13 @@ def manage_account_Private(request, login_context):
     context = {}
 
     try: 
-        context.update({"api_token": f'Token {Token.objects.get(user=User.objects.get(username=login_context["username"]))}'})
+        context.update({"api_token": f'Token {Token.objects.get(user=request.user)}'})
     except Exception:
         pass
 
     if request.method == "POST":
         try:
-            Token.objects.create(user=User.objects.get(username=login_context["username"]))
+            Token.objects.create(user=request.user)
             return redirect(manage_account_Private)
         except Exception:
             pass
@@ -1055,7 +1055,7 @@ def show_comments(
             if storage.save_history:
                 try:
                     filtered_comments_history_item.objects.create(
-                        user=User.objects.get(username=login_context["username"]), 
+                        user=request.user, 
                         title=comments_and_VidInfo["video_metadata"]["title"],
                         link="https://www.youtube.com/watch?v=" + video_id,
                     )

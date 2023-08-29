@@ -9,7 +9,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 COPY /app/requirements/prod.txt .
 
-RUN pip install --no-cache-dir -r prod.txt
+RUN pip install --no-cache -r prod.txt
 
 FROM python:3.10-alpine
 
