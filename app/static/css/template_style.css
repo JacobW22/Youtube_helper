@@ -1,5 +1,4 @@
 .main-container {
-  scroll-snap-type: y mandatory !important;
   scroll-behavior: smooth !important;
 }
 
@@ -10,7 +9,7 @@
 .first-container,
 .second-container {
   height: 100%;
-  min-height: 500px!important;
+  min-height: 600px!important;
 }
 
 .form-control {
@@ -165,11 +164,13 @@ button {
   }
 }
 
-@media screen and (max-width: 992px) {
-  .main-container::-webkit-scrollbar {
-    display: none;
+@media screen and (min-width: 1200px) {
+  .main-container {
+    scroll-snap-type: y mandatory !important;
   }
+}
 
+@media screen and (max-width: 1200px) {
   .ratio {
     width: 75%;
   }

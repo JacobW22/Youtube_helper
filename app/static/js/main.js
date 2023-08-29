@@ -48,6 +48,16 @@ $('.input_submit').hover(function() {
     $('.form-control').removeClass('align-text-center');
 });
 
+
+$('#MainNavbarSupportedContent').on('shown.bs.collapse', function () {
+    $('#navbar').addClass('change_navbar_bg');
+});
+
+$('#MainNavbarSupportedContent').on('hide.bs.collapse', function () {
+    $('#navbar').removeClass('change_navbar_bg');
+});
+
+
 $(document).ready(function(){
 
 // Timezone settings
@@ -82,4 +92,4 @@ function hideToast() {
     toast.remove();
     });
 };
-  });
+});

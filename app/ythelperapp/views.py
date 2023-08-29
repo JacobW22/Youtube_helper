@@ -13,7 +13,7 @@ from .serializers import download_history_Serializer, prompts_history_Serializer
 
 # App packages
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm, StartTaskForm
-from .decorators import login_check, login_required, not_authenticated_only, rate_limit, RedirectException
+from .decorators import login_check, login_required, not_authenticated_only, rate_limit
 from .models import user_data_storage, download_history_item, prompts_history_item, filtered_comments_history_item, transferred_playlists_history_item, User, Ticket
 from .tasks import TransferPlaylist, download_and_store_image
 from settings.base import BASE_DIR
@@ -132,6 +132,20 @@ Function Views
       ↓
       
 """
+
+@login_check
+def landing_page(request, login_context):
+    context = {
+        'vid_downloads_quantity': download_history_item.objects.all().count(),
+        'prompts_quantity': prompts_history_item.objects.all().count(),
+        'filtered_comments_quantity': filtered_comments_history_item.objects.all().count(),
+        'transferred_playlists_quantity': transferred_playlists_history_item.objects.all().count(),
+    }
+
+    context.update(login_context)
+    context.update({"sites_context": sites_context})
+    return render(request, "landing_page.html", context)
+
 
 @login_check
 def main_page(request, login_context):
@@ -264,7 +278,6 @@ def sign_up_page(request, login_context):
     return render(request, "sign_up_page.html", context)
 
 
-# Backoff for sending request again ( sometimes titles can't be found by pytube )
 @login_check
 def download_page(request, login_context, video_url):
     context = {}
@@ -284,21 +297,26 @@ def download_page(request, login_context, video_url):
 
     return render(request, "download_page.html", context)
 
-
 @login_required
 @login_check
+@rate_limit
 def ai_page(request, login_context, image_url="", image_description=""):
     if request.method == "POST":
         description = request.POST.get("description")
 
-        try:
+        if request.POST.get("random_avatar"):
+            description = f'Random {request.POST.get("random_avatar")} avatar'
+
+        if Ticket.objects.get(user=request.user).remaining_tickets > 0:
             safe_link = get_openai_response(request, login_context, description)
-        except RedirectException as e:
-            return redirect(e.url)
+        else:
+            msg.info(request, "No tickets remaining")
+            return redirect(ai_page)
         
         return redirect(ai_page, image_url=safe_link, image_description=description)
 
     context = {}
+            
     context.update(login_context)
     context.update({"sites_context": sites_context})
 
@@ -310,20 +328,19 @@ def ai_page(request, login_context, image_url="", image_description=""):
                 "image_title": image_description,
             }
         )
-
     else:
         # If no image provided check user's remaining Tickets   
-        if login_context['logged']:
-            try:
-                remaining_tickets = Ticket.objects.get(user=User.objects.get(username=login_context['username'])).remaining_tickets
-            except ObjectDoesNotExist:
-                remaining_tickets = 3
+        try:
+            remaining_tickets = Ticket.objects.get(user=request.user).remaining_tickets
+        except ObjectDoesNotExist:
+            remaining_tickets = 3
 
-            context.update({"tickets": remaining_tickets})
+        context.update({"tickets": remaining_tickets})
 
         users_avatars = get_avatars()  
         context.update({"users_avatars": users_avatars})
         
+
     return render(request, "ai_site.html", context)
 
 
@@ -444,10 +461,12 @@ def youtube_to_spotify(request, login_context):
             return redirect(auth_url)
 
         form = StartTaskForm(request.POST)
+
         if form.is_valid():
             url = request.POST.get("url")
 
-            if "list=RD" not in url: # Block Youtube Mix playlists
+            # Block Youtube Mix playlists
+            if "list=RD" not in url: 
                 url = url.split("list=", 1)[1]
                 playlist_id = url.split("&", 1)[0]
 
@@ -457,12 +476,13 @@ def youtube_to_spotify(request, login_context):
                         user=User.objects.get(username=login_context["username"])
                     )
 
+                    # Retrieve playlist title
                     response_for_title = (
                         youtube.playlists()
                         .list(part="snippet", id=playlist_id, fields="items(snippet(title))")
                         .execute()
                     )
-
+                    
                     if response_for_title["items"][0]["snippet"]["title"]:
                         title = response_for_title["items"][0]["snippet"]["title"]
                     else:
@@ -808,10 +828,9 @@ async def get_video_comments(
 
         # Check if the page is the last one
         if "nextPageToken" not in response:
-            print("sss")
             processed_comments.append("last_page")
 
-        # Process the user search phrase
+        # Process the user's search phrase
         if searchInput != "":
             if "items" in response:
                 filtered_comments = [
@@ -838,7 +857,7 @@ async def get_video_comments(
                 for comment in filtered_comments:
                     snippet = comment["snippet"]["topLevelComment"]["snippet"]
 
-                    # Retrieve comment info
+                    # Retrieve comment data
                     author = snippet["authorDisplayName"]
                     channel_url = snippet["authorChannelUrl"]
                     text = snippet["textDisplay"]
@@ -866,7 +885,7 @@ async def get_video_comments(
                 for comment in response["items"]:
                     snippet = comment["snippet"]["topLevelComment"]["snippet"]
 
-                    # Retrieve comment info
+                    # Retrieve comment data
                     author = snippet["authorDisplayName"]
                     channel_url = snippet["authorChannelUrl"]
                     text = snippet["textDisplay"]
@@ -926,7 +945,7 @@ async def get_video_comments_view_async(
         return redirect('comments')
 
     try:
-        # Check whether to run request for video metadata
+        # Check whether to run new request for video metadata 
         match isFirstTime:
             case True:
                 video_url = "https://www.youtube.com/watch?v=" + video_id
@@ -1106,12 +1125,11 @@ def get_avatars():
         return None
 
 
-@rate_limit
 def get_openai_response(request, login_context, description):
     try:
         response_data = openai.Image.create(
             prompt=description
-            + " in visual key of Jojo Bizzare Adventure, epic, anime, hyper realistic, handsome, 1:1",
+            + " in visual key of Jojo Bizzare Adventure, epic, anime style, japanese anime, nice background, hyper realistic, handsome, 1:1",
             n=1,
             size="1024x1024",
         )
@@ -1122,20 +1140,20 @@ def get_openai_response(request, login_context, description):
 
         # Store data in user history
         try:
-            if "username" in login_context:
+            if request.user:
                 storage = user_data_storage.objects.get(
-                    user=User.objects.get(username=login_context["username"])
+                    user=request.user
                 )
 
                 if storage.save_history:
                     prompts_history_item.objects.create(
-                        user=User.objects.get(username=login_context["username"]), 
+                        user=request.user, 
                         title=description,
-                        link=fixed_link.replace("%25", "%"),
+                        link=fixed_link,
                     )
                     logger.info(f"Item has been added to database by {request.user.username}")
 
-        except Exception:
+        except Exception as e:
             logger.error(f"Ai page, Exception while saving history: {e}")
             msg.info(request, "Error while saving history")
 
@@ -1145,6 +1163,9 @@ def get_openai_response(request, login_context, description):
             logger.info(f"Ai_page, Exception while sending task: {e}")
             pass
         
+        user_ticket = Ticket.objects.get(user=request.user)
+        user_ticket.remaining_tickets -= 1
+        user_ticket.save()
         return fixed_link
 
     except openai.error.RateLimitError:
