@@ -60,11 +60,8 @@ def rate_limit(view_func):
                 user_ticket.save()
 
             if user_ticket.remaining_tickets <= 0:
-                # Handle rate limit exceeded response
-                msg.info(request, "No tickets remaining")
-                raise RedirectException('ai_page')
+                return view_func(request, *args, **kwargs)
 
-            user_ticket.remaining_tickets -= 1
             user_ticket.save()
             logger.info(f"User {request.user.username} used Ticket")
 
@@ -72,8 +69,3 @@ def rate_limit(view_func):
         return view_func(request, *args, **kwargs)
     
     return wrapper_func
-
-class RedirectException(Exception):
-    def __init__(self, url):
-        self.url = url
-        super().__init__()

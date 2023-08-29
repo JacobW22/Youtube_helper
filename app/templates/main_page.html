@@ -36,7 +36,7 @@
 
 
   <!-- First section start -->
-  <section class="d-flex flex-column align-items-center first-container snap" id="section1">
+  <section class="d-flex flex-column align-items-center first-container snap">
     
     <form method="post" class="container-fluid d-flex flex-column my-auto align-items-center gap-4 p-0" id="main_form" >
         {% csrf_token %}
@@ -50,7 +50,7 @@
           </div>
           
           <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default">Enter video url</span>
-          <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" id="input_link" class="form-control text-light" required>
+          <input type="text" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" name="sended_link" id="input_link" class="form-control text-light" id="section1" required>
           <button type="submit" class="btn btn-dark btn-lg animate mt-2 input_submit">Confirm</button>
     </form>
 
@@ -63,7 +63,7 @@
 
 
   <!-- Second section start -->
-  <section class="d-flex my-auto flex-column container-fluid align-items-center justify-content-center second-container mb-3" id="section2">
+  <section class="d-flex my-auto flex-column container-fluid align-items-center justify-content-center second-container mb-3">
 
     <span class="text-light fs-2 text-center"> <i class="fa-solid fa-photo-film" style="color: #ffffff;"></i> </span>
     <span class="slider_info p-3 text-light fs-2 text-center">Previously downloaded media </span>
@@ -82,7 +82,7 @@
 
           {% for video in unique_videos %}
 
-            <div class="carousel-item">
+            <div class="carousel-item" id="section2">
               <img class="d-block slider_image" src="{{ video.thumbnail_url }}" alt="slide">
                 <div class="carousel-caption d-block text-center">
                   <span class="caption_text d-block text-truncate"> {{ video.title }} </span>
