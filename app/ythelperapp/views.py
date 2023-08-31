@@ -63,7 +63,7 @@ youtube = build("youtube", "v3", developerKey=GOOGLE_API_KEY)
 
 # Navbar menu info
 sites_context = {
-    "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
+    "downloader_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
     "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT Comments Filtering",
     "youtube_to_spotify": "<i class='fa-brands fa-spotify'></i>&nbsp; Youtube Playlist To Spotify",
     "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai Avatar Generator",
@@ -148,12 +148,12 @@ def landing_page(request, login_context):
 
 
 @login_check
-def main_page(request, login_context):
+def downloader_page(request, login_context):
     context = {}
 
     # Use download history for slides on the main page
     if "username" in login_context:
-        unique_videos = list(download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('title').distinct('title'))
+        unique_videos = list(download_history_item.objects.filter(user=request.user).order_by('title').distinct('title'))
         random.shuffle(unique_videos)
         
         context.update({"number_of_links": range(0, len(unique_videos[:10]))})
@@ -176,19 +176,19 @@ def main_page(request, login_context):
         except Exception as e:
             logger.error(f"Video downloader view, Exception: {e}")
             msg.info(request, "Invalid url")
-            return redirect(main_page)
+            return redirect(downloader_page)
 
 
         # Store data in user history
         if "username" in login_context:
             storage = user_data_storage.objects.get(
-                user=User.objects.get(username=login_context["username"])
+                user=request.user
             )
 
             if storage.save_history:
                 try:
                     download_history_item.objects.create(
-                        user=User.objects.get(username=login_context["username"]), 
+                        user=request.user, 
                         title=yt.title,
                         link=video_url,
                         thumbnail_url=yt.thumbnail_url
@@ -205,7 +205,7 @@ def main_page(request, login_context):
 
     context.update(login_context)
     context.update({"sites_context": sites_context})
-    return render(request, "main_page.html", context)
+    return render(request, "downloader_page.html", context)
 
 
 @login_check
@@ -227,7 +227,7 @@ def login_page(request, login_context):
                 login(request, user)
                 logger.info(f"User {request.user.username} has logged in")
                 msg.success(request, "Welcome " + "<b>" + request.user.username + "</b>")
-                return redirect(main_page)
+                return redirect(downloader_page)
 
             else:
                 msg.info(request, "Password is incorrect")
@@ -244,7 +244,7 @@ def login_page(request, login_context):
 def logoutUser(request):
     logger.info(f"User {request.user.username} has logged out")
     logout(request)
-    return redirect(main_page)
+    return redirect(downloader_page)
 
 
 @login_check
@@ -289,7 +289,7 @@ def download_page(request, login_context, video_url):
     except Exception as e:
         logger.error(f"Download_page view, Exception: {e}")
         msg.info(request, "Something went wrong, please try again")
-        return redirect(main_page)
+        return redirect(downloader_page)
 
     context.update(login_context)
     context.update({"sites_context": sites_context})
@@ -341,7 +341,7 @@ def ai_page(request, login_context, image_url="", image_description=""):
         context.update({"users_avatars": users_avatars})
         
 
-    return render(request, "ai_site.html", context)
+    return render(request, "ai_generator.html", context)
 
 
 @login_check
@@ -473,7 +473,7 @@ def youtube_to_spotify(request, login_context):
                 # Store data in user history 
                 if "username" in login_context:
                     storage = user_data_storage.objects.get(
-                        user=User.objects.get(username=login_context["username"])
+                        user=request.user
                     )
 
                     # Retrieve playlist title
@@ -489,8 +489,8 @@ def youtube_to_spotify(request, login_context):
                         title = "Couldn't find"
 
                     if storage.save_history:
-                        download_history_item.objects.create(
-                            user=User.objects.get(username=login_context["username"]), 
+                        transferred_playlists_history_item.objects.create(
+                            user=request.user, 
                             title=title,
                             link=request.POST.get("url"),
                         )
@@ -537,7 +537,7 @@ def youtube_to_spotify_done(request, login_context, account_url):
 @login_check
 def manage_account_General(request, login_context):
     storage = user_data_storage.objects.get(
-        user=User.objects.get(username=login_context["username"])
+        user=request.user
     )
 
     form = UpdateUserForm(
@@ -557,7 +557,7 @@ def manage_account_General(request, login_context):
             return redirect(manage_account_General)
 
     context = {"form": form}
-    context.update({"user": User.objects.get(username=login_context["username"])})
+    context.update({"user": request.user})
     context.update(login_context)
     context.update({"sites_context": sites_context})
 
@@ -568,15 +568,15 @@ def manage_account_General(request, login_context):
 def manage_account_Overview(request, login_context):
 
     context = {
-        "vid_downloads_quantity": download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
-        "prompts_quantity": prompts_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
-        "filtered_comments_quantity": filtered_comments_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
-        "transferred_playlists_quantity": transferred_playlists_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).count(),
+        "vid_downloads_quantity": download_history_item.objects.filter(user=request.user).count(),
+        "prompts_quantity": prompts_history_item.objects.filter(user=request.user).count(),
+        "filtered_comments_quantity": filtered_comments_history_item.objects.filter(user=request.user).count(),
+        "transferred_playlists_quantity": transferred_playlists_history_item.objects.filter(user=request.user).count(),
         
-        "download_history": download_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
-        "prompts_history": prompts_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
-        "filtered_comments_history": filtered_comments_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
-        "transferred_playlists_history": transferred_playlists_history_item.objects.filter(user=User.objects.get(username=login_context["username"])).order_by('-saved_on')[:6],
+        "download_history": download_history_item.objects.filter(user=request.user).order_by('-saved_on')[:6],
+        "prompts_history": prompts_history_item.objects.filter(user=request.user).order_by('-saved_on')[:6],
+        "filtered_comments_history": filtered_comments_history_item.objects.filter(user=request.user).order_by('-saved_on')[:6],
+        "transferred_playlists_history": transferred_playlists_history_item.objects.filter(user=request.user).order_by('-saved_on')[:6],
     }
 
     context.update(login_context)
@@ -590,13 +590,13 @@ def manage_account_Private(request, login_context):
     context = {}
 
     try: 
-        context.update({"api_token": f'Token {Token.objects.get(user=User.objects.get(username=login_context["username"]))}'})
+        context.update({"api_token": f'Token {Token.objects.get(user=request.user)}'})
     except Exception:
         pass
 
     if request.method == "POST":
         try:
-            Token.objects.create(user=User.objects.get(username=login_context["username"]))
+            Token.objects.create(user=request.user)
             return redirect(manage_account_Private)
         except Exception:
             pass
@@ -1055,7 +1055,7 @@ def show_comments(
             if storage.save_history:
                 try:
                     filtered_comments_history_item.objects.create(
-                        user=User.objects.get(username=login_context["username"]), 
+                        user=request.user, 
                         title=comments_and_VidInfo["video_metadata"]["title"],
                         link="https://www.youtube.com/watch?v=" + video_id,
                     )

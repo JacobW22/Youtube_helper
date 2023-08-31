@@ -1,16 +1,22 @@
-{% extends "simple_template.html" %}
+{% extends "template.html" %}
+{% load static %}
+
+{% block head_imports %}
+    <link rel="stylesheet" href="{% static 'css/simple_pages.css' %}">
+{% endblock %}
+
 
 {% block navbar %}
-
 <!-- Navbar start -->
 {% url 'youtube_to_spotify' as the_url %}
 {% include "navbar.html" with sites_context=sites_context active_site_name="From Youtube to Spotify" active_site_url=the_url %}
 <!-- Navbar end -->   
-
 {% endblock %}
+
 
 {% block content %}
 
+<div class="d-flex flex-column align-items-center default_container main-container px-4">
 
     <div class="container-fluid d-flex flex-column align-items-center gap-5 p-0 my-auto" id="main_form" >
 
@@ -62,4 +68,7 @@
 
     </div>
 
+</div>
+
+{% include "toasts.html" %}
 {% endblock %}

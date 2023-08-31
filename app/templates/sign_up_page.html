@@ -1,41 +1,25 @@
+{% extends "template.html" %}
 {% load static %}
 {% load widget_tweaks %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youtube helper</title>
 
-    <!-- Imports start -->
-      <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-      <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
-      <link rel="stylesheet" href="{% static 'css/template_log_reg_style.css' %}">
+{% block head_imports %}
+    <link rel="stylesheet" href="{% static 'css/template_log_reg.css' %}">
+    <script src="{% static 'js/sign_up_page.js' %}" type="text/javascript"></script>
+{% endblock %}
 
-
-      <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
-      <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
-      <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
-
-
-      <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
-      <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-    <!-- Imports end -->
-</head>
-<body>
-
-
-<!-- Site container start -->
-<div class="d-flex flex-column full_site_container">
-
-
+{% block navbar %}
 <!-- Navbar start -->
 {% url 'sign_up_page' as the_url %}
 {% include "navbar.html" with sites_context=sites_context active_site_name="Sign up" active_site_url=the_url %}
 <!-- Navbar end -->  
+{% endblock %}
 
+
+{% block content %}
+
+<!-- Site container start -->
+<div class="d-flex flex-column full_site_container">
 
   <!-- Main container start -->
   <section class="d-none flex-column my-auto pt-5 px-4 align-items-center justify-content-center main-container">
@@ -111,63 +95,5 @@
 <!-- Site container end -->
 
 
-
-<!-- Toasts container start-->
-<div class="toast-container bottom-0 start-50 translate-middle-x">
-  {% for field,errors in form.errors.items %}
-      {% for error in errors %}
-        <div class="toast text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
-            <div class="toast-body">
-              {{ error }}
-            </div>
-          <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
-        </div>
-      {% endfor %}
-  {% endfor %}
-</div>
-<!-- Toasts container end -->
-
-
-
-<script src="{% static 'js/main.js' %}" type="text/javascript"></script>
-<script type="text/javascript">
-
-$(document).ready(function(){
-
-    // Fade In page
-    $('.main-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
-
-});
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-  var form = document.getElementById("main_form"); // Replace with your actual form ID
-  form.addEventListener("submit", sendForm);
-});
-
-function sendForm(event) {
-  event.preventDefault();
-
-  var emailField = document.getElementById("emailField");
-  var form = event.target; 
-
-  emailField.value = emailField.value.toLowerCase();
-  form.submit();
-}
-
-
-function sendFormWithClick() {
-  event.preventDefault();
-
-  var emailField = document.getElementById("emailField");
-  var submit = document.getElementById("submitBtn"); 
-
-  emailField.value = emailField.value.toLowerCase();
-  submit.click();
-}
-
-
-</script>
-</body>
-</html>
+{% include "toasts.html" %}
+{% endblock %}
