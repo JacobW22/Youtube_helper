@@ -14,10 +14,10 @@
 
 ## General Information
 - The application offers such tools as:<br>
-    : Video Downloader including multiple formats<br>
-    : Filtering comments attached with sorting and searching phrases<br>
-    : Transferring youtube playlists to spotify account<br>
-    : Ai powered avatar generator
+    - Video Downloader including multiple formats<br>
+    - Filtering comments attached with sorting and searching phrases<br>
+    - Transferring youtube playlists to spotify account<br>
+    - Ai powered avatar generator
 
 - You have an overview of the history of your activities and the ability to customize your account settings
 - You can access and use free api of the application to get your history data
