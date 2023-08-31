@@ -14,7 +14,7 @@
 
 ## General Information
 - The application offers such tools as:<br>
-    - Video Downloader including multiple formats<br>
+    - Video downloader including multiple formats<br>
     - Filtering comments attached with sorting and searching phrases<br>
     - Transferring youtube playlists to spotify account<br>
     - Ai powered avatar generator
@@ -32,8 +32,9 @@
 
 
 ## Features
-- You can create account, turn off saving history and change account info
+- You can create account and manipulate user settings
 - You can use free tools including api service
+- You can check your recent activity and go back to items history
 
 
 ## Screenshots
