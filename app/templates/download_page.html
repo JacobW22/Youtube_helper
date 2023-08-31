@@ -1,38 +1,22 @@
+{% extends "template.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youtube helper</title>
 
-    <!-- Imports start -->
-    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
-    <link rel="stylesheet" href="{% static 'css/template_download_style.css' %}">
+{% block head_imports %}
+  <link rel="stylesheet" href="{% static 'css/template_download.css' %}">
+  <script src="{% static 'js/download_page.js' %}" type="text/javascript"></script>
+{% endblock %}
 
-
-    <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
-    <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
-
-
-    <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-    <!-- Imports end -->
-</head>
-<body>
     
-
-
+{% block navbar %}
 <!-- Navbar start -->
-{% url 'main_page' as the_url %}
+{% url 'downloader_page' as the_url %}
 {% include "navbar.html" with sites_context=sites_context active_site_name="Video Downloader" active_site_url=the_url %}
 <!-- Navbar end -->   
+{% endblock %}
 
 
+{% block content %}
 <!-- Main container start -->
 <div class="d-flex flex-column my-auto main-container">
 
@@ -150,11 +134,6 @@
   <!-- Main container end -->
 
 
-
-
-
-
-
 <!-- Modal with description start -->
 <div class="modal fade description_modal" id="description_Modal" tabindex="-1" aria-labelledby="description_ModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable text-dark">
@@ -174,44 +153,8 @@
 </div>
 <!-- Modal with description end -->
 
-
-
-<!-- Toasts container start -->	
-<div class="toast-container bottom-0 start-50 translate-middle-x">
-  {% for message in messages %}
-  <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
-    <div class="toast-body">
-        <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
-    </div>
-    <button type="button" class="btn-close ms-auto fs-6 mb-3 toast_dismiss" aria-label="Close"></button>
-  </div>
-  {% endfor %}
-</div>
-<!-- Toasts container end -->	
-	
+{% include "toasts.html" %}
+{% endblock %}
 
 
 
-<script src="{% static 'js/main.js' %}" type="text/javascript"></script>
-<script type="text/javascript">
-  
-  $(document).ready(function(){
-    // Fade In page
-    $('.first-container').fadeIn(500).removeClass('d-none').addClass('d-flex');
-    $('.second-container').fadeIn(1000).removeClass('d-none').addClass('d-flex');
-  });
-
-  // Add slideDown animation to Bootstrap dropup when expanding.
-  $('.dropup').on('show.bs.dropdown', function() {
-    $(this).find('.dropdown-menu').first().stop(true, true).slideToggle(300);
-  });
-
-
-  // Add slideUp animation to Bootstrap dropup when collapsing.
-  $('.dropup').on('hide.bs.dropdown', function() {
-    $(this).find('.dropdown-menu').hide();
-  });
-
-</script>
-</body>
-</html>

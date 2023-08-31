@@ -1,0 +1,23 @@
+<!-- Toasts container start-->
+<div class="toast-container bottom-0 start-50 translate-middle-x">
+    {% for message in messages %}
+    <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+      <div class="toast-body">
+          {{ message|safe }}
+      </div>
+      <button type="button" class="btn-close ms-auto fs-6 mb-3 toast_dismiss" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    {% for field,errors in form.errors.items %}
+        {% for error in errors %}
+          <div class="toast text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+              <div class="toast-body">
+                {{ error }}
+              </div>
+            <button type="button" class="btn-close ms-auto fs-6 mb-3 toast_dismiss" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+<!-- Toasts container end -->	

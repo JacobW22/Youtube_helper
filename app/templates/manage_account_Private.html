@@ -1,42 +1,22 @@
+{% extends "template.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youtube helper</title>
 
-    
-       <!-- Imports start -->
-       <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-       <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
-       <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">  
-       <link rel="stylesheet" href="{% static 'css/template_manage_account_Private.css' %}">
-   
-   
-       <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
-       <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
-       <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
-   
-   
-       <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
-       <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-       <!-- Imports end -->
-   </head>
+{% block head_imports %}
+  <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">  
+  <link rel="stylesheet" href="{% static 'css/template_manage_account_Private.css' %}">
+  <script src="{% static 'js/manage_account_Private.js' %}" type="text/javascript"></script>
+{% endblock %}
 
-</head>
-<body>
-    
-
+{% block navbar %}
 <!-- Navbar start -->
 {% url 'manage_account' as the_url %}
 {% include "navbar.html" with sites_context=sites_context active_site_name="Manage account" active_site_url=the_url %}
 <!-- Navbar end -->
+{% endblock %}
 
-
-  
+{% block content %}
+    
 <!-- Main container start -->
 <div class="d-flex main-container flex-column flex-md-row">
 
@@ -81,67 +61,5 @@
 <!-- Main container end -->
 
 
-
-
-<!-- Toasts container start -->	
-<div class="toast-container bottom-0 start-50 translate-middle-x">
-  {% for message in messages %}
-  <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
-    <div class="toast-body">
-        <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
-    </div>
-    <button type="button" class="btn-close ms-auto fs-6 mb-3 toast_dismiss" aria-label="Close"></button>
-  </div>
-  {% endfor %}
-</div>
-<!-- Toasts container end -->	
-
-
-
-<script src="{% static 'js/main.js' %}" type="text/javascript"></script>
-<script type="text/javascript">
-
-$(document).ready(function(){
-  $('[data-bs-toggle="tooltip"]').tooltip();   
-});
-
-
-function RevealToken() {
-  var token_form = document.getElementById("token");
-  var revealButton = document.getElementById("revealButton");
-
-  if (token_form.getAttribute("type") == "password") {
-    token_form.setAttribute("type", "text");
-    revealButton.innerHTML = "Hide Api Token";
-  }
-  else {
-    token_form.setAttribute("type", "password");
-    revealButton.innerHTML = "Reveal Api Token";
-  }
-}
-
-
-function copy_to_clipboard() {
-  var copyText = document.getElementById("token");
-
-  navigator.clipboard.writeText(copyText.value);
-  
-  $('[data-bs-toggle="tooltip"]').attr('title', 'Copied!');
-
-  $('[data-bs-toggle="tooltip"]').each(function( index ) {
-    var tooltip = bootstrap.Tooltip.getInstance($(this));
-    tooltip.setContent({'.tooltip-inner': 'Copied!'});
-  })
-}
-
-
-$('[data-bs-toggle="tooltip"]').mouseout(function(){
-  $('[data-bs-toggle="tooltip"]').each(function( index ) {
-    var tooltip = bootstrap.Tooltip.getInstance($(this));
-    tooltip.setContent({'.tooltip-inner': 'Copy to clipboard'});
-  })
-});
-
-</script>
-</body>
-</html>
+{% include "toasts.html" %}
+{% endblock %}

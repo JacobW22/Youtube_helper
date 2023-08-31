@@ -3,10 +3,6 @@ body {
     scroll-behavior: smooth !important;
 }
 
-.default_container {
-    display: none !important;
-}
-
 .section_containers {
     height: 100%;
     min-height: 100vh;
