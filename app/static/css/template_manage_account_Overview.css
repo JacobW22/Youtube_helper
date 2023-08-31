@@ -79,6 +79,10 @@ td a {
     transform: translateY(50%);
 }
 
+.delete_item {
+    margin-left: 0 !important;
+}
+
 @media screen and (max-width: 992px) {
     .main_section::-webkit-scrollbar,
     .table_container::-webkit-scrollbar {

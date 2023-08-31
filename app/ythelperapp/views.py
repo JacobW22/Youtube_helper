@@ -566,6 +566,48 @@ def manage_account_General(request, login_context):
 
 @login_check
 def manage_account_Overview(request, login_context):
+    if request.method == "POST":
+        if request.POST.get("delete_item_from_downloaded"):
+            try:
+                download_history_item.objects.filter(id=request.POST.get("delete_item_from_downloaded")).delete()
+                logger.info(f"Deleted object with id: {request.POST.get('delete_item_from_downloaded')}")
+                msg.info(request, "Item has been deleted")
+            except Exception as e:
+                logger.error(f"Exception occurred while trying to delete item: {e}")
+                msg.error(request, "Error when deleting item")
+                return redirect(manage_account_Overview)
+            
+        elif request.POST.get("delete_item_from_comments"):
+            try:
+                filtered_comments_history_item.objects.filter(id=request.POST.get("delete_item_from_comments")).delete()
+                logger.info(f"Deleted object with id: {request.POST.get('delete_item_from_comments')}")
+                msg.info(request, "Item has been deleted")
+            except Exception as e:
+                logger.error(f"Exception occurred while trying to delete item: {e}")
+                msg.error(request, "Error when deleting item")
+                return redirect(manage_account_Overview)
+            
+        elif request.POST.get("delete_item_from_playlists"):
+            try:
+                transferred_playlists_history_item.objects.filter(id=request.POST.get("delete_item_from_playlists")).delete()
+                logger.info(f"Deleted object with id: {request.POST.get('delete_item_from_playlists')}")
+                msg.info(request, "Item has been deleted")
+            except Exception as e:
+                logger.error(f"Exception occurred while trying to delete item: {e}")
+                msg.error(request, "Error when deleting item")
+                return redirect(manage_account_Overview)
+            
+
+        elif request.POST.get("delete_item_from_prompts"):
+            try:
+                prompts_history_item.objects.filter(id=request.POST.get("delete_item_from_prompts")).delete()
+                logger.info(f"Deleted object with id: {request.POST.get('delete_item_from_prompts')}")
+                msg.info(request, "Item has been deleted")
+            except Exception as e:
+                logger.error(f"Exception occurred while trying to delete item: {e}")
+                msg.error(request, "Error when deleting item")
+                return redirect(manage_account_Overview)
+            
 
     context = {
         "vid_downloads_quantity": download_history_item.objects.filter(user=request.user).count(),
