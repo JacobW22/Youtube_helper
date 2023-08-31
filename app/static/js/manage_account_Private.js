@@ -21,7 +21,13 @@ $(document).ready(function(){
   
   function copy_to_clipboard() {
     var copyText = document.getElementById("token");
-  
+    
+    // Deprecated but works on apple devices
+    copyText.setAttribute("type", "text");
+    copyText.select();
+    document.execCommand('copy');
+
+    // Main copying 
     navigator.clipboard.writeText(copyText.value);
     
     $('[data-bs-toggle="tooltip"]').attr('title', 'Copied!');
