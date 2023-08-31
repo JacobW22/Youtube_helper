@@ -25,7 +25,7 @@ def login_required(view_func):
             return view_func(request, *args, **kwargs)
         else:
             msg.info(request, "You need to have account")
-            return redirect('main_page')
+            return redirect('downloader_page')
         
     return wrapper_func
 
@@ -34,7 +34,7 @@ def not_authenticated_only(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
             msg.info(request, "You need to log out")
-            return redirect('main_page')
+            return redirect('downloader_page')
         else:
             return view_func(request, *args, **kwargs)
         

@@ -1,38 +1,165 @@
+{% extends "template.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youtube helper</title>
-
-  <!-- Imports start -->
-  <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
-  <link rel="stylesheet" href="{% static 'css/template_comments_style.css' %}">
+{% block head_imports %}
+  <link rel="stylesheet" href="{% static 'css/template_comments.css' %}">
   <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
-
-
-  <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
-  <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
   <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+      $('.input_submit').hover(function() {
+        $('.form-control').addClass('align-text-center');
+      }, function() {
+        $('.form-control').removeClass('align-text-center');
+      })
+
+      $(".card_body").attr("target", "_blank");
+      $(".card_body").attr("rel", "noopener noreferrer");
+      $(".comment_text").find("a").addClass("link_in_comments");
+
+      {% if pageID %}
+      dselect(document.querySelector('#maxResults'));
 
 
-  <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-  <!-- Imports end -->
-</head>
-<body>
+      $(".dselect-wrapper").children("div").addClass("selection-menu");
+      $(".dselect-wrapper").find(".dropdown-item").addClass("selection-menu");
+      $(".dselect-wrapper").find(".form-select").addClass("mx-auto");
+
+
+      {% endif %}
+      
+      $('.comments_body').find('.author_name').hover( function() {
+        $(this).closest('.comments_body').find('.profile_img').css('box-shadow', '0px 0px 10px 0.5px yellow');
+      }, function() {
+        $(this).closest('.comments_body').find('.profile_img').css('box-shadow', '0px 0px 10px 0.5px red');
+      });
+      
+      $('.comments_body').find('.profile_img').hover( function() {
+        $(this).css('box-shadow', '0px 0px 10px 0.5px yellow');
+      }, function() {
+        $(this).css('box-shadow', '0px 0px 10px 0.5px red');
+      });
+
+      $(".comments_navbar").click(function() {
+        navbar = $(this);
+        var value = navbar.find(".navbar-toggler").attr('aria-expanded');
     
+        if (value == 'true') {
+          navbar.addClass("comments_navbar_absolute");
+        }
 
+        else {
+          navbar.find(".navbar-collapse").on('hidden.bs.collapse', function() {
+            navbar.removeClass("comments_navbar_absolute");
+          });
+        }
+      });
+    
+      {% if maxResults %}
+        var selectedValue = '{{ maxResults }}';
+
+        $('#maxResults').val(selectedValue);
+        $('.dselect-wrapper').find('button.form-select').html(selectedValue);
+        $('.form-select').css('border-color', '#7cf569');
+
+        $('.dselect-wrapper').find('button.form-select').on('DOMSubtreeModified', function() {
+          var MaxResults = $(this).html();
+          changePageWithMaxResults(MaxResults);
+        });
+      {% endif %}
+
+    });
+
+    $( "#search_phrase" ).on( "focus", function() {
+      $("#search_phrase" ).tooltip();
+    });
+
+    {% if video_id %}
+    function submitFormWithValue(order) {
+
+      maxResults = document.getElementById("maxResults").value;
+
+      var form = document.getElementById('hidden_form');
+
+
+      var orderInput = document.getElementById('orderInput');
+      var maxResultsInput = document.getElementById('maxResultsInput');
+      var previousPageIdInput = document.getElementById('previousPageIdInput');
+      var pageIdInput = document.getElementById('pageIdInput');
+      var video_idInput = document.getElementById('video_idInput');
+
+      
+      orderInput.value = order;
+      maxResultsInput.value = maxResults;
+      previousPageIdInput.value = 1;
+      pageIdInput.value = 1;
+      video_idInput.value = '{{ video_id }}';
+
+      form.submit();
+
+    }
+
+    {% endif %}
+
+
+    {% if pageID %}
+    function changePageWithValue(page) {
+
+      var form = document.getElementById('hidden_form');
+
+
+      var orderInput = document.getElementById('orderInput');
+      var maxResultsInput = document.getElementById('maxResultsInput');
+      var previousPageIdInput = document.getElementById('previousPageIdInput');
+      var pageIdInput = document.getElementById('pageIdInput');
+      var video_idInput = document.getElementById('video_idInput');
+
+      orderInput.value = '{{ order }}';
+      maxResultsInput.value = {{ maxResults }};
+      previousPageIdInput.value = {{ pageID }};
+      pageIdInput.value = page;
+      video_idInput.value = '{{ video_id }}';
+
+      form.submit();
+
+    }
+
+    function changePageWithMaxResults(maxResults) {
+
+      var form = document.getElementById('hidden_form');
+
+
+      var orderInput = document.getElementById('orderInput');
+      var maxResultsInput = document.getElementById('maxResultsInput');
+      var previousPageIdInput = document.getElementById('previousPageIdInput');
+      var pageIdInput = document.getElementById('pageIdInput');
+      var video_idInput = document.getElementById('video_idInput');
+
+      orderInput.value = '{{ order }}';
+      maxResultsInput.value = maxResults;
+      previousPageIdInput.value = {{ pageID }};
+      pageIdInput.value = {{ pageID }};
+      video_idInput.value = '{{ video_id }}';
+
+      form.submit();
+
+    }
+
+    {% endif %}
+  </script>
+{% endblock %}
+
+
+{% block navbar %}
 <!-- Navbar start -->
 {% url 'comments' as the_url %}
 {% include "navbar.html" with sites_context=sites_context active_site_name="YT comments" active_site_url=the_url %}
 <!-- Navbar end -->
+{% endblock %}
 
+
+{% block content %}
 
 {% if video_id %}
   <!-- Main container start -->
@@ -315,169 +442,5 @@
 </div>
 <!-- Main container end -->
 
-
-
-
-<!-- Toasts container start -->	
-<div class="toast-container bottom-0 start-50 translate-middle-x ">
-  {% for message in messages %}
-  <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
-    <div class="toast-body">
-        <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
-    </div>
-    <button type="button" class="btn-close ms-auto fs-6 mb-3 toast_dismiss" aria-label="Close"></button>
-  </div>
-  {% endfor %}
-</div>
-<!-- Toasts container end -->	
-
-
-
-<script src="{% static 'js/main.js' %}" type="text/javascript"></script>
-<script type="text/javascript">
-
-  $(document).ready(function(){
-
-    $('.input_submit').hover(function() {
-      $('.form-control').addClass('align-text-center');
-    }, function() {
-      $('.form-control').removeClass('align-text-center');
-    })
-
-    $(".card_body").attr("target", "_blank");
-    $(".card_body").attr("rel", "noopener noreferrer");
-    $(".comment_text").find("a").addClass("link_in_comments");
-
-    {% if pageID %}
-    dselect(document.querySelector('#maxResults'));
-
-
-    $(".dselect-wrapper").children("div").addClass("selection-menu");
-    $(".dselect-wrapper").find(".dropdown-item").addClass("selection-menu");
-    $(".dselect-wrapper").find(".form-select").addClass("mx-auto");
-
-
-    {% endif %}
-    
-    $('.comments_body').find('.author_name').hover( function() {
-      $(this).closest('.comments_body').find('.profile_img').css('box-shadow', '0px 0px 10px 0.5px yellow');
-    }, function() {
-      $(this).closest('.comments_body').find('.profile_img').css('box-shadow', '0px 0px 10px 0.5px red');
-    });
-    
-    $('.comments_body').find('.profile_img').hover( function() {
-      $(this).css('box-shadow', '0px 0px 10px 0.5px yellow');
-    }, function() {
-      $(this).css('box-shadow', '0px 0px 10px 0.5px red');
-    });
-
-    $(".comments_navbar").click(function() {
-      navbar = $(this);
-      var value = navbar.find(".navbar-toggler").attr('aria-expanded');
-  
-      if (value == 'true') {
-        navbar.addClass("comments_navbar_absolute");
-      }
-
-      else {
-        navbar.find(".navbar-collapse").on('hidden.bs.collapse', function() {
-          navbar.removeClass("comments_navbar_absolute");
-        });
-      }
-    });
-  
-    {% if maxResults %}
-      var selectedValue = '{{ maxResults }}';
-
-      $('#maxResults').val(selectedValue);
-      $('.dselect-wrapper').find('button.form-select').html(selectedValue);
-      $('.form-select').css('border-color', '#7cf569');
-
-      $('.dselect-wrapper').find('button.form-select').on('DOMSubtreeModified', function() {
-        var MaxResults = $(this).html();
-        changePageWithMaxResults(MaxResults);
-      });
-    {% endif %}
-
-  });
-
-  $( "#search_phrase" ).on( "focus", function() {
-    $("#search_phrase" ).tooltip();
-  });
-
-  {% if video_id %}
-  function submitFormWithValue(order) {
-
-    maxResults = document.getElementById("maxResults").value;
-
-    var form = document.getElementById('hidden_form');
-
-
-    var orderInput = document.getElementById('orderInput');
-    var maxResultsInput = document.getElementById('maxResultsInput');
-    var previousPageIdInput = document.getElementById('previousPageIdInput');
-    var pageIdInput = document.getElementById('pageIdInput');
-    var video_idInput = document.getElementById('video_idInput');
-
-    
-    orderInput.value = order;
-    maxResultsInput.value = maxResults;
-    previousPageIdInput.value = 1;
-    pageIdInput.value = 1;
-    video_idInput.value = '{{ video_id }}';
-
-    form.submit();
-
-  }
-
-  {% endif %}
-
-
-  {% if pageID %}
-  function changePageWithValue(page) {
-
-    var form = document.getElementById('hidden_form');
-
-
-    var orderInput = document.getElementById('orderInput');
-    var maxResultsInput = document.getElementById('maxResultsInput');
-    var previousPageIdInput = document.getElementById('previousPageIdInput');
-    var pageIdInput = document.getElementById('pageIdInput');
-    var video_idInput = document.getElementById('video_idInput');
-
-    orderInput.value = '{{ order }}';
-    maxResultsInput.value = {{ maxResults }};
-    previousPageIdInput.value = {{ pageID }};
-    pageIdInput.value = page;
-    video_idInput.value = '{{ video_id }}';
-
-    form.submit();
-
-  }
-
-  function changePageWithMaxResults(maxResults) {
-
-    var form = document.getElementById('hidden_form');
-
-
-    var orderInput = document.getElementById('orderInput');
-    var maxResultsInput = document.getElementById('maxResultsInput');
-    var previousPageIdInput = document.getElementById('previousPageIdInput');
-    var pageIdInput = document.getElementById('pageIdInput');
-    var video_idInput = document.getElementById('video_idInput');
-
-    orderInput.value = '{{ order }}';
-    maxResultsInput.value = maxResults;
-    previousPageIdInput.value = {{ pageID }};
-    pageIdInput.value = {{ pageID }};
-    video_idInput.value = '{{ video_id }}';
-
-    form.submit();
-
-  }
-
-  {% endif %}
-
-</script>
-</body>
-</html>
+{% include "toasts.html" %}
+{% endblock %}

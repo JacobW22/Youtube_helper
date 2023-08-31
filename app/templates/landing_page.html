@@ -1,11 +1,13 @@
-{% extends "simple_template.html" %}
+{% extends "template.html" %}
 {% load static %}
+
 
 {% block head_imports %}
     <link rel="stylesheet" href="{% static 'css/landing_page.css' %}">
 {% endblock %}
 
-{% block container_content %}
+
+{% block content %}
 
         <div clas="d-flex flex-column justify-content-center align-items-center">
             <div class="d-flex flex-column justify-content-center section_containers position-relative pt-5 pt-lg-0">
@@ -104,4 +106,6 @@
             </div>
 
         </div>
+
+{% include "toasts.html" %}
 {% endblock %}
