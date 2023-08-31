@@ -34,7 +34,7 @@
 ## Features
 - You can create account and manipulate user settings
 - You can use free tools including api service
-- You can check your recent activity and go back to items history
+- You can check your recent activity and go back to items in history
 
 
 ## Screenshots
