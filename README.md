@@ -13,10 +13,10 @@
 
 
 ## General Information
-- The application offers such tools as:
-    : Video Downloader including multiple formats
-    : Filtering comments attached with sorting and searching phrases
-    : Transferring youtube playlists to spotify account
+- The application offers such tools as:<br>
+    : Video Downloader including multiple formats<br>
+    : Filtering comments attached with sorting and searching phrases<br>
+    : Transferring youtube playlists to spotify account<br>
     : Ai powered avatar generator
 
 - You have an overview of the history of your activities and the ability to customize your account settings
@@ -37,11 +37,11 @@
 
 
 ## Screenshots
-![Example screenshot](static/images/example_screenshot1.png)
-![Example screenshot](static/images/example_screenshot2.png)
-![Example screenshot](static/images/example_screenshot3.png)
-![Example screenshot](static/images/example_screenshot4.png)
-![Example screenshot](static/images/example_screenshot5.png)
+![Example screenshot](app/static/images/example_screenshot1.png)
+![Example screenshot](app/static/images/example_screenshot2.png)
+![Example screenshot](app/static/images/example_screenshot3.png)
+![Example screenshot](app/static/images/example_screenshot4.png)
+![Example screenshot](app/static/images/example_screenshot5.png)
 
 
 ## Setup
