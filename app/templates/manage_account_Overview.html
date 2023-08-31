@@ -94,7 +94,15 @@
 
               {% for video in download_history %}
               <tr>
-                  <td>{{ video.title }}</td>
+                  <td>
+                    <form method="POST" class="d-flex flex-column flex-xxl-row gap-2 gap-xxl-0 align-items-center justify-content-center">
+                      {% csrf_token %}
+                      <button type="submit" name="delete_item_from_downloaded" value="{{ video.id }}" class="btn-close ms-auto fs-6 toast_dismiss delete_item" aria-label="Close"></button>
+                      <span class="mx-auto">
+                      {{ video.title }}
+                      </span>
+                    </form>
+                  </td>
                   <td>{{ video.link }}</td>
                   <td>{{ video.saved_on|date:"d/m/Y G:i" }}</td>
               </tr>
@@ -126,11 +134,19 @@
             </thead>
             <tbody>
 
-              {% for prompt in filtered_comments_history %}
+              {% for video in filtered_comments_history %}
               <tr>
-                    <td>{{ prompt.title }}</td>
-                    <td>{{ prompt.link }}</td>
-                    <td>{{ prompt.saved_on|date:"d/m/Y G:i" }}</td>
+                    <td>
+                      <form method="POST" class="d-flex flex-column flex-xxl-row gap-2 gap-xxl-0 align-items-center justify-content-center">
+                        {% csrf_token %}
+                        <button type="submit" name="delete_item_from_comments" value="{{ video.id }}" class="btn-close ms-auto fs-6 toast_dismiss delete_item" aria-label="Close"></button>
+                        <span class="mx-auto">
+                        {{ video.title }}
+                        </span>
+                      </form>
+                    </td>
+                    <td>{{ video.link }}</td>
+                    <td>{{ video.saved_on|date:"d/m/Y G:i" }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -162,7 +178,15 @@
 
               {% for playlist in transferred_playlists_history %}
               <tr>
-                  <td>{{ playlist.title }}</td>
+                  <td>
+                    <form method="POST" class="d-flex flex-column flex-xxl-row gap-2 gap-xxl-0 align-items-center justify-content-center">
+                      {% csrf_token %}
+                      <button type="submit" name="delete_item_from_playlists" value="{{ playlist.id }}" class="btn-close ms-auto fs-6 toast_dismiss delete_item" aria-label="Close"></button>
+                      <span class="mx-auto">
+                      {{ playlist.title }}
+                      </span>
+                    </form>
+                  </td>
                   <td>{{ playlist.link }}</td>
                   <td>{{ playlist.saved_on|date:"d/m/Y G:i" }}</td>
               </tr>
@@ -196,7 +220,15 @@
 
               {% for prompt in prompts_history reversed %}
               <tr>
-                  <td>{{ prompt.title }}</td>
+                  <td>
+                    <form method="POST" class="d-flex flex-column flex-xxl-row gap-2 gap-xxl-0 align-items-center justify-content-center">
+                      {% csrf_token %}
+                      <button type="submit" name="delete_item_from_prompts" value="{{ prompt.id }}" class="btn-close ms-auto fs-6 toast_dismiss delete_item" aria-label="Close"></button>
+                      <span class="mx-auto">
+                      {{ prompt.title }}
+                      </span>
+                    </form>
+                  </td>
                   <td>{{ prompt.link }}</td>
                   <td>{{ prompt.saved_on|date:"d/m/Y G:i" }}</td>
               </tr>
