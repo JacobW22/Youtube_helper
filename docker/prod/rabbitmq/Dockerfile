@@ -7,9 +7,9 @@ RUN python -m venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY /app/requirements/prod.txt .
+COPY /app/requirements/requirements.txt .
 
-RUN pip install --no-cache -r prod.txt
+RUN pip install --no-cache -r requirements.txt
 
 FROM python:3.10-alpine
 
