@@ -5,24 +5,47 @@ volumes:
 
 services:
 
-  web:
+  web: &python
     build:
      context: .
      dockerfile: docker/dev/python/Dockerfile 
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB
     volumes:
       - ./app:/app
     ports:
       - 8000:8000 
-    command: gunicorn --workers=5 --threads=2 youtube_helper.wsgi:application -b 0.0.0.0:8000
-
   postgres:
     image: postgres:15-alpine
+    env_file:
+      - .env 
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=youtube_helper_db
-      - POSTGRES_PASSWORD=password
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_HOST: $POSTGRES_HOST
+      POSTGRES_PORT: $POSTGRES_PORT
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
+  rabbitmq:
+    image: rabbitmq:3.12.2-alpine
+  
+  celery:
+    build:
+     context: .
+     dockerfile: docker/dev/rabbitmq/Dockerfile 
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB
+    volumes:
+      - ./app:/app
+    ports: []
+    depends_on:
+      - rabbitmq
+      - postgres
