@@ -63,7 +63,7 @@ youtube = build("youtube", "v3", developerKey=GOOGLE_API_KEY)
 
 # Navbar menu info
 sites_context = {
-    "main_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
+    "downloader_page": "<i class='fa-solid fa-download'></i></i>&nbsp; Video Downloader",
     "comments": "<i class='fa-regular fa-comments'></i>&nbsp; YT Comments Filtering",
     "youtube_to_spotify": "<i class='fa-brands fa-spotify'></i>&nbsp; Youtube Playlist To Spotify",
     "ai_page": "<i class='fa-regular fa-image'></i>&nbsp; Ai Avatar Generator",
@@ -148,7 +148,7 @@ def landing_page(request, login_context):
 
 
 @login_check
-def main_page(request, login_context):
+def downloader_page(request, login_context):
     context = {}
 
     # Use download history for slides on the main page
@@ -176,7 +176,7 @@ def main_page(request, login_context):
         except Exception as e:
             logger.error(f"Video downloader view, Exception: {e}")
             msg.info(request, "Invalid url")
-            return redirect(main_page)
+            return redirect(downloader_page)
 
 
         # Store data in user history
@@ -205,7 +205,7 @@ def main_page(request, login_context):
 
     context.update(login_context)
     context.update({"sites_context": sites_context})
-    return render(request, "main_page.html", context)
+    return render(request, "downloader_page.html", context)
 
 
 @login_check
@@ -227,7 +227,7 @@ def login_page(request, login_context):
                 login(request, user)
                 logger.info(f"User {request.user.username} has logged in")
                 msg.success(request, "Welcome " + "<b>" + request.user.username + "</b>")
-                return redirect(main_page)
+                return redirect(downloader_page)
 
             else:
                 msg.info(request, "Password is incorrect")
@@ -244,7 +244,7 @@ def login_page(request, login_context):
 def logoutUser(request):
     logger.info(f"User {request.user.username} has logged out")
     logout(request)
-    return redirect(main_page)
+    return redirect(downloader_page)
 
 
 @login_check
@@ -289,7 +289,7 @@ def download_page(request, login_context, video_url):
     except Exception as e:
         logger.error(f"Download_page view, Exception: {e}")
         msg.info(request, "Something went wrong, please try again")
-        return redirect(main_page)
+        return redirect(downloader_page)
 
     context.update(login_context)
     context.update({"sites_context": sites_context})
@@ -341,7 +341,7 @@ def ai_page(request, login_context, image_url="", image_description=""):
         context.update({"users_avatars": users_avatars})
         
 
-    return render(request, "ai_site.html", context)
+    return render(request, "ai_generator.html", context)
 
 
 @login_check
