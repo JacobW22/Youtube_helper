@@ -51,7 +51,7 @@ If you want to open project locally:
 
 ```
 (on Windows, Linux, MacOS)
-NOTE: SET UP .ENV VARIABLES FIRST IN .ENV FILE
+NOTE: SET UP ENVIRONMENT VARIABLES FIRST INTO THE .ENV FILE
 
 cd into the main directory then:
 
