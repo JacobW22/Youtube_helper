@@ -49,12 +49,12 @@ $('.input_submit').hover(function() {
 });
 
 
-$('#MainNavbarSupportedContent').on('shown.bs.collapse', function () {
-    $('#navbar').addClass('change_navbar_bg');
+$('.navbar-collapse').on('shown.bs.collapse', function () {
+    $(this).closest(".navbar").addClass('change_navbar_bg');
 });
 
-$('#MainNavbarSupportedContent').on('hide.bs.collapse', function () {
-    $('#navbar').removeClass('change_navbar_bg');
+$('.navbar-collapse').on('hide.bs.collapse', function () {
+    $(this).closest(".navbar").removeClass('change_navbar_bg');
 });
 
 

@@ -1,24 +1,5 @@
 from .base import *
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': env("POSTGRES_DB"),
-
-        'USER': env("POSTGRES_USER"),
-
-        'PASSWORD': env("POSTGRES_PASSWORD"),
-
-        'HOST': env("POSTGRES_HOST"),
-
-        'PORT': env("POSTGRES_PORT"),
-    }
-}
-
 # AWS S3 config
 
 AWS_S3_HOST = 's3.eu-central-1.amazonaws.com'
