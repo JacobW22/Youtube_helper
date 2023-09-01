@@ -50,11 +50,18 @@
 If you want to open project locally: 
 
 ```
-(on Windows, Linux, MacOS) 
+(on Windows, Linux, MacOS)
+NOTE: SET UP .ENV VARIABLES FIRST IN .ENV FILE
+
 cd into the main directory then:
 
+- Without AWS setup
 $ docker compose build
 $ docker compose up
+
+-With AWS setup
+$ docker compose -f prod.yml build
+$ docker compose -f prod.yml up
 ```
 
 ## Project Status
