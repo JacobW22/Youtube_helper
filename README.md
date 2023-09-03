@@ -1,4 +1,9 @@
+<p align="center">
 # Youtube Helper
+</p>
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/JacobW22/Youtube_helper_project/main?style=flat-square&logo=github&color=blue)
+![GitHub repo size](https://img.shields.io/github/repo-size/JacobW22/Youtube_helper_project?style=flat-square&color=lightblue)
+
 > Youtube Helper is an application that offers free tools that use materials from the Youtube website
 
 > Live demo [_here_](http://165.232.68.73:8000). 
