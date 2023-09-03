@@ -1,6 +1,7 @@
 # Youtube Helper
 > Youtube Helper is an application that offers free tools that use materials from the Youtube website
-> Live demo [_here_](http://http://165.232.68.73:8000). 
+
+> Live demo [_here_](http://165.232.68.73:8000). 
 
 ## Table of Contents
 * [General Info](#general-information)
@@ -49,11 +50,18 @@
 If you want to open project locally: 
 
 ```
-(on Windows, Linux, MacOS) 
+(on Windows, Linux, MacOS)
+NOTE: SET UP ENVIRONMENT VARIABLES FIRST INTO THE .ENV FILE
+
 cd into the main directory then:
 
+- Without AWS setup
 $ docker compose build
 $ docker compose up
+
+-With AWS setup
+$ docker compose -f prod.yml build
+$ docker compose -f prod.yml up
 ```
 
 ## Project Status
