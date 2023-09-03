@@ -1,0 +1,239 @@
+.modal::-webkit-scrollbar {
+  display: none !important;
+}
+
+.downloading_modal {
+  user-select: none;
+}
+
+@keyframes gear-spin {
+  from {
+    transform: rotate(0deg);
+    -moz-transform: rotate(0deg); /* FF3.5+ */
+    -o-transform: rotate(0deg); /* Opera 10.5 */
+    -webkit-transform: rotate(0deg); /* Saf3.1+, Chrome */
+  }
+  to {
+    transform: rotate(360deg);
+    -moz-transform: rotate(360deg); /* FF3.5+ */
+    -o-transform: rotate(360deg); /* Opera 10.5 */
+    -webkit-transform: rotate(360deg); /* Saf3.1+, Chrome */
+  }
+}
+
+.fa-gear {
+  transition: filter 300ms;
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fa-gear {
+    animation: gear-spin infinite 15s linear;
+  }
+}
+
+.container-for-gears {
+  height: 2em !important;
+}
+
+.form-control {
+  background-color: black !important;
+  border: 0.15em solid #fff !important;
+  border-color: white !important;
+  border-radius: 15px !important;
+  box-shadow: 0px 0px 15px 1px black;
+  text-align: center;
+  font-size: 1.2rem !important;
+  overflow: hidden !important;
+
+  width: 40rem !important;
+  max-width: 100% !important;
+}
+
+.form-control:focus {
+  border-color: #f5696e !important;
+  box-shadow: 0px 0px 15px 1px black;
+  text-align: left;
+}
+
+.form-control:not(:placeholder-shown) {
+  border-color: #7cf569 !important;
+}
+
+.form-control::placeholder,
+.pointing-to-link,
+.container-for-gears {
+  user-select: none;
+}
+
+.btn {
+  scale: 1.1;
+}
+
+.ai-title {
+  top: 0 !important;
+}
+
+.ai-subtitle {
+  border-left: 0.15em solid #f5696e;
+  border-right: 0.15em solid #f5696e;
+  display: inline-block;
+}
+
+.avatar_gallery {
+  width: 50rem !important;
+  max-width: 100% !important;
+}
+.avatar_gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-content {
+  background: #000000 !important;
+  color: rgb(185, 185, 185);
+  border-radius: 15px !important;
+}
+
+.text-muted {
+  user-select: none;
+}
+
+.ai_generated_thumbnail {
+  width: 12.5rem!important;
+  height: 12.5rem !important;
+  border-radius: 25px !important;
+  box-shadow: 0px 0px 25px 10px black !important;
+}
+
+.center_container {
+  width: 100vw;
+  max-width: 100%;
+}
+
+.truncate {
+  width: 90vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+}
+
+.spinner-grow {
+  width: 6px;
+  height: 6px;
+  animation-duration: 0.9s;
+}
+
+#spinner_2 {
+  animation-delay: 0.3s;
+}
+
+#spinner_3 {
+  animation-delay: 0.6s;
+}
+
+.modal_text {
+  color: #fff;
+  animation: change_color infinite 6s linear;
+  user-select: none;
+}
+
+.modal-content {
+  border-radius: 50px !important;
+  animation: borderAnimation 6s infinite linear;
+}
+
+.img-fluid {
+  height: 10rem;
+  width: 10rem;
+  margin: 1em;
+  border-radius: 25px;
+}
+
+img {
+  box-shadow: 0px 0px 5px 5px black;
+}
+
+@keyframes borderAnimation {
+  100%,
+  0% {
+    box-shadow: 0 0 0 0.15em rgb(255, 0, 0);
+  }
+  8% {
+    box-shadow: 0 0 0 0.15em rgb(255, 127, 0);
+  }
+  16% {
+    box-shadow: 0 0 0 0.15em rgb(206, 206, 0);
+  }
+  25% {
+    box-shadow: 0 0 0 0.15em rgb(93, 184, 3);
+  }
+  33% {
+    box-shadow: 0 0 0 0.15em rgb(0, 177, 0);
+  }
+  41% {
+    box-shadow: 0 0 0 0.15em rgb(0, 139, 69);
+  }
+  50% {
+    box-shadow: 0 0 0 0.15em rgb(0, 255, 255);
+  }
+  58% {
+    box-shadow: 0 0 0 0.15em rgb(0, 127, 255);
+  }
+  66% {
+    box-shadow: 0 0 0 0.15em rgb(0, 0, 255);
+  }
+  75% {
+    box-shadow: 0 0 0 0.15em rgb(127, 0, 255);
+  }
+  83% {
+    box-shadow: 0 0 0 0.15em rgb(255, 0, 255);
+  }
+  91% {
+    box-shadow: 0 0 0 0.15em rgb(255, 0, 127);
+  }
+}
+
+@keyframes change_color {
+  100%,
+  0% {
+    color: rgb(255, 0, 0);
+  }
+  8% {
+    color: rgb(255, 127, 0);
+  }
+  16% {
+    color: rgb(206, 206, 0);
+  }
+  25% {
+    color: rgb(93, 184, 3);
+  }
+  33% {
+    color: rgb(0, 177, 0);
+  }
+  41% {
+    color: rgb(0, 139, 69);
+  }
+  50% {
+    color: rgb(0, 255, 255);
+  }
+  58% {
+    color: rgb(0, 127, 255);
+  }
+  66% {
+    color: rgb(0, 0, 255);
+  }
+  75% {
+    color: rgb(127, 0, 255);
+  }
+  83% {
+    color: rgb(255, 0, 255);
+  }
+  91% {
+    color: rgb(255, 0, 127);
+  }
+}
+
+
+
+

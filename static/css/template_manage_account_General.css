@@ -1,0 +1,59 @@
+.main_section {
+    color: darkgrey;
+}
+
+.top_section .account_info span{
+    border: 0.1em solid white;
+    border-radius: 25px;
+    padding: 1em;
+}
+  
+.form-control {
+    background-color: black !important;
+    color: white !important;
+    border: 0.15em solid #fff !important;
+    border-color: white !important;
+    border-radius: 15px !important;
+    box-shadow: 0px 0px 15px 1px black;
+    text-align: center;
+    font-size: 1.2rem !important;
+    overflow: hidden !important;
+    max-width: 90%;
+    width: 35rem !important;
+    margin-top: 10px;
+}
+  
+.form-control:focus {
+    border-color: #7cf569 !important;
+    box-shadow: 0px 0px 15px 1px black;
+}
+
+.form-control::placeholder {
+    user-select: none;
+}
+
+.title {
+    display: block;
+    width: 15em;
+    max-width: 100%;
+    border-bottom: 0.15em solid #910000;
+    padding-bottom: 0.3em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-radius: 25px;
+}
+
+.form-check-input:checked {
+    background-color: #910000 !important;
+    border-color: transparent !important;
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='white'/></svg>") !important;
+}
+
+.form-check-input:focus {
+    box-shadow: none !important;
+}
+
+.form-check-input {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='%23910000'/></svg>") !important;
+    cursor: pointer;
+}

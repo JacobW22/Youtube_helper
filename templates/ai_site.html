@@ -1,0 +1,248 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube helper</title>
+    
+    
+    <!-- Imports start -->
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/overall.css' %}">  
+    <link rel="stylesheet" href="{% static 'css/template_ai_site.css' %}">
+
+
+    <script src="https://kit.fontawesome.com/5cd37e3dba.js" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+
+
+
+    <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!-- Imports end -->
+</head>
+<body>
+    
+
+<!-- Navbar start -->
+{% url 'ai_page' as the_url %}
+{% include "navbar.html" with sites_context=sites_context active_site_name="Ai thumbnail generator" active_site_url=the_url %}
+<!-- Navbar end --> 
+
+
+{% if not image_link %}
+
+
+<!-- Main container start -->
+<div class="d-flex flex-column py-3 px-0 m-0 gap-3">
+  
+        <!-- First section start -->
+        <section class="d-flex w-100 first-section flex-column mx-auto gap-3 px-0">
+          <!-- Content container start -->
+          <div class="d-flex w-100 content flex-column justify-content-center align-items-center my-auto">
+            <div class="d-flex flex-column gap-3 mb-3 text-center justify-content-center align-items-center">
+              <i class="fa-solid fa-brain fs-1" style="color: #ffffff;"></i>
+              <span class="text-light fs-1 ai-title">
+                  Generate Avatar image with Ai
+              </span>
+            </div>
+            
+            <span class="d-flex text-light w-100 flex-column px-0 justify-content-center align-items-center align-self-top mt-1 mt-lg-4 gap-5 text_section" >
+                <div class="text-center">
+                  <span class="ai-subtitle text-center px-3 fs-3">
+                    Avatars collection
+                  </span>
+                </div>
+                
+                <div class="text-center avatar_gallery">
+                  <img src="{% static 'images/img-60gIrd8ObbkiZhzTnMLTruTK.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-d6cwUNORxNQRZ45LlP6p4xuh.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-Zo9qEiDxsrYAXTOf9sfajjzm.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-jt9NQ6y6dbfOftlQ6TJlRPQh.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-LuHpPcqYgJfLwGBWgRDXWvJE.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-BszahQQvIOyUdNU0hf1BIN9m.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-NlfvemMSRGMAlA4YXw2IbGZJ.png' %}" alt="icon_example" class="img-fluid">
+                  <img src="{% static 'images/img-uuo5NqltONY3oXEarTLQ9WX2.png' %}" alt="icon_example" class="img-fluid">
+                </div>
+                
+            </span>
+          </div>
+          <!-- Content container end -->
+        </section>
+        <!-- First section end -->
+
+
+        <!-- Second section start -->
+        <section class="d-flex second-section flex-column container-fluid mx-auto w-100">
+          <form method="post" class="container-fluid d-flex flex-column align-items-center pb-3 my-auto mx-auto form-container" id="main_form" >
+              {% csrf_token %}
+
+                  <span class="text-light fs-2 container-for-gears row gap-1">
+                      <span class="col align-self-start p-0 p-sm-1"><i class="fa-solid fa-gear" style="color: #ffffff;"></i></span>
+                      <span class="col align-self-end p-0 p-sm-1"><small><i class="fa-solid fa-gear" style="color: #ffffff;"></i></small></span>
+                  </span>
+
+                  <span class="pointing-to-link text-light fs-2 text-center" id="inputGroup-sizing-default"> Create your own </span>
+                 
+                  <span class="pointing-to-link text-light fs-1 mb-2 p-1 text-center " id="inputGroup-sizing-default"> <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i> </span>
+                  <input type="text" name="description" placeholder="Video Vlogger,  Gamer,  Car Mechanic,  Software Engineer etc." class="form-control text-light mb-3" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                  <span class="fs-6 text-light text-muted text-center mb-5">Describe your avatar up here</span>
+                  <button type="submit" class="btn btn-dark btn-lg rounded-pill send_request animate">Generate</button>
+                  
+          </form>        
+        </section>
+        <!-- Second section end -->
+
+
+        <!-- Modal for request start -->
+        <div class="modal fade downloading_modal" id="downloading_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="downloading_modalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered my-0">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="d-flex align-items-center justify-content-center modal_text">
+                    &nbsp;
+                    &nbsp;
+                    <strong>  Sending request</strong>
+                    &nbsp;
+                    <div class="spinner-grow mt-2 ms-1 me-1" role="status"></div>
+                    <div class="spinner-grow mt-2 me-1" id="spinner_2" role="status"></div>
+                    <div class="spinner-grow mt-2" id="spinner_3" role="status"></div>
+
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal for request end -->
+
+
+{% else %}
+
+
+  <!-- Main container start -->
+  <div class="main-container center_container d-inline-block">
+      <div class="d-flex flex-column justify-content-center align-items-center p-0 my-auto mx-auto main-container">
+        <!-- Go back section start-->
+          <div class="mx-auto mb-3">
+            <button class="text-light highlight_link go_back fs-5 mb-4" onclick="history.back()">
+              <i class="fa-solid fa-arrow-left"></i>&nbsp; Go back
+            </button>
+          </div>
+        <!-- Go back section end-->
+
+        <div>
+          <span class="text-center text-muted fs-3">Description:<span>
+        </div>
+
+        <div class="mb-4">
+          <span class="text-light fs-1 text-center truncate" id="inputGroup-sizing-default"> {{ image_title }}</span>
+        </div>
+
+        <img src="{{ image_link }}" class="img-fluid ai_generated_thumbnail" alt="Video_thumbnail">
+        <a type="button" class="btn btn-dark btn-lg rounded-pill download_file mt-5 mb-3 animate" href="{{ image_link }}" target="_blank" rel="noopener noreferrer" download="Thumbnail"> Download &nbsp;<i class="fa-solid fa-up-right-from-square"></i></a>
+      </div>
+  </div>
+  <!-- Main container end -->
+
+
+{% endif %}
+
+</div>
+<!-- Main container end -->
+
+
+<!-- Toasts container start -->	
+<div class="toast-container bottom-0 start-50 translate-middle-x ">
+  {% for message in messages %}
+  <div class="toast fade text-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false"> 
+    <div class="toast-body">
+        <i class="fa-regular fa-hand-peace"></i>&nbsp; {{ message }}
+    </div>
+    <button type="button" class="btn-close ms-auto fs-6 mb-2 toast_dismiss" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+</div>
+<!-- Toasts container end -->	
+
+
+
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    
+    $(window).on("pageshow", function() {
+      $('.modal').modal('hide');
+      $("#downloading_modal").modal('hide');
+    });
+
+    // Fade In page
+    $('.first-section').fadeIn(500).removeClass('d-none').addClass('d-flex');
+    $('.second-section').fadeIn(500).removeClass('d-none').addClass('d-flex');
+
+    $(".toast").css("opacity", "0");
+    $(".toast").toast("show");
+    $(".toast").addClass("custom-fade-in").css("opacity", "1");
+    
+    $('.send_request').hover(function() {
+      $('.form-control').addClass('align-text-center');
+    }, function() {
+      $('.form-control').removeClass('align-text-center');
+    });
+  });
+
+  // Add event listener for click event on the close button
+  $('.toast .btn-close').on('click', function() {
+    var toast = $(this).closest('.toast');
+    // Animate the toast element
+    toast.animate({
+      opacity: 0,
+      height: 0,
+      marginBottom: 0
+    }, 500, function() {
+      // Remove the toast element from the DOM
+      toast.remove();
+    });
+  });
+
+  var hamburger_icon = document.getElementsByClassName("navbar-toggler-icon");
+  hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")";
+
+
+  $( ".navbar-toggler" ).click(function() {
+    var value = $(".navbar-toggler").attr('aria-expanded');
+
+    if (value == 'true') {
+      hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-compact-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67z' fill='white'%3E%3C/path%3E%3C/svg%3E\")"
+    }
+    else hamburger_icon[0].style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg style='color: white' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='40' zoomAndPan='magnify' viewBox='0 0 30 30.000001' height='40' preserveAspectRatio='xMidYMid meet' version='1.0'%3E%3Cdefs%3E%3CclipPath id='id1'%3E%3Cpath d='M 3.386719 7.164062 L 26.613281 7.164062 L 26.613281 22.40625 L 3.386719 22.40625 Z M 3.386719 7.164062 ' clip-rule='nonzero' fill='white'%3E%3C/path%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23id1)'%3E%3Cpath fill='white' d='M 3.398438 22.40625 L 26.601562 22.40625 L 26.601562 19.867188 L 3.398438 19.867188 Z M 3.398438 16.054688 L 26.601562 16.054688 L 26.601562 13.515625 L 3.398438 13.515625 Z M 3.398438 7.164062 L 3.398438 9.703125 L 26.601562 9.703125 L 26.601562 7.164062 Z M 3.398438 7.164062 ' fill-opacity='1' fill-rule='nonzero'%3E%3C/path%3E%3C/g%3E%3C/svg%3E\")";
+  });
+
+
+  $(".downloading_modal").on('shown.bs.modal', function() {
+    $('.modal-backdrop').css('opacity', '0.6');
+  });
+
+	$(".send_request").click(function(){
+		$("#downloading_modal").modal('show');
+	});
+
+
+
+  // Add slideDown animation to Bootstrap dropdown when expanding.
+  $('.dropdown').on('show.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
+  });
+
+  // Add slideUp animation to Bootstrap dropdown when collapsing.
+  $('.dropdown').on('hide.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+.full_site_container {
+  height: 100% !important;
+}
+
+.main-container {
+  zoom: 110%;
+}
+
+.form-control {
+  background-color: transparent;
+}
+
+.form-control:focus {
+  background-color: transparent;
+}
+
+button {
+  position: relative !important;
+}
+
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+.form-label {
+  color: gray;
+}
+
+.main-container {
+  scale: 1.2;
+}
+
+.footer {
+  zoom: 110%;
+}
+
+.txt2 {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.fa-user,
+.fa-at {
+  zoom: 1.8;
+}
+
+.email:not(:placeholder-shown) {
+  text-transform: lowercase;
+}
+
+.fa-at {
+  transform: translateX(-30%);
+}
+
+.username {
+  font-weight: bold;
+  scale: 1.1;
+  font-size: 110% !important;
+}
+
+.username::placeholder {
+  font-size: 110% !important;
+}
+
+.username:not(:placeholder-shown) {
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+}
+
+input::placeholder {
+  text-align: center;
+  font-size: 1rem;
+  color: rgb(145, 145, 145) !important;
+}
+
+.input100:not(:placeholder-shown) + .focus-input100 + .symbol-input100 {
+  color: rgb(47, 175, 52);
+}
+
+input {
+  text-align: center;
+  background: none !important;
+  box-shadow: inset 0em 0em 0.1em 0.1em white;
+  color: white !important;
+}
+
+input:focus {
+  text-align: left;
+}
+
+@media screen and (min-width: 1200px) {
+  #main_form,
+  #result_form {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .main-container {
+    padding: 15vw;
+  }
+
+  .insides {
+    width: 100%;
+  }
+
+  form {
+    width: 100%;
+  }
+}

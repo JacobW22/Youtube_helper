@@ -1,0 +1,91 @@
+.container {
+    zoom: 1.1;
+    height: 100%;
+}
+
+.form-control {
+    background-color: black !important;
+    font-size: 1.2rem !important;
+    border: 0.15em solid #fff !important;
+    border-color: white !important;
+    color: white !important;
+    border-radius: 15px !important;
+    box-shadow: 0px 0px 15px 1px black;
+    text-align: center;
+    margin-top: 10px;
+
+    width: 35rem !important;
+    max-width: 100% !important;
+}
+  
+.form-control:focus {
+    border-color: #f5696e !important;
+    box-shadow: 0px 0px 15px 1px black;
+    text-align: left;
+}
+  
+.form-control:not(:placeholder-shown) {
+    border-color: #7cf569 !important;
+}
+
+.pointing-to-mail {
+    font-family: "Quicksand", sans-serif;
+}
+
+.go_back_container {
+    transform: translateY(-200%);
+}
+
+.sp_url {
+    color: #78d4fc;
+    word-break: break-word;
+    
+}
+
+.sp_url:hover {
+    color: white;
+}
+
+.sp_login {
+    zoom: 1.2;
+    border-radius: 50px !important;
+    animation: borderAnimation 6s infinite linear;
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: #fff;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    background-color: black;
+}
+
+.fa-spotify:not(.sp_login .fa-spotify, .dropdown-item .fa-spotify) {
+    zoom: 1.5;
+}
+
+.zoom {
+    zoom: 1.1;
+}
+
+#main_form {
+    transform: translateY(-5%);
+}
+
+@keyframes borderAnimation {
+    100%,0% {
+      box-shadow: 0 0 0.15em 0.03em rgb(93, 184, 3);
+    }
+    25% {
+      box-shadow: 0 0 0.15em 0.2em rgb(0, 177, 0);
+    }
+    50% {
+      box-shadow: 0 0 0.15em 0.03em rgb(0, 139, 69);
+    }
+    75% {
+      box-shadow: 0 0 0.15em 0.2em rgb(0, 85, 43);
+    }
+
+}
