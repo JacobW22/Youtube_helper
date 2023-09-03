@@ -1,6 +1,4 @@
-<p align="center">
-# Youtube Helper
-</p>
+# <p align="center"> Youtube Helper </p>
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/JacobW22/Youtube_helper_project/main?style=flat-square&logo=github&color=blue)
 ![GitHub repo size](https://img.shields.io/github/repo-size/JacobW22/Youtube_helper_project?style=flat-square&color=lightblue)
 
