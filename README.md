@@ -29,6 +29,7 @@
 - The application uses a message broker for scheduling long-running tasks such as generating playlist or sending user's avatars to aws bucket
 
 ## Technologies Used
+- Python - v3.10.0
 - Django - v4.2.4
 - Django Rest Framework - v3.14.0
 - Bootstrap - v5.2.2
