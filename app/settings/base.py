@@ -165,7 +165,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': env("POSTGRES_ENGINE"),
 
         'NAME': env("POSTGRES_DB"),
 
