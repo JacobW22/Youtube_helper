@@ -28,6 +28,12 @@ jobs:
     - name: Run Tests
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        POSTGRES_ENGINE: 'django.db.backends.sqlite3'
+        POSTGRES_DB: 'youtube_helper_db'
+        POSTGRES_USER: ''
+        POSTGRES_PASSWORD: ''
+        POSTGRES_HOST: ''
+        POSTGRES_PORT: ''
       run: |
         cd app
         python manage.py test
