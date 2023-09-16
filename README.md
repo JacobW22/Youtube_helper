@@ -2,6 +2,7 @@
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/JacobW22/Youtube_helper_project/main?style=flat-square&logo=github&color=blue)
 ![GitHub repo size](https://img.shields.io/github/repo-size/JacobW22/Youtube_helper_project?style=flat-square&color=lightblue)
 [![CodeQL](https://github.com/JacobW22/Youtube_helper_project/workflows/CodeQL/badge.svg)](https://github.com/JacobW22/Youtube_helper_project/actions?query=workflow%3ACodeQL)
+[![Django CI](https://github.com/JacobW22/Youtube_helper_project/actions/workflows/django.yml/badge.svg)](https://github.com/JacobW22/Youtube_helper_project/actions/workflows/django.yml)
 
 > Youtube Helper is an application that offers free tools that use materials from the Youtube website
 
