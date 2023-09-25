@@ -6,7 +6,7 @@
 
 > Youtube Helper is an application that offers free tools that use materials from the Youtube website
 
-> Live demo [_here_](http://165.232.68.73:8000). 
+[comment]: # > Live demo [_here_](http://165.232.68.73:8000). 
 
 ## Table of Contents
 * [General Info](#general-information)
