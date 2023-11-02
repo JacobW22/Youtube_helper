@@ -2,7 +2,7 @@ setuptools>=65.5.1
 django-environ==0.10.0
 redis>=5.0.0b1
 gunicorn==21.2.0
-Django==4.2.4
+Django==4.2.7
 django-storages==1.13.2
 django-widget-tweaks==1.4.12
 google-api-python-client==2.95.0
