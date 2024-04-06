@@ -41,13 +41,13 @@
 
 
 ## Features
-- You can create accounts and manipulate user settings
+- You can create accounts and manipulate over user settings
 - You can use free tools including api service
 - You can check your recent activity and go back to items in history
-- You can manipulate your downloads, searching, transferring, etc. history
+- You can manipulate your downloads, searching, transferring history, etc.
 - You can change user information such as: Username, E-mail, Password
 - All created avatars are stored in S3 bucket
-- Working password resetting system is present
+- Working password resetting system
 
 
 ## Screenshots
