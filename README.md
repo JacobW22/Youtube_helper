@@ -23,7 +23,7 @@
     - Video downloader including multiple formats<br>
     - Filtering comments attached with sorting and searching phrases<br>
     - Transferring youtube playlists to spotify account<br>
-    - Ai powered avatar generator
+    - AI powered avatar generator
 
 - You have an overview of the history of your activities and the ability to customize your account settings
 - You can access and use free api of the application to get your history data
@@ -35,11 +35,13 @@
 - Django Rest Framework - v3.14.0
 - Bootstrap - v5.2.2
 - JQuery - v3.2.1
+- Celery - v5.3.1 and Rabbitmq - v3.12.2
 - Docker - v23.0.5
+- AWS S3 buckets
 
 
 ## Features
-- You can create account and manipulate user settings
+- You can create accounts and manipulate user settings
 - You can use free tools including api service
 - You can check your recent activity and go back to items in history
 
