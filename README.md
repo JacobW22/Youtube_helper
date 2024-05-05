@@ -4,7 +4,7 @@
 [![CodeQL](https://github.com/JacobW22/Youtube_helper_project/workflows/CodeQL/badge.svg)](https://github.com/JacobW22/Youtube_helper_project/actions?query=workflow%3ACodeQL)
 [![Django CI](https://github.com/JacobW22/Youtube_helper_project/actions/workflows/django.yml/badge.svg)](https://github.com/JacobW22/Youtube_helper_project/actions/workflows/django.yml)
 
-> Youtube Helper is an application that offers free tools that use materials from the Youtube website
+> Youtube Helper is an application that offers free tools operating on Youtube data
 
 <!-- > Live demo [_here_](http://165.232.68.73:8000). -->
 
